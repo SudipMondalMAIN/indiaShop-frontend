@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — indiaShop</title>
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/nav.css">
+<style>
+.detail-layout { display: flex; gap: 24px; align-items: flex-start; }
+.detail-images { width: 340px; flex-shrink: 0; position: sticky; top: 70px; }
+.main-image { background: var(--bg); border-radius: var(--radius); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden; }
+.main-image img { width: 100%; height: 100%; object-fit: contain; padding: 24px; }
+.thumb-row { display: flex; gap: 8px; }
+.thumb { width: 56px; height: 56px; border: 2px solid var(--border); border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--bg); transition: var(--transition); }
+.thumb.active { border-color: var(--primary); }
+.thumb img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+
+.detail-info { flex: 1; min-width: 0; }
+.detail-brand { font-size: 13px; color: var(--primary); font-weight: 500; margin-bottom: 4px; }
+.detail-name { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
+.detail-rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-price-row { margin-bottom: 16px; }
+.detail-price { font-size: 28px; font-weight: 700; }
+.detail-original { font-size: 16px; text-decoration: line-through; color: var(--text3); margin-left: 8px; }
+.detail-discount { font-size: 16px; color: var(--success); font-weight: 600; margin-left: 8px; }
+
+.qty-selector { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.qty-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: var(--transition); }
+.qty-btn:hover { border-color: var(--primary); color: var(--primary); }
+.qty-val { font-size: 16px; font-weight: 600; min-width: 24px; text-align: center; }
+
+.detail-btns { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.detail-btns .btn { flex: 1; min-width: 140px; padding: 13px; font-size: 15px; }
+
+.delivery-box { background: var(--bg); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+.delivery-box label { font-size: 12px; color: var(--text3); display: block; margin-bottom: 6px; }
+.delivery-input-row { display: flex; gap: 8px; }
+.delivery-input-row input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13px; outline: none; }
+.delivery-input-row input:focus { border-color: var(--primary); }
+
+.spec-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.spec-table tr:nth-child(odd) { background: var(--bg); }
+.spec-table td { padding: 9px 14px; }
+.spec-table td:first-child { color: var(--text3); width: 40%; }
+
+@media (max-width: 768px) {
+  .detail-layout { flex-direction: column; }
+  .detail-images { width: 100%; position: static; }
+  .detail-name { font-size: 17px; }
+  .detail-price { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="container"></div></nav>
+<div class="page-content">
+<div class="container">
+
+  <div id="product-wrap">
+    <!-- Loading skeleton -->
+    <div class="detail-layout">
+      <div class="detail-images">
+        <div class="skeleton" style="aspect-ratio:1;border-radius:var(--radius)"></div>
+      </div>
+      <div class="detail-info">
+        <div class="skeleton" style="height:14px;width:80px;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:24px;width:90%;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:14px;width:60%;margin-bottom:20px"></div>
+        <div class="skeleton" style="height:36px;width:200px;margin-bottom:16px"></div>
+        <div class="skeleton" style="height:44px;margin-bottom:10px"></div>
+        <div class="skeleton" style="height:44px"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<nav class="bottom-nav"></nav>
+
+<script src="../static/js/main.js"></script>
+<script>
+  buildNavbar();
+  const pid = new URLSearchParams(window.location.search).get('id');
+  if (!pid) window.location.href = 'products.html';
+
+  let qty = 1;
+  let product = null;
+
+  async function loadProduct() {
+    try {
+      product = await api('GET', `/products/${pid}`);
+      document.title = `${product.name} — indiaShop`;
+      const disc = product.original_price > product.price ? Math.round((1 - product.price/product.original_price)*100) : 0;
+      const images = product.images?.length ? product.images : [product.image || 'https://placehold.co/400x400?text=No+Image'];
+
+      document.getElementById('product-wrap').innerHTML = `
+        <div class="detail-layout">
+          <div class="detail-images">
+            <div class="main-image card"><img id="main-img" src="${images[0]}" alt="${product.name}"></div>
+            <div class="thumb-row">
+              ${images.map((img, i) => `<div class="thumb${i===0?' active':''}" onclick="changeImg('${img}',this)"><img src="${img}" alt=""></div>`).join('')}
+            </div>
+          </div>
+          <div class="detail-info">
+            <div class="detail-brand">${product.brand || product.seller_name || ''}</div>
+            <div class="detail-name">${product.name}</div>
+            <div class="detail-rating-row">
+              ${product.rating ? `<span class="star-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="white"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>${product.rating}</span>` : ''}
+              ${product.review_count ? `<span class="text-muted fs-12">${product.review_count} reviews</span>` : ''}
+              <span class="badge badge-success" style="font-size:11px">${product.stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
+            </div>
+            <div class="detail-price-row">
+              <span class="detail-price">${formatPrice(product.price)}</span>
+              ${disc ? `<span class="detail-original">${formatPrice(product.original_price)}</span><span class="detail-discount">${disc}% off</span>` : ''}
+            </div>
+            <div class="qty-selector">
+              <span style="font-size:13px;color:var(--text2);font-weight:500">Quantity:</span>
+              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <span class="qty-val" id="qty-val">1</span>
+              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+            <div class="detail-btns">
+              <button class="btn btn-accent" onclick="addToCart()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                Add to Cart
+              </button>
+              <button class="btn btn-primary" onclick="buyNow()">Buy Now</button>
+            </div>
+            <div class="delivery-box">
+              <label>Check delivery availability</label>
+              <div class="delivery-input-row">
+                <input type="text" id="pincode" placeholder="Enter pincode" maxlength="6">
+                <button class="btn btn-outline btn-sm" onclick="checkDelivery()">Check</button>
+              </div>
+              <div id="delivery-result" style="margin-top:8px;font-size:12px"></div>
+            </div>
+            ${product.description ? `<div class="card p-4 mb-4"><div class="fw-600 mb-2">Product Description</div><div style="font-size:13px;color:var(--text2);line-height:1.7">${product.description}</div></div>` : ''}
+            ${product.specifications ? `
+              <div class="card p-4">
+                <div class="fw-600 mb-3">Specifications</div>
+                <table class="spec-table">
+                  ${Object.entries(product.specifications).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}
+                </table>
+              </div>` : ''}
+          </div>
+        </div>
+      `;
+    } catch {
+      document.getElementById('product-wrap').innerHTML = `<div class="empty-state"><p>Product not found.</p><a href="products.html" class="btn btn-outline">Browse Products</a></div>`;
+    }
+  }
+
+  function changeImg(src, el) {
+    document.getElementById('main-img').src = src;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function changeQty(d) {
+    qty = Math.max(1, Math.min(qty + d, product?.stock || 99));
+    document.getElementById('qty-val').textContent = qty;
+  }
+
+  function addToCart() {
+    if (!product) return;
+    Cart.add({ id: product.id, name: product.name, price: product.price, image: product.image }, qty);
+  }
+
+  function buyNow() {
+    addToCart();
+    window.location.href = 'cart.html';
+  }
+
+  async function checkDelivery() {
+    const pin = document.getElementById('pincode').value;
+    if (pin.length !== 6) return toast('Enter valid 6-digit pincode', 'error');
+    const el = document.getElementById('delivery-result');
+    el.textContent = 'Checking...';
+    setTimeout(() => {
+      el.innerHTML = `<span style="color:var(--success)">✓ Delivery available</span> · Estimated 2-5 days`;
+    }, 800);
+  }
+
+  loadProduct();
+</script>
+</body>
+</html>
