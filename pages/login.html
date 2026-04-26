@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — indiaShop</title>
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/auth.css">
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-banner">
+    <div>
+      <h1>India's Most<br>Trusted Shop</h1>
+      <p>Millions of products. Best prices. Fast delivery.</p>
+    </div>
+  </div>
+  <div class="auth-form-wrap">
+    <div class="auth-logo">india<span>Shop</span></div>
+
+    <!-- Step 1: Email -->
+    <div id="step-email">
+      <div class="auth-title">Sign in</div>
+      <div class="auth-sub">Enter your email to continue</div>
+      <div class="auth-form">
+        <div class="input-wrap">
+          <label>Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Continue</button>
+        <div class="divider-text">or</div>
+        <button class="google-btn" onclick="googleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          Continue with Google
+        </button>
+        <div class="auth-footer">New to indiaShop? <a href="register.html">Create account</a></div>
+      </div>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="step-otp" style="display:none">
+      <button onclick="showEmail()" style="color:var(--primary);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
+      </button>
+      <div class="auth-title">Enter OTP</div>
+      <div class="auth-sub" id="otp-sub">Sent to your email</div>
+      <div class="auth-form">
+        <div class="otp-inputs">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+        </div>
+        <div class="otp-timer">Resend in <span id="otp-timer">60s</span></div>
+        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Verify & Login</button>
+      </div>
+    </div>
+
+    <p class="terms-text mt-4">By continuing, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<script src="../static/js/main.js"></script>
+<script>
+  if (Auth.isLoggedIn()) window.location.href = '../index.html';
+
+  function showEmail() {
+    document.getElementById('step-email').style.display = '';
+    document.getElementById('step-otp').style.display = 'none';
+  }
+
+  async function sendOTP() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) return toast('Enter your email', 'error');
+    const btn = document.getElementById('send-otp-btn');
+    btnLoading(btn, true);
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'login' });
+      document.getElementById('otp-sub').textContent = `Sent to ${email}`;
+      document.getElementById('step-email').style.display = 'none';
+      document.getElementById('step-otp').style.display = '';
+      initOTPInputs();
+      startOTPTimer(60);
+      toast('OTP sent!', 'success');
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      btnLoading(btn, false);
+    }
+  }
+
+  async function verifyOTP() {
+    const email = document.getElementById('email').value.trim();
+    const otp = getOTPValue();
+    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
+    const btn = document.getElementById('verify-btn');
+    btnLoading(btn, true);
+    try {
+      const data = await api('POST', '/auth/verify-otp', { email, otp, type: 'login' });
+      Auth.set(data.token, data.user);
+      toast('Welcome back!', 'success');
+      setTimeout(() => {
+        const redirect = new URLSearchParams(window.location.search).get('next') || '../index.html';
+        window.location.href = redirect;
+      }, 800);
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      btnLoading(btn, false);
+    }
+  }
+
+  async function resendOTP() {
+    const email = document.getElementById('email').value.trim();
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'login' });
+      toast('OTP resent!', 'success');
+      document.getElementById('otp-timer').parentElement.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
+      startOTPTimer(60);
+    } catch (e) { toast(e.message, 'error'); }
+  }
+
+  async function googleLogin() {
+    // Google OAuth popup — implement with your Google Client ID
+    toast('Google login coming soon', '');
+  }
+
+  document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') sendOTP(); });
+</script>
+</body>
+</html>
