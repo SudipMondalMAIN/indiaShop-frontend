@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — indiaShop</title>
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/auth.css">
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-banner">
+    <div>
+      <h1>Join Millions<br>of Shoppers</h1>
+      <p>Get the best deals, exclusive offers, and fast delivery right to your door.</p>
+    </div>
+  </div>
+  <div class="auth-form-wrap">
+    <div class="auth-logo">india<span>Shop</span></div>
+
+    <!-- Step 1: Details -->
+    <div id="step-details">
+      <div class="auth-title">Create account</div>
+      <div class="auth-sub">It's free and always will be</div>
+      <div class="auth-form">
+        <div class="input-wrap">
+          <label>Full name</label>
+          <input type="text" id="name" placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="input-wrap">
+          <label>Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="input-wrap">
+          <label>Phone number</label>
+          <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
+        <div class="divider-text">or</div>
+        <button class="google-btn" onclick="googleSignup()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          Sign up with Google
+        </button>
+        <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
+      </div>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="step-otp" style="display:none">
+      <button onclick="showDetails()" style="color:var(--primary);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
+      </button>
+      <div class="auth-title">Verify Email</div>
+      <div class="auth-sub" id="otp-sub">OTP sent to your email</div>
+      <div class="auth-form">
+        <div class="otp-inputs">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+        </div>
+        <div class="otp-timer">Resend in <span id="otp-timer">60s</span></div>
+        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Create Account</button>
+      </div>
+    </div>
+
+    <p class="terms-text mt-4">By creating an account, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<script src="../static/js/main.js"></script>
+<script>
+  if (Auth.isLoggedIn()) window.location.href = '../index.html';
+
+  function showDetails() {
+    document.getElementById('step-details').style.display = '';
+    document.getElementById('step-otp').style.display = 'none';
+  }
+
+  async function sendOTP() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if (!name || !email || !phone) return toast('Fill all fields', 'error');
+    if (phone.length !== 10) return toast('Enter valid 10-digit phone', 'error');
+    const btn = document.getElementById('send-otp-btn');
+    btnLoading(btn, true);
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'register' });
+      document.getElementById('otp-sub').textContent = `Sent to ${email}`;
+      document.getElementById('step-details').style.display = 'none';
+      document.getElementById('step-otp').style.display = '';
+      initOTPInputs();
+      startOTPTimer(60);
+      toast('OTP sent!', 'success');
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      btnLoading(btn, false);
+    }
+  }
+
+  async function verifyOTP() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const otp = getOTPValue();
+    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
+    const btn = document.getElementById('verify-btn');
+    btnLoading(btn, true);
+    try {
+      const data = await api('POST', '/auth/register', { name, email, phone, otp });
+      Auth.set(data.token, data.user);
+      toast('Account created!', 'success');
+      setTimeout(() => window.location.href = '../index.html', 800);
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      btnLoading(btn, false);
+    }
+  }
+
+  async function resendOTP() {
+    const email = document.getElementById('email').value.trim();
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'register' });
+      toast('OTP resent!', 'success');
+      document.getElementById('otp-timer').parentElement.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
+      startOTPTimer(60);
+    } catch (e) { toast(e.message, 'error'); }
+  }
+
+  function googleSignup() { toast('Google signup coming soon', ''); }
+</script>
+</body>
+</html>
