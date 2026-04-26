@@ -5,6 +5,51 @@
 <title>Register — indiaShop</title>
 <link rel="stylesheet" href="../static/css/style.css">
 <link rel="stylesheet" href="../static/css/auth.css">
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  // ── Replace with your Firebase config ────────────────────────────────────
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Expose to window so non-module scripts can call it
+  window._firebaseGoogleSignup = async function () {
+    const loader = document.getElementById('google-loading');
+    loader.style.display = 'flex';
+    try {
+      const result   = await signInWithPopup(auth, provider);
+      const idToken  = await result.user.getIdToken();
+
+      // Send Firebase ID token to your backend
+      const data = await api('POST', '/auth/google', { id_token: idToken });
+      Auth.set(data.token, data.user);
+      toast('Welcome, ' + data.user.name + '!', 'success');
+      setTimeout(() => window.location.href = '../index.html', 800);
+    } catch (e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        toast(e.message || 'Google sign-up failed', 'error');
+      }
+    } finally {
+      loader.style.display = 'none';
+    }
+  };
+</script>
 </head>
 <body>
 <div class="auth-page">
@@ -14,29 +59,32 @@
       <p>Get the best deals, exclusive offers, and fast delivery right to your door.</p>
     </div>
   </div>
+
   <div class="auth-form-wrap">
     <div class="auth-logo">india<span>Shop</span></div>
 
-    <!-- Step 1: Details -->
-    <div id="step-details">
+    <!-- Progress dots -->
+    <div class="step-progress" id="step-progress">
+      <span class="dot active" id="dot-1"></span>
+      <span class="dot-line"></span>
+      <span class="dot" id="dot-2"></span>
+      <span class="dot-line"></span>
+      <span class="dot" id="dot-3"></span>
+    </div>
+
+    <!-- ── Step 1: Email ──────────────────────────────────────────────────── -->
+    <div id="step-email">
       <div class="auth-title">Create account</div>
-      <div class="auth-sub">It's free and always will be</div>
+      <div class="auth-sub">Enter your email to get started</div>
       <div class="auth-form">
-        <div class="input-wrap">
-          <label>Full name</label>
-          <input type="text" id="name" placeholder="Your full name" autocomplete="name">
-        </div>
         <div class="input-wrap">
           <label>Email address</label>
           <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
         </div>
-        <div class="input-wrap">
-          <label>Phone number</label>
-          <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10">
-        </div>
         <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
+
         <div class="divider-text">or</div>
-        <button class="google-btn" onclick="googleSignup()">
+        <button class="google-btn" onclick="window._firebaseGoogleSignup()">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
           Sign up with Google
         </button>
@@ -44,9 +92,9 @@
       </div>
     </div>
 
-    <!-- Step 2: OTP -->
+    <!-- ── Step 2: OTP ───────────────────────────────────────────────────── -->
     <div id="step-otp" style="display:none">
-      <button onclick="showDetails()" style="color:var(--primary);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;">
+      <button onclick="goToStep('email')" class="back-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
       </button>
       <div class="auth-title">Verify Email</div>
@@ -60,8 +108,25 @@
           <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
           <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
         </div>
-        <div class="otp-timer">Resend in <span id="otp-timer">60s</span></div>
-        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Create Account</button>
+        <div class="otp-timer" id="otp-timer-wrap">Resend in <span id="otp-timer">60s</span></div>
+        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Verify OTP</button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Name & Phone ──────────────────────────────────────────── -->
+    <div id="step-details" style="display:none">
+      <div class="auth-title">Almost done!</div>
+      <div class="auth-sub">Tell us a little about yourself</div>
+      <div class="auth-form">
+        <div class="input-wrap">
+          <label>Full name</label>
+          <input type="text" id="name" placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="input-wrap">
+          <label>Phone number</label>
+          <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" id="create-btn" onclick="createAccount()">Create Account</button>
       </div>
     </div>
 
@@ -69,28 +134,108 @@
   </div>
 </div>
 
+<!-- Google loading overlay -->
+<div id="google-loading" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;padding:32px;text-align:center;min-width:200px">
+    <div style="width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#2874f0;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 16px"></div>
+    <div style="font-size:14px;color:#555">Signing in with Google...</div>
+  </div>
+</div>
+
+<style>
+/* ── Step progress dots ─────────────────────────────────────────────────── */
+.step-progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  transition: background 0.3s, transform 0.3s;
+}
+.dot.active {
+  background: var(--primary, #2874f0);
+  transform: scale(1.2);
+}
+.dot.done {
+  background: #4caf50;
+}
+.dot-line {
+  flex: 1;
+  height: 2px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.dot-line.done { background: #4caf50; }
+
+.back-btn {
+  color: var(--primary, #2874f0);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+</style>
+
 <script src="../static/js/main.js"></script>
 <script>
   if (Auth.isLoggedIn()) window.location.href = '../index.html';
 
-  function showDetails() {
-    document.getElementById('step-details').style.display = '';
-    document.getElementById('step-otp').style.display = 'none';
+  // ── Step management ────────────────────────────────────────────────────────
+  function goToStep(step) {
+    document.getElementById('step-email').style.display   = 'none';
+    document.getElementById('step-otp').style.display     = 'none';
+    document.getElementById('step-details').style.display = 'none';
+
+    const dots = [
+      document.getElementById('dot-1'),
+      document.getElementById('dot-2'),
+      document.getElementById('dot-3'),
+    ];
+    const lines = document.querySelectorAll('.dot-line');
+
+    // Reset dots
+    dots.forEach(d => { d.className = 'dot'; });
+    lines.forEach(l => { l.className = 'dot-line'; });
+
+    if (step === 'email') {
+      document.getElementById('step-email').style.display = '';
+      dots[0].classList.add('active');
+    } else if (step === 'otp') {
+      document.getElementById('step-otp').style.display = '';
+      dots[0].classList.add('done');
+      lines[0].classList.add('done');
+      dots[1].classList.add('active');
+    } else if (step === 'details') {
+      document.getElementById('step-details').style.display = '';
+      dots[0].classList.add('done');
+      dots[1].classList.add('done');
+      lines[0].classList.add('done');
+      lines[1].classList.add('done');
+      dots[2].classList.add('active');
+    }
   }
 
+  // ── Step 1: Send OTP ───────────────────────────────────────────────────────
   async function sendOTP() {
-    const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if (!name || !email || !phone) return toast('Fill all fields', 'error');
-    if (phone.length !== 10) return toast('Enter valid 10-digit phone', 'error');
+    if (!email) return toast('Enter your email', 'error');
     const btn = document.getElementById('send-otp-btn');
     btnLoading(btn, true);
     try {
       await api('POST', '/auth/send-otp', { email, type: 'register' });
       document.getElementById('otp-sub').textContent = `Sent to ${email}`;
-      document.getElementById('step-details').style.display = 'none';
-      document.getElementById('step-otp').style.display = '';
+      goToStep('otp');
       initOTPInputs();
       startOTPTimer(60);
       toast('OTP sent!', 'success');
@@ -101,18 +246,41 @@
     }
   }
 
+  // ── Step 2: Verify OTP ─────────────────────────────────────────────────────
   async function verifyOTP() {
-    const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const otp = getOTPValue();
+    const otp   = getOTPValue();
     if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
     const btn = document.getElementById('verify-btn');
     btnLoading(btn, true);
     try {
-      const data = await api('POST', '/auth/register', { name, email, phone, otp });
+      // Just verify OTP — don't register yet
+      await api('POST', '/auth/verify-otp', { email, otp, type: 'register' });
+      goToStep('details');
+      toast('Email verified!', 'success');
+    } catch (e) {
+      toast(e.message, 'error');
+    } finally {
+      btnLoading(btn, false);
+    }
+  }
+
+  // ── Step 3: Create Account ─────────────────────────────────────────────────
+  async function createAccount() {
+    const name  = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const otp   = getOTPValue(); // keep OTP in memory for final call if backend needs it
+
+    if (!name)              return toast('Enter your full name', 'error');
+    if (phone.length !== 10) return toast('Enter valid 10-digit phone', 'error');
+
+    const btn = document.getElementById('create-btn');
+    btnLoading(btn, true);
+    try {
+      const data = await api('POST', '/auth/register', { name, email, phone });
       Auth.set(data.token, data.user);
-      toast('Account created!', 'success');
+      toast('Account created! Welcome 🎉', 'success');
       setTimeout(() => window.location.href = '../index.html', 800);
     } catch (e) {
       toast(e.message, 'error');
@@ -121,17 +289,22 @@
     }
   }
 
+  // ── Resend OTP ─────────────────────────────────────────────────────────────
   async function resendOTP() {
     const email = document.getElementById('email').value.trim();
     try {
       await api('POST', '/auth/send-otp', { email, type: 'register' });
       toast('OTP resent!', 'success');
-      document.getElementById('otp-timer').parentElement.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
+      document.getElementById('otp-timer-wrap').innerHTML =
+        `Resend in <span id="otp-timer">60s</span>`;
       startOTPTimer(60);
     } catch (e) { toast(e.message, 'error'); }
   }
 
-  function googleSignup() { toast('Google signup coming soon', ''); }
+  // Enter key on email field
+  document.getElementById('email').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendOTP();
+  });
 </script>
 </body>
 </html>
