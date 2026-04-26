@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Dashboard — indiaShop</title>
+<link rel="stylesheet" href="../../static/css/style.css">
+<link rel="stylesheet" href="../../static/css/nav.css">
+<style>
+.seller-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: var(--radius); padding: 22px; color: #fff; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.seller-header-left h2 { font-size: 20px; font-weight: 800; }
+.seller-header-left p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+.seller-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.seller-nav a { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--text2); box-shadow: var(--shadow-sm); transition: var(--transition); }
+.seller-nav a:hover, .seller-nav a.active { background: var(--primary); color: #fff; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+.stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 6px; }
+.stat-val { font-size: 24px; font-weight: 800; }
+.stat-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.recent-order { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.recent-order:last-child { border-bottom: none; }
+@media(max-width:768px){ .stat-grid{grid-template-columns:1fr 1fr;} }
+@media(max-width:480px){ .stat-grid{grid-template-columns:1fr 1fr;} }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="container"></div></nav>
+<div class="page-content">
+<div class="container">
 
+  <div class="seller-header">
+    <div class="seller-header-left">
+      <h2 id="store-name">My Store</h2>
+      <p>Seller Dashboard · <span id="seller-status" class="badge" style="font-size:11px"></span></p>
+    </div>
+    <a href="add-product.html" class="btn" style="background:rgba(255,255,255,0.2);color:#fff;border:1.5px solid rgba(255,255,255,0.4)">+ Add Product</a>
+  </div>
+
+  <div class="seller-nav">
+    <a href="dashboard.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="products.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      Products
+    </a>
+    <a href="orders.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
+      Orders
+    </a>
+    <a href="add-product.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Add Product
+    </a>
+    <a href="../../index.html" style="margin-left:auto">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      View Store
+    </a>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-val text-success" id="stat-revenue">₹0</div><div class="stat-sub">All time</div></div>
+    <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-val" id="stat-orders">0</div><div class="stat-sub">Received</div></div>
+    <div class="stat-card"><div class="stat-label">Products</div><div class="stat-val" id="stat-products">0</div><div class="stat-sub">Listed</div></div>
+    <div class="stat-card"><div class="stat-label">Pending Orders</div><div class="stat-val text-accent" id="stat-pending">0</div><div class="stat-sub">Need attention</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start">
+    <div class="card p-4">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="fw-700 fs-15">Recent Orders</div>
+        <a href="orders.html" class="text-primary fs-12 fw-600">View All</a>
+      </div>
+      <div id="recent-orders"></div>
+    </div>
+    <div class="card p-4">
+      <div class="fw-700 fs-15 mb-3">Quick Actions</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="add-product.html" class="btn btn-primary btn-block">+ Add New Product</a>
+        <a href="products.html" class="btn btn-outline btn-block">Manage Products</a>
+        <a href="orders.html" class="btn btn-outline btn-block">View All Orders</a>
+      </div>
+      <div class="fw-600 fs-13 mt-4 mb-2">Top Products</div>
+      <div id="top-products" style="font-size:13px;color:var(--text3)">Loading...</div>
+    </div>
+  </div>
+
+</div>
+</div>
+<nav class="bottom-nav"></nav>
+
+<script src="../../static/js/main.js"></script>
+<script>
+  if (!Auth.isLoggedIn()) window.location.href = '../login.html';
+  if (!Auth.isSeller() && !Auth.isAdmin()) window.location.href = '../account.html';
+  buildNavbar();
+
+  const user = Auth.user();
+  document.getElementById('store-name').textContent = user?.business_name || user?.name + "'s Store";
+
+  async function loadDashboard() {
+    try {
+      const data = await api('GET', '/seller/dashboard');
+      document.getElementById('stat-revenue').textContent = formatPrice(data.total_revenue || 0);
+      document.getElementById('stat-orders').textContent = data.total_orders || 0;
+      document.getElementById('stat-products').textContent = data.total_products || 0;
+      document.getElementById('stat-pending').textContent = data.pending_orders || 0;
+
+      const statusLabel = { processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled', pending: 'Pending' };
+      const statusClass = { processing: 'primary', shipped: 'warning', delivered: 'success', cancelled: 'danger', pending: 'gray' };
+
+      const orders = data.recent_orders || [];
+      document.getElementById('recent-orders').innerHTML = orders.length ? orders.map(o => `
+        <div class="recent-order">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">#${o.id} · ${o.buyer_name || 'Customer'}</div>
+            <div style="font-size:12px;color:var(--text3)">${new Date(o.created_at).toLocaleDateString('en-IN')} · ${formatPrice(o.total_amount)}</div>
+          </div>
+          <span class="badge badge-${statusClass[o.status]||'gray'}">${statusLabel[o.status]||o.status}</span>
+        </div>`).join('') : '<p class="text-muted fs-13">No orders yet.</p>';
+
+      const prods = data.top_products || [];
+      document.getElementById('top-products').innerHTML = prods.length ? prods.slice(0,3).map(p => `<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between"><span>${p.name?.slice(0,30)}...</span><span class="fw-600">${p.total_sold||0} sold</span></div>`).join('') : 'No products yet.';
+
+      const s = data.status || 'pending';
+      const statusEl = document.getElementById('seller-status');
+      statusEl.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+      statusEl.className = `badge badge-${s === 'approved' ? 'success' : s === 'rejected' ? 'danger' : 'warning'}`;
+    } catch(e) {
+      toast(e.message, 'error');
+    }
+  }
+
+  loadDashboard();
+</script>
+</body>
+</html>
