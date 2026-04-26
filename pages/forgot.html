@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgot Password — indiaShop</title>
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/auth.css">
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-banner">
+    <div>
+      <h1>Reset Your<br>Password</h1>
+      <p>Enter your email and we'll send you an OTP to reset your password.</p>
+    </div>
+  </div>
+  <div class="auth-form-wrap">
+    <div class="auth-logo">india<span>Shop</span></div>
+
+    <div id="step-email">
+      <div class="auth-title">Forgot Password?</div>
+      <div class="auth-sub">We'll send an OTP to your email</div>
+      <div class="auth-form">
+        <div class="input-wrap">
+          <label>Email address</label>
+          <input type="email" id="email" placeholder="you@example.com">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
+        <div class="auth-footer"><a href="login.html">← Back to login</a></div>
+      </div>
+    </div>
+
+    <div id="step-otp" style="display:none">
+      <div class="auth-title">Enter OTP</div>
+      <div class="auth-sub" id="otp-sub">Sent to your email</div>
+      <div class="auth-form">
+        <div class="otp-inputs">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
+        </div>
+        <div class="otp-timer">Resend in <span id="otp-timer">60s</span></div>
+        <div class="input-wrap">
+          <label>New Password</label>
+          <input type="password" id="new-password" placeholder="Min 8 characters">
+        </div>
+        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="resetPassword()">Reset Password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../static/js/main.js"></script>
+<script>
+  async function sendOTP() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) return toast('Enter your email', 'error');
+    const btn = document.getElementById('send-otp-btn');
+    btnLoading(btn, true);
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'forgot' });
+      document.getElementById('otp-sub').textContent = `Sent to ${email}`;
+      document.getElementById('step-email').style.display = 'none';
+      document.getElementById('step-otp').style.display = '';
+      initOTPInputs();
+      startOTPTimer(60);
+      toast('OTP sent!', 'success');
+    } catch(e) { toast(e.message, 'error'); }
+    finally { btnLoading(btn, false); }
+  }
+
+  async function resetPassword() {
+    const email = document.getElementById('email').value.trim();
+    const otp = getOTPValue();
+    const password = document.getElementById('new-password').value;
+    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
+    if (password.length < 8) return toast('Password min 8 characters', 'error');
+    const btn = document.getElementById('verify-btn');
+    btnLoading(btn, true);
+    try {
+      await api('POST', '/auth/reset-password', { email, otp, password });
+      toast('Password reset! Redirecting...', 'success');
+      setTimeout(() => window.location.href = 'login.html', 1200);
+    } catch(e) { toast(e.message, 'error'); }
+    finally { btnLoading(btn, false); }
+  }
+
+  async function resendOTP() {
+    const email = document.getElementById('email').value.trim();
+    try {
+      await api('POST', '/auth/send-otp', { email, type: 'forgot' });
+      toast('OTP resent!', 'success');
+      document.getElementById('otp-timer').parentElement.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
+      startOTPTimer(60);
+    } catch(e) { toast(e.message, 'error'); }
+  }
+</script>
+</body>
+</html>
