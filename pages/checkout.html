@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — indiaShop</title>
+<link rel="stylesheet" href="../static/css/style.css">
+<link rel="stylesheet" href="../static/css/nav.css">
+<style>
+.checkout-layout { display: flex; gap: 20px; align-items: flex-start; }
+.checkout-main { flex: 1; }
+.checkout-aside { width: 320px; flex-shrink: 0; position: sticky; top: 70px; }
+.step-card { background: var(--surface); border-radius: var(--radius); margin-bottom: 12px; box-shadow: var(--shadow-sm); overflow: hidden; }
+.step-header { padding: 14px 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-num.done { background: var(--success); }
+.step-title { font-size: 14px; font-weight: 700; flex: 1; }
+.step-change { font-size: 12px; font-weight: 700; color: var(--primary); }
+.step-body { padding: 0 18px 18px; display: none; }
+.step-body.open { display: block; }
+.addr-option { border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s; }
+.addr-option.selected { border-color: var(--primary); background: var(--primary-light); }
+.addr-option input[type=radio] { accent-color: var(--primary); margin-right: 8px; }
+.pay-option { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s; }
+.pay-option.selected { border-color: var(--primary); background: var(--primary-light); }
+.order-summary-card { background: var(--surface); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm); }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
+.summary-row.total { font-weight: 700; font-size: 16px; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px; }
+@media(max-width:768px){ .checkout-layout{flex-direction:column;} .checkout-aside{width:100%;position:static;} }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="container"></div></nav>
+<div class="page-content">
+<div class="container">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <a href="cart.html" style="color:var(--text3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
+    <div class="fw-700 fs-18">Checkout</div>
+  </div>
+
+  <div class="checkout-layout">
+    <div class="checkout-main">
+
+      <!-- Step 1: Address -->
+      <div class="step-card" id="step1">
+        <div class="step-header" onclick="toggleStep(1)">
+          <div class="step-num" id="s1-num">1</div>
+          <div class="step-title">Delivery Address</div>
+          <div class="step-change" id="s1-change" style="display:none">CHANGE</div>
+        </div>
+        <div class="step-body open" id="s1-body">
+          <div id="addr-list">
+            <div class="skeleton" style="height:80px;margin-bottom:10px"></div>
+          </div>
+          <button class="btn btn-outline btn-sm mt-3" onclick="window.open('addresses.html','_blank')">+ Add New Address</button>
+          <div class="mt-3">
+            <button class="btn btn-primary" id="addr-confirm-btn" onclick="confirmAddress()">Deliver Here</button>
+          </div>
+        </div>
+        <div id="s1-summary" style="padding:0 18px 14px;display:none">
+          <div id="s1-summary-text" style="font-size:13px;color:var(--text2)"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div class="step-card" id="step2" style="opacity:0.6;pointer-events:none">
+        <div class="step-header" onclick="toggleStep(2)">
+          <div class="step-num" id="s2-num">2</div>
+          <div class="step-title">Payment Method</div>
+          <div class="step-change" id="s2-change" style="display:none">CHANGE</div>
+        </div>
+        <div class="step-body" id="s2-body">
+          <div class="pay-option selected" id="pay-cod" onclick="selectPayment('cod')">
+            <input type="radio" name="pay" checked> <div><div style="font-weight:600;font-size:14px">Cash on Delivery</div><div style="font-size:12px;color:var(--text3)">Pay when your order arrives</div></div>
+          </div>
+          <div class="pay-option" id="pay-upi" onclick="selectPayment('upi')">
+            <input type="radio" name="pay"> <div><div style="font-weight:600;font-size:14px">UPI Payment</div><div style="font-size:12px;color:var(--text3)">PhonePe, GPay, Paytm, etc.</div></div>
+          </div>
+          <div class="pay-option" id="pay-card" onclick="selectPayment('card')">
+            <input type="radio" name="pay"> <div><div style="font-weight:600;font-size:14px">Credit / Debit Card</div><div style="font-size:12px;color:var(--text3)">Visa, Mastercard, RuPay</div></div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary" onclick="confirmPayment()">Continue</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="step-card" id="step3" style="opacity:0.6;pointer-events:none">
+        <div class="step-header">
+          <div class="step-num" id="s3-num">3</div>
+          <div class="step-title">Review & Place Order</div>
+        </div>
+        <div class="step-body" id="s3-body">
+          <div id="review-items" style="margin-bottom:16px"></div>
+          <button class="btn btn-accent btn-lg" style="width:100%" id="place-btn" onclick="placeOrder()">
+            Place Order
+          </button>
+          <p style="font-size:12px;color:var(--text3);margin-top:8px;text-align:center">By placing your order, you agree to our Terms & Conditions</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="checkout-aside">
+      <div class="order-summary-card">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:14px;letter-spacing:0.5px">Price Details</div>
+        <div class="summary-row"><span>Items (<span id="s-count">0</span>)</span><span id="s-mrp">₹0</span></div>
+        <div class="summary-row"><span>Discount</span><span class="text-success" id="s-disc">-₹0</span></div>
+        <div class="summary-row"><span>Delivery</span><span class="text-success">FREE</span></div>
+        <div class="summary-row total"><span>Total</span><span id="s-total">₹0</span></div>
+        <div id="s-saving" style="background:#e8f5e9;color:var(--success);font-size:12px;font-weight:600;padding:8px 10px;border-radius:var(--radius);margin-top:8px;display:none">
+          You save ₹<span id="s-save-amt">0</span> on this order 🎉
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<nav class="bottom-nav"></nav>
+
+<script src="../static/js/main.js"></script>
+<script>
+  if (!Auth.isLoggedIn()) window.location.href = 'login.html?next=checkout.html';
+  buildNavbar();
+
+  const items = Cart.get();
+  if (!items.length) window.location.href = 'cart.html';
+
+  let selectedAddrId = null;
+  let selectedPayment = 'cod';
+
+  // Summary
+  const total = Cart.total();
+  const mrp = items.reduce((s, i) => s + (i.original_price || i.price) * i.qty, 0);
+  const saved = mrp - total;
+  document.getElementById('s-count').textContent = items.length;
+  document.getElementById('s-mrp').textContent = formatPrice(mrp);
+  document.getElementById('s-disc').textContent = `-${formatPrice(saved)}`;
+  document.getElementById('s-total').textContent = formatPrice(total);
+  if (saved > 0) { document.getElementById('s-saving').style.display = 'block'; document.getElementById('s-save-amt').textContent = saved.toLocaleString('en-IN'); }
+
+  // Review items
+  document.getElementById('review-items').innerHTML = items.map(i => `
+    <div style="display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+      <img src="${i.image || 'https://placehold.co/48x48'}" style="width:48px;height:48px;object-fit:contain;background:var(--bg);border-radius:var(--radius)">
+      <div style="flex:1"><div style="font-size:13px;font-weight:500">${i.name}</div><div style="font-size:12px;color:var(--text3)">Qty: ${i.qty}</div><div style="font-size:13px;font-weight:700">${formatPrice(i.price * i.qty)}</div></div>
+    </div>`).join('');
+
+  async function loadAddresses() {
+    try {
+      const data = await api('GET', '/addresses');
+      const addrs = data.addresses || [];
+      const list = document.getElementById('addr-list');
+      if (!addrs.length) {
+        list.innerHTML = '<p class="text-muted fs-13">No saved addresses. <a href="addresses.html" class="text-primary fw-600">Add one</a></p>';
+        return;
+      }
+      if (addrs.length) { selectedAddrId = addrs.find(a => a.is_default)?.id || addrs[0].id; }
+      list.innerHTML = addrs.map(a => `
+        <div class="addr-option${a.is_default || a.id === selectedAddrId ? ' selected' : ''}" onclick="selectAddr(${a.id}, this)">
+          <input type="radio" name="addr" ${a.is_default || a.id === selectedAddrId ? 'checked' : ''}>
+          <strong>${a.name}</strong> · ${a.phone}<br>
+          <span style="font-size:12px;color:var(--text2)">${a.address_line}, ${a.city}, ${a.state} — ${a.pincode}</span>
+        </div>`).join('');
+    } catch { document.getElementById('addr-list').innerHTML = '<p class="text-muted fs-13">Failed to load addresses.</p>'; }
+  }
+
+  function selectAddr(id, el) {
+    selectedAddrId = id;
+    document.querySelectorAll('.addr-option').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectPayment(type) {
+    selectedPayment = type;
+    ['cod','upi','card'].forEach(t => { document.getElementById('pay-'+t).classList.toggle('selected', t===type); document.getElementById('pay-'+t).querySelector('input').checked = t===type; });
+  }
+
+  function confirmAddress() {
+    if (!selectedAddrId) return toast('Select a delivery address', 'error');
+    document.getElementById('s1-body').style.display = 'none';
+    document.getElementById('s1-summary').style.display = 'block';
+    const selected = document.querySelector('.addr-option.selected');
+    document.getElementById('s1-summary-text').textContent = selected?.textContent?.trim()?.slice(0,80) + '...';
+    document.getElementById('s1-num').className = 'step-num done';
+    document.getElementById('s1-change').style.display = 'block';
+    const s2 = document.getElementById('step2');
+    s2.style.opacity = '1'; s2.style.pointerEvents = '';
+    document.getElementById('s2-body').classList.add('open');
+  }
+
+  function confirmPayment() {
+    document.getElementById('s2-body').classList.remove('open');
+    document.getElementById('s2-num').className = 'step-num done';
+    document.getElementById('s2-change').style.display = 'block';
+    const s3 = document.getElementById('step3');
+    s3.style.opacity = '1'; s3.style.pointerEvents = '';
+    document.getElementById('s3-body').classList.add('open');
+  }
+
+  function toggleStep(n) {
+    // allow going back
+    const body = document.getElementById(`s${n}-body`);
+    body.classList.toggle('open');
+  }
+
+  async function placeOrder() {
+    const btn = document.getElementById('place-btn');
+    btnLoading(btn, true);
+    try {
+      const data = await api('POST', '/orders', {
+        address_id: selectedAddrId,
+        payment_method: selectedPayment,
+        items: items.map(i => ({ product_id: i.id, qty: i.qty }))
+      });
+      Cart.clear();
+      toast('Order placed successfully! 🎉', 'success');
+      setTimeout(() => window.location.href = 'orders.html', 1000);
+    } catch(e) { toast(e.message, 'error'); }
+    finally { btnLoading(btn, false); }
+  }
+
+  loadAddresses();
+</script>
+</body>
+</html>
