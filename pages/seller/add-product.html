@@ -1,1 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Product — indiaShop Seller</title>
+<link rel="stylesheet" href="../../static/css/style.css">
+<link rel="stylesheet" href="../../static/css/nav.css">
+<style>
+.seller-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: var(--radius); padding: 22px; color: #fff; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.seller-header-left h2 { font-size: 20px; font-weight: 800; }
+.seller-header-left p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+.seller-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.seller-nav a { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--text2); box-shadow: var(--shadow-sm); transition: var(--transition); }
+.seller-nav a:hover, .seller-nav a.active { background: var(--primary); color: #fff; }
 
+.form-page { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+.section-heading { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid-2 .full { grid-column: 1 / -1; }
+
+/* Upload zone */
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 16px; text-align: center; cursor: pointer; transition: var(--transition); position: relative; background: var(--bg); }
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
+.upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-zone p { font-size: 13px; color: var(--text2); }
+.upload-zone p span { color: var(--primary); font-weight: 600; }
+.upload-zone small { font-size: 11px; color: var(--text3); }
+
+/* Preview grid */
+.preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.preview-item { position: relative; border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--border); aspect-ratio: 1; background: var(--bg); }
+.preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.preview-item.uploading img { opacity: 0.4; }
+.preview-item.uploading::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
+.preview-progress { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--border); }
+.preview-progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width .3s; }
+.preview-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.55); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; opacity: 0; transition: opacity .2s; }
+.preview-item:hover .preview-overlay { opacity: 1; }
+.prev-btn { background: rgba(255,255,255,0.18); border: none; border-radius: 3px; color: #fff; font-size: 10px; padding: 4px 8px; cursor: pointer; font-weight: 600; white-space: nowrap; backdrop-filter: blur(4px); }
+.prev-btn:hover { background: rgba(255,255,255,0.32); }
+.prev-btn.danger { color: #ffb3b3; }
+.primary-flag { position: absolute; top: 4px; left: 4px; background: var(--primary); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 2px; }
+
+/* Sidebar */
+.sidebar-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 18px; margin-bottom: 14px; }
+.price-preview { background: var(--bg); border-radius: var(--radius); padding: 12px; margin-top: 12px; font-size: 13px; }
+.price-preview-row { display: flex; justify-content: space-between; padding: 4px 0; }
+.price-preview-row.total { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; font-weight: 700; }
+.tip-box { background: #fff8e1; border-left: 3px solid var(--warning); padding: 10px 12px; border-radius: var(--radius); font-size: 12px; color: #7c5e00; margin-top: 12px; line-height: 1.7; display: none; }
+
+@media(max-width:768px) { .form-page{grid-template-columns:1fr;} .form-grid-2{grid-template-columns:1fr;} .form-grid-2 .full{grid-column:1;} .preview-grid{grid-template-columns:repeat(3,1fr);} }
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="container"></div></nav>
+<div class="page-content"><div class="container">
+
+  <div class="seller-header">
+    <div class="seller-header-left">
+      <h2>Add New Product</h2>
+      <p>Fill in the details and upload photos to list your product</p>
+    </div>
+    <a href="products.html" class="btn" style="background:rgba(255,255,255,0.18);color:#fff;border:1.5px solid rgba(255,255,255,0.4)">← My Products</a>
+  </div>
+
+  <div class="seller-nav">
+    <a href="dashboard.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="products.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Products</a>
+    <a href="orders.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Orders</a>
+    <a href="add-product.html" class="active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Product</a>
+    <a href="../../index.html" style="margin-left:auto"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>View Store</a>
+  </div>
+
+  <div class="form-page">
+    <!-- LEFT -->
+    <div>
+      <!-- Basic info -->
+      <div class="card p-4 mb-3">
+        <div class="section-heading">Product Information</div>
+        <div class="form-grid-2">
+          <div class="input-wrap full">
+            <label>Product Name *</label>
+            <input type="text" id="name" placeholder="e.g. Samsung Galaxy S24 Ultra 256GB" oninput="updatePreview()">
+          </div>
+          <div class="input-wrap">
+            <label>Category *</label>
+            <select id="category_id" onchange="updatePreview()"><option value="">— Select Category —</option></select>
+          </div>
+          <div class="input-wrap">
+            <label>Brand</label>
+            <input type="text" id="brand" placeholder="e.g. Samsung">
+          </div>
+          <div class="input-wrap full">
+            <label>Description</label>
+            <textarea id="description" rows="4" placeholder="Describe the product features, specifications, warranty, etc."></textarea>
+          </div>
+          <div class="input-wrap">
+            <label>SKU (optional)</label>
+            <input type="text" id="sku" placeholder="e.g. SAM-S24-BLK-256">
+          </div>
+          <div class="input-wrap" style="justify-content:flex-end;padding-top:18px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;font-size:13px;color:var(--text)">
+              <input type="checkbox" id="is_featured" style="width:16px;height:16px;accent-color:var(--primary)">
+              Mark as Featured Product
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="card p-4 mb-3">
+        <div class="section-heading">Pricing & Inventory</div>
+        <div class="form-grid-2">
+          <div class="input-wrap">
+            <label>Price (₹) *</label>
+            <input type="number" id="price" placeholder="0" min="0" oninput="updatePreview()">
+          </div>
+          <div class="input-wrap">
+            <label>Discount %</label>
+            <input type="number" id="discount_pct" placeholder="0" min="0" max="90" oninput="updatePreview()">
+          </div>
+          <div class="input-wrap">
+            <label>Stock Quantity *</label>
+            <input type="number" id="stock" placeholder="0" min="0" oninput="updatePreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="card p-4 mb-3">
+        <div class="section-heading">Product Photos</div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+          <div class="upload-zone-icon">📷</div>
+          <p>Drag & drop photos here or <span>browse files</span></p>
+          <small>JPG, PNG, WEBP · Max 5MB each · You can upload multiple</small>
+        </div>
+        <div class="preview-grid" id="previewGrid"></div>
+        <div class="tip-box" id="imgTip">
+          💡 <strong>First photo = main display image.</strong> Hover on any photo to set it as primary or remove it.
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" id="submitBtn" onclick="submitProduct()">
+        + Add Product
+      </button>
+    </div>
+
+    <!-- RIGHT sidebar -->
+    <div>
+      <div class="sidebar-card">
+        <div class="section-heading">Price Calculator</div>
+        <div class="price-preview">
+          <div class="price-preview-row"><span class="text-muted">MRP</span><span id="prev-mrp">₹0</span></div>
+          <div class="price-preview-row"><span class="text-muted">Discount</span><span id="prev-disc" class="text-success">— 0%</span></div>
+          <div class="price-preview-row total"><span>Selling Price</span><span id="prev-final" class="text-primary fw-700">₹0</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="section-heading">Checklist</div>
+        <div style="font-size:13px;line-height:2.1">
+          <div id="chk-name">○ Product name</div>
+          <div id="chk-cat">○ Category selected</div>
+          <div id="chk-price">○ Price entered</div>
+          <div id="chk-stock">○ Stock quantity</div>
+          <div id="chk-img">○ At least 1 photo</div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="section-heading">Photo Guidelines</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          ✅ White or light background<br>
+          ✅ Multiple angles (front, side, back)<br>
+          ✅ Min 500×500 px resolution<br>
+          ✅ Clear and well-lit<br>
+          ❌ No watermarks or logos<br>
+          ❌ No blurry or dark photos
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+<nav class="bottom-nav"></nav>
+
+<script src="../../static/js/main.js"></script>
+<script>
+if (!Auth.isLoggedIn()) window.location.href = '../login.html';
+if (!Auth.isAdmin() && !Auth.isSeller()) window.location.href = '../account.html';
+buildNavbar('products');
+
+let uploadedImages = [];
+
+// Load categories
+async function loadCategories() {
+  try {
+    const data = await api('GET', '/api/categories');
+    const sel  = document.getElementById('category_id');
+    (data.data || []).forEach(cat => {
+      const o = document.createElement('option');
+      o.value = cat.id; o.textContent = (cat.emoji || '') + ' ' + cat.name;
+      sel.appendChild(o);
+    });
+  } catch(e) { toast('Failed to load categories', 'error'); }
+}
+
+// Price preview + checklist
+function updatePreview() {
+  const price = parseFloat(document.getElementById('price').value) || 0;
+  const disc  = parseInt(document.getElementById('discount_pct').value) || 0;
+  const final = disc ? Math.round(price * (1 - disc / 100)) : price;
+  document.getElementById('prev-mrp').textContent   = formatPrice(price);
+  document.getElementById('prev-disc').textContent  = '— ' + disc + '%';
+  document.getElementById('prev-final').textContent = formatPrice(final);
+
+  const name  = document.getElementById('name').value.trim();
+  const catId = document.getElementById('category_id').value;
+  const stock = parseInt(document.getElementById('stock').value) || 0;
+
+  chk('chk-name',  !!name,               'Product name');
+  chk('chk-cat',   !!catId,              'Category selected');
+  chk('chk-price', price > 0,            'Price entered');
+  chk('chk-stock', stock > 0,            'Stock quantity');
+  chk('chk-img',   uploadedImages.length > 0, 'At least 1 photo');
+}
+
+function chk(id, ok, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.color = ok ? 'var(--success)' : 'var(--text3)';
+  el.textContent = (ok ? '✅ ' : '○ ') + label;
+}
+
+// Drag & Drop
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles([...e.dataTransfer.files]); });
+document.getElementById('fileInput').addEventListener('change', e => { handleFiles([...e.target.files]); e.target.value = ''; });
+
+async function handleFiles(files) {
+  const imgs = files.filter(f => f.type.startsWith('image/'));
+  if (!imgs.length) return toast('Please select image files only', 'error');
+  for (const f of imgs) {
+    if (f.size > 5 * 1024 * 1024) { toast('"' + f.name + '" exceeds 5MB limit', 'error'); continue; }
+    await uploadSingle(f);
+  }
+}
+
+async function uploadSingle(file) {
+  const tid  = 'up-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+  const grid = document.getElementById('previewGrid');
+  const el   = document.createElement('div');
+  el.className = 'preview-item uploading'; el.id = tid;
+  const localUrl = URL.createObjectURL(file);
+  el.innerHTML = `<img src="${localUrl}" alt="uploading"><div class="preview-progress"><div class="preview-progress-bar" id="bar-${tid}"></div></div>`;
+  grid.appendChild(el);
+  document.getElementById('imgTip').style.display = 'block';
+
+  let p = 0;
+  const bar = document.getElementById('bar-' + tid);
+  const tick = setInterval(() => { p = Math.min(p + Math.random()*18, 85); if(bar) bar.style.width = p+'%'; }, 180);
+
+  try {
+    const fd = new FormData(); fd.append('image', file);
+    const res  = await fetch(BASE_URL + '/api/admin/upload-image', {
+      method: 'POST', headers: { Authorization: 'Bearer ' + Auth.token() }, body: fd,
+    });
+    const data = await res.json();
+    clearInterval(tick);
+
+    if (!data.success) { el.remove(); URL.revokeObjectURL(localUrl); return toast(data.message || 'Upload failed', 'error'); }
+
+    if(bar) bar.style.width = '100%';
+    el.classList.remove('uploading');
+    URL.revokeObjectURL(localUrl);
+
+    const isFirst = uploadedImages.length === 0;
+    uploadedImages.push({ url: data.data.url, public_id: data.data.public_id, is_primary: isFirst });
+    renderPreviews();
+    updatePreview();
+    toast('Photo uploaded!', 'success');
+  } catch(err) {
+    clearInterval(tick); el.remove();
+    toast('Network error during upload', 'error');
+  }
+}
+
+function renderPreviews() {
+  const grid = document.getElementById('previewGrid');
+  [...grid.querySelectorAll('.preview-item:not(.uploading)')].forEach(e => e.remove());
+
+  uploadedImages.forEach((img, idx) => {
+    const el = document.createElement('div');
+    el.className = 'preview-item'; el.id = 'done-' + idx;
+    el.innerHTML = `
+      <img src="${img.url}" alt="product photo">
+      ${img.is_primary ? '<div class="primary-flag">PRIMARY</div>' : ''}
+      <div class="preview-overlay">
+        ${!img.is_primary ? `<button class="prev-btn" onclick="setPrimary('${img.public_id}')">⭐ Set Primary</button>` : ''}
+        <button class="prev-btn danger" onclick="removeImg('${img.public_id}')">🗑 Remove</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+
+  document.getElementById('imgTip').style.display = uploadedImages.length ? 'block' : 'none';
+  updatePreview();
+}
+
+function setPrimary(pid) {
+  uploadedImages.forEach(i => i.is_primary = i.public_id === pid);
+  renderPreviews();
+}
+
+async function removeImg(pid) {
+  uploadedImages = uploadedImages.filter(i => i.public_id !== pid);
+  if (uploadedImages.length && !uploadedImages.some(i => i.is_primary)) uploadedImages[0].is_primary = true;
+  renderPreviews();
+  try {
+    await fetch(BASE_URL + '/api/admin/delete-image', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + Auth.token() },
+      body: JSON.stringify({ public_id: pid }),
+    });
+  } catch { /* silent */ }
+}
+
+async function submitProduct() {
+  const name        = document.getElementById('name').value.trim();
+  const category_id = document.getElementById('category_id').value;
+  const brand       = document.getElementById('brand').value.trim();
+  const description = document.getElementById('description').value.trim();
+  const price       = parseFloat(document.getElementById('price').value);
+  const discount_pct= parseInt(document.getElementById('discount_pct').value) || 0;
+  const stock       = parseInt(document.getElementById('stock').value) || 0;
+  const sku         = document.getElementById('sku').value.trim();
+  const is_featured = document.getElementById('is_featured').checked;
+
+  if (!name)              return toast('Product name is required', 'error');
+  if (!category_id)       return toast('Please select a category', 'error');
+  if (!price || price<=0) return toast('Enter a valid price', 'error');
+  if (stock < 0)          return toast('Stock cannot be negative', 'error');
+  if (!uploadedImages.length) return toast('Please upload at least one photo', 'error');
+
+  const btn = document.getElementById('submitBtn');
+  btnLoading(btn, true);
+
+  try {
+    const payload = {
+      name, category_id, brand, description,
+      price, discount_pct, stock, is_featured,
+      images: uploadedImages.map(i => ({ url: i.url, alt_text: name, is_primary: i.is_primary })),
+    };
+    if (sku) payload.sku = sku;
+
+    await api('POST', '/api/admin/products', payload);
+    toast('Product added successfully! 🎉', 'success');
+
+    // Reset
+    setTimeout(() => {
+      ['name','brand','price','discount_pct','stock','sku','description'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('category_id').value = '';
+      document.getElementById('is_featured').checked = false;
+      document.getElementById('previewGrid').innerHTML = '';
+      document.getElementById('imgTip').style.display = 'none';
+      uploadedImages = [];
+      updatePreview();
+    }, 500);
+
+  } catch(e) {
+    toast(e.message || 'Failed to add product', 'error');
+  } finally {
+    btnLoading(btn, false);
+  }
+}
+
+loadCategories();
+updatePreview();
+</script>
+</body>
+</html>
