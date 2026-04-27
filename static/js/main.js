@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════
-const BASE_URL = 'https://indiashop-backend-exmc.onrender.com';
+const BASE_URL = 'https://indiashop-backend-exmc.onrender.com/api';
 
 // ═══════════════════════════════════════════════
 // API HELPER
