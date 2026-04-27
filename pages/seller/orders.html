@@ -1,1 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders — indiaShop Seller</title>
+<link rel="stylesheet" href="../../static/css/style.css">
+<link rel="stylesheet" href="../../static/css/nav.css">
+<style>
+.seller-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: var(--radius); padding: 22px; color: #fff; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.seller-header-left h2 { font-size: 20px; font-weight: 800; }
+.seller-header-left p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+.seller-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.seller-nav a { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--text2); box-shadow: var(--shadow-sm); transition: var(--transition); }
+.seller-nav a:hover, .seller-nav a.active { background: var(--primary); color: #fff; }
 
+.order-table-wrap { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.order-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.order-table th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); border-bottom: 1px solid var(--border); }
+.order-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.order-table tr:last-child td { border-bottom: none; }
+.order-table tr:hover td { background: var(--bg); }
+
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-success  { background: #e6f9f0; color: #1a8a4a; }
+.badge-warning  { background: #fff8e1; color: #c47d00; }
+.badge-danger   { background: #ffeaea; color: #c0392b; }
+.badge-info     { background: #e8f4fd; color: #1a6fa0; }
+.badge-default  { background: var(--bg); color: var(--text3); }
+
+.order-items-mini { display: flex; flex-direction: column; gap: 4px; }
+.order-item-mini  { display: flex; align-items: center; gap: 8px; }
+.order-item-mini img { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.filter-bar select { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13px; background: var(--surface); color: var(--text); cursor: pointer; }
+.filter-bar .count-label { font-size: 13px; color: var(--text3); margin-left: auto; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+.pagination { display: flex; justify-content: center; gap: 6px; padding: 16px; }
+.pagination button { padding: 6px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 13px; cursor: pointer; }
+.pagination button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+@media(max-width:768px) {
+  .order-table th:nth-child(3), .order-table td:nth-child(3),
+  .order-table th:nth-child(4), .order-table td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+<nav class="navbar"><div class="container"></div></nav>
+<div class="page-content"><div class="container">
+
+  <div class="seller-header">
+    <div class="seller-header-left">
+      <h2>My Orders</h2>
+      <p>Orders containing your products</p>
+    </div>
+  </div>
+
+  <div class="seller-nav">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="products.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      Products
+    </a>
+    <a href="orders.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Orders
+    </a>
+    <a href="add-product.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Add Product
+    </a>
+    <a href="../../index.html" style="margin-left:auto">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      View Store
+    </a>
+  </div>
+
+  <div class="filter-bar">
+    <select id="statusFilter" onchange="applyFilter()">
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="confirmed">Confirmed</option>
+      <option value="shipped">Shipped</option>
+      <option value="delivered">Delivered</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+    <span class="count-label" id="order-count"></span>
+  </div>
+
+  <div class="order-table-wrap">
+    <div id="orders-loading" style="padding:40px;text-align:center;color:var(--text3)">Loading orders…</div>
+    <div id="orders-empty" class="empty-state" style="display:none">
+      <div class="icon">📦</div>
+      <p>No orders found</p>
+    </div>
+    <table class="order-table" id="orders-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Items</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="orders-body"></tbody>
+    </table>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+
+</div></div>
+<nav class="bottom-nav"></nav>
+
+<script src="../../static/js/main.js"></script>
+<script>
+if (!Auth.isLoggedIn()) window.location.href = '../login.html';
+if (!Auth.isAdmin() && !Auth.isSeller()) window.location.href = '../account.html';
+buildNavbar('account');
+
+let allOrders = [];
+let currentPage = 1;
+const perPage = 20;
+
+const STATUS_BADGES = {
+  pending:   'badge-warning',
+  confirmed: 'badge-info',
+  shipped:   'badge-info',
+  delivered: 'badge-success',
+  cancelled: 'badge-danger',
+};
+
+async function loadOrders(page = 1) {
+  const status = document.getElementById('statusFilter').value;
+  const qp = `?page=${page}&limit=${perPage}` + (status ? `&status=${status}` : '');
+
+  document.getElementById('orders-loading').style.display = 'block';
+  document.getElementById('orders-table').style.display  = 'none';
+  document.getElementById('orders-empty').style.display  = 'none';
+
+  try {
+    const data = await api('GET', '/seller/orders' + qp);
+    allOrders = (data.data && data.data.orders) ? data.data.orders : [];
+    const total = (data.data && data.data.total) || 0;
+    const totalPages = (data.data && data.data.total_pages) || 1;
+
+    document.getElementById('order-count').textContent = `${total} order${total !== 1 ? 's' : ''}`;
+    document.getElementById('orders-loading').style.display = 'none';
+
+    if (!allOrders.length) {
+      document.getElementById('orders-empty').style.display = 'flex';
+      return;
+    }
+
+    renderOrders(allOrders);
+    renderPagination(page, totalPages);
+  } catch(e) {
+    document.getElementById('orders-loading').textContent = 'Failed to load orders. ' + (e.message || '');
+    toast('Failed to load orders', 'error');
+  }
+}
+
+function renderOrders(orders) {
+  const tbody = document.getElementById('orders-body');
+  tbody.innerHTML = orders.map(o => {
+    const items = o.items || [];
+    const itemsHtml = `<div class="order-items-mini">
+      ${items.slice(0, 2).map(it => `
+        <div class="order-item-mini">
+          <img src="${it.product_image || 'https://placehold.co/32x32?text=P'}" alt="${it.product_name}">
+          <span>${it.product_name} × ${it.quantity}</span>
+        </div>`).join('')}
+      ${items.length > 2 ? `<span style="font-size:11px;color:var(--text3)">+${items.length - 2} more</span>` : ''}
+    </div>`;
+
+    const address = o.address || {};
+    const customer = address.full_name || '—';
+    const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const badge   = STATUS_BADGES[o.status] || 'badge-default';
+
+    return `<tr>
+      <td style="font-family:monospace;font-size:12px;color:var(--text3)">#${(o.id||'').slice(-8).toUpperCase()}</td>
+      <td>${itemsHtml}</td>
+      <td>${customer}<br><span style="font-size:11px;color:var(--text3)">${address.city || ''}</span></td>
+      <td style="white-space:nowrap">${dateStr}</td>
+      <td style="font-weight:700">${formatPrice(o.total_amount || 0)}</td>
+      <td><span class="badge ${badge}">${(o.status||'').charAt(0).toUpperCase() + (o.status||'').slice(1)}</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('orders-table').style.display = 'table';
+}
+
+function renderPagination(current, total) {
+  const pg = document.getElementById('pagination');
+  if (total <= 1) { pg.innerHTML = ''; return; }
+  let html = `<button ${current === 1 ? 'disabled' : ''} onclick="loadOrders(${current - 1})">←</button>`;
+  for (let i = 1; i <= total; i++) {
+    html += `<button class="${i === current ? 'active' : ''}" onclick="loadOrders(${i})">${i}</button>`;
+  }
+  html += `<button ${current === total ? 'disabled' : ''} onclick="loadOrders(${current + 1})">→</button>`;
+  pg.innerHTML = html;
+}
+
+function applyFilter() {
+  loadOrders(1);
+}
+
+loadOrders(1);
+</script>
+</body>
+</html>
