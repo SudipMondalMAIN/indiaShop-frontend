@@ -1,69 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>indiaShop — India's Most Trusted Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="static/css/style.css">
 <link rel="stylesheet" href="static/css/nav.css">
 <style>
-/* Hero Banner */
-.hero-banner {
-  background: linear-gradient(90deg, #2874f0, #0c47a1);
-  border-radius: var(--radius); overflow: hidden; margin-bottom: 24px;
-  position: relative; min-height: 180px; display: flex; align-items: center; padding: 32px;
+:root {
+  --primary: #e8232a;
+  --primary-dark: #b91c22;
+  --primary-light: #fff0f0;
+  --accent: #ff6b00;
+  --accent2: #00a676;
+  --ink: #0d0d0d;
+  --ink2: #4a4a5a;
+  --ink3: #8a8a9a;
+  --surface: #ffffff;
+  --bg: #f4f3f0;
+  --border: rgba(0,0,0,0.08);
+  --r: 16px;
+  --r-sm: 10px;
+  --r-xs: 6px;
+  --shadow-xs: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.14);
+  --t: all 0.25s cubic-bezier(.4,0,.2,1);
+  --fh: 'Clash Display', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
 }
-.hero-banner::after {
-  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 40%;
-  background: url('https://rukminim2.flixcart.com/flap/464/708/image/633789f7def60050.jpg') center/cover no-repeat;
-  opacity: 0.3;
-}
-.hero-content { position: relative; z-index: 1; color: #fff; }
-.hero-content h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; line-height: 1.2; }
-.hero-content p { font-size: 15px; opacity: 0.85; margin-bottom: 20px; }
-.hero-content .btn { background: #fff; color: var(--primary); font-weight: 700; }
-.hero-content .btn:hover { background: #f0f4ff; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--fb);color:var(--ink);-webkit-font-smoothing:antialiased}
 
-/* Category Scroll */
-.cat-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
-.cat-scroll::-webkit-scrollbar { display: none; }
-.cat-chip {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  flex-shrink: 0; cursor: pointer; padding: 12px 16px;
-  background: var(--surface); border-radius: var(--radius);
-  box-shadow: var(--shadow-sm); transition: var(--transition); min-width: 80px;
-}
-.cat-chip:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-.cat-chip-icon {
-  width: 48px; height: 48px; border-radius: 50%; display: flex;
-  align-items: center; justify-content: center; font-size: 22px;
-}
-.cat-chip span { font-size: 11px; font-weight: 600; color: var(--text2); text-align: center; }
+/* ─── LAYOUT ─── */
+.page-content{padding:20px 0 100px}
+.container{max-width:1240px;margin:0 auto;padding:0 20px}
 
-/* Banner Grid */
-.banner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.banner-card {
-  border-radius: var(--radius); overflow: hidden; position: relative;
-  height: 160px; cursor: pointer; display: flex; align-items: flex-end; padding: 20px;
-}
-.banner-card::before { content: ''; position: absolute; inset: 0; z-index: 0; }
-.banner-card.b1 { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
-.banner-card.b2 { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); }
-.banner-card-text { position: relative; z-index: 1; }
-.banner-card-text h3 { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.banner-card-text p { font-size: 12px; color: var(--text2); }
+/* ─── NAVBAR PLACEHOLDER ─── */
+nav.navbar .container{min-height:60px}
 
-/* Offer strip */
-.offer-strip {
-  background: linear-gradient(90deg, #ff6b35, #ff4e50);
-  border-radius: var(--radius); padding: 12px 20px;
-  display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
-  overflow: hidden;
+/* ─── HERO ─── */
+.hero{
+  position:relative;
+  background:#0a0a0f;
+  border-radius:24px;
+  overflow:hidden;
+  min-height:260px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:44px 48px;
+  margin-bottom:20px;
 }
-.offer-strip-label { color: #fff; font-size: 16px; font-weight: 800; white-space: nowrap; }
-.offer-strip-items { display: flex; gap: 12px; overflow: hidden; flex: 1; }
-.offer-chip {
-  background: rgba(255,255,255,0.2); color: #fff; padding: 4px 12px;
-  border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(232,35,42,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(255,107,0,0.12) 0%, transparent 60%);
+}
+.hero-grid-overlay{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+}
+.hero-content{position:relative;z-index:1;max-width:520px}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(232,35,42,0.15);
+  border:1px solid rgba(232,35,42,0.3);
+  color:#ff8080;
+  font-size:11px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:5px 13px;border-radius:20px;
+  margin-bottom:18px;
+}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:#e8232a;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-family:var(--fh);
+  font-size:46px;font-weight:700;
+  line-height:1.1;color:#fff;
+  margin-bottom:12px;
+  letter-spacing:-1px;
+}
+.hero h1 em{color:var(--primary);font-style:normal}
+.hero p{font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:28px;line-height:1.65;max-width:400px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--primary);color:#fff;
+  font-family:var(--fh);font-size:14px;font-weight:600;
+  padding:13px 26px;border-radius:12px;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:var(--t);
+}
+.btn-cta:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,35,42,0.4)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.7);
+  border:1px solid rgba(255,255,255,0.12);
+  font-size:14px;font-weight:500;
+  padding:13px 26px;border-radius:12px;
+  text-decoration:none;transition:var(--t);
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.12);color:#fff}
+.hero-right{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:10px;
+  align-items:flex-end;
+}
+.hero-stat-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;padding:14px 20px;
+  backdrop-filter:blur(10px);
+  text-align:center;min-width:110px;
+}
+.hero-stat-card strong{
+  display:block;font-family:var(--fh);
+  font-size:22px;font-weight:700;color:#fff;
+}
+.hero-stat-card span{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;display:block}
+
+/* ─── OFFER TICKER ─── */
+.ticker-wrap{
+  background:var(--primary);
+  border-radius:12px;
+  padding:11px 20px;
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:24px;overflow:hidden;
+}
+.ticker-badge{
+  background:rgba(0,0,0,0.18);color:#fff;
+  font-family:var(--fh);font-size:11px;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 12px;border-radius:6px;
+  white-space:nowrap;flex-shrink:0;
+}
+.ticker-track{flex:1;overflow:hidden}
+.ticker-items{
+  display:flex;gap:36px;
+  animation:ticker 22s linear infinite;
+  width:max-content;
+}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{
+  color:#fff;font-size:13px;font-weight:500;
+  white-space:nowrap;display:flex;align-items:center;gap:8px;
+}
+.ticker-item::before{content:'●';font-size:6px;opacity:0.5}
+
+/* ─── TRUST BAR ─── */
+.trust{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-bottom:28px;
+}
+.trust-item{
+  background:var(--surface);border-radius:var(--r);
+  padding:18px 20px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:var(--shadow-xs);
+  border:1px solid var(--border);
+  transition:var(--t);
+}
+.trust-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.trust-icon-wrap{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.trust-text strong{display:block;font-size:13px;font-weight:700;color:var(--ink)}
+.trust-text span{font-size:11px;color:var(--ink3)}
+
+/* ─── SECTION HEADER ─── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-title{
+  font-family:var(--fh);font-size:21px;font-weight:700;
+  color:var(--ink);display:flex;align-items:center;gap:10px;
+}
+.sec-title-line{
+  display:block;width:4px;height:22px;
+  background:var(--primary);border-radius:4px;
+  flex-shrink:0;
+}
+.sec-link{
+  font-size:12px;font-weight:600;color:var(--primary);
+  text-decoration:none;padding:7px 16px;
+  border:1.5px solid var(--primary);border-radius:20px;
+  transition:var(--t);letter-spacing:.2px;
+}
+.sec-link:hover{background:var(--primary);color:#fff}
+
+/* ─── CATEGORIES ─── */
+.cat-row{
+  display:flex;gap:10px;
+  overflow-x:auto;padding-bottom:4px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.cat-row::-webkit-scrollbar{display:none}
+.cat-chip{
+  flex-shrink:0;display:flex;flex-direction:column;
+  align-items:center;gap:8px;cursor:pointer;
+  padding:16px 14px;background:var(--surface);
+  border-radius:var(--r);box-shadow:var(--shadow-xs);
+  transition:var(--t);min-width:80px;
+  border:1.5px solid transparent;
+  position:relative;overflow:hidden;
+}
+.cat-chip::after{
+  content:'';position:absolute;inset:0;
+  background:var(--primary);opacity:0;
+  transition:opacity .25s ease;
+}
+.cat-chip:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+.cat-chip:hover .cat-chip-label{color:var(--primary)}
+.cat-icon{
+  width:50px;height:50px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;transition:transform .3s ease;
+}
+.cat-chip:hover .cat-icon{transform:scale(1.1)}
+.cat-chip-label{font-size:11px;font-weight:600;color:var(--ink2);text-align:center;transition:color .25s}
+
+/* ─── PROMO BANNERS ─── */
+.promo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.promo-card{
+  border-radius:20px;overflow:hidden;
+  position:relative;height:160px;cursor:pointer;
+  display:flex;align-items:flex-end;padding:22px;
+  transition:var(--t);
+}
+.promo-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.promo-card.p1{background:linear-gradient(135deg,#ffecd2 0%,#fcb69f 100%)}
+.promo-card.p2{background:linear-gradient(135deg,#0a0a1a 0%,#1a1040 100%)}
+.promo-emoji{
+  position:absolute;right:-8px;top:50%;
+  transform:translateY(-50%);
+  font-size:90px;opacity:0.18;
+  user-select:none;pointer-events:none;
+}
+.promo-content{position:relative;z-index:1}
+.promo-content h3{
+  font-family:var(--fh);font-size:19px;font-weight:700;
+  margin-bottom:3px;
+}
+.promo-card.p1 .promo-content h3{color:#1a0a0a}
+.promo-card.p2 .promo-content h3{color:#fff}
+.promo-content p{font-size:12px;margin-bottom:8px}
+.promo-card.p1 .promo-content p{color:rgba(26,10,10,0.6)}
+.promo-card.p2 .promo-content p{color:rgba(255,255,255,0.5)}
+.promo-tag{
+  display:inline-block;font-size:11px;font-weight:700;
+  padding:4px 12px;border-radius:20px;
+}
+.promo-card.p1 .promo-tag{background:var(--primary);color:#fff}
+.promo-card.p2 .promo-tag{background:var(--accent);color:#fff}
+
+/* ─── SKELETON ─── */
+.skeleton{background:var(--surface);border-radius:var(--r);overflow:hidden;animation:pulse 1.5s ease-in-out infinite}
+.skel-img{height:160px;background:#eee}
+.skel-body{padding:12px}
+.skel-line{height:9px;border-radius:5px;background:#eee;margin-bottom:8px}
+.skel-line.s{width:55%}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+/* ─── PRODUCT CARDS ─── */
+.prod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.prod-card{
+  background:var(--surface);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;
+  box-shadow:var(--shadow-xs);
+  border:1px solid var(--border);
+  transition:var(--t);position:relative;
+}
+.prod-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.prod-card:hover .prod-img{transform:scale(1.04)}
+.prod-img-wrap{overflow:hidden;height:165px;background:#f7f7f7}
+.prod-img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s ease;display:block;
+}
+.prod-body{padding:12px 14px 14px}
+.prod-name{
+  font-size:13px;font-weight:600;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:6px;
+}
+.prod-pricing{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+.prod-price{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--primary)}
+.prod-mrp{font-size:11px;color:var(--ink3);text-decoration:line-through}
+.prod-off{font-size:11px;font-weight:700;color:var(--accent2)}
+.prod-badge{
+  position:absolute;top:10px;left:10px;
+  background:var(--primary);color:#fff;
+  font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:6px;
+  letter-spacing:.2px;
+}
+.prod-wishlist{
+  position:absolute;top:10px;right:10px;
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:var(--t);
+  opacity:0;
+}
+.prod-card:hover .prod-wishlist{opacity:1}
+.prod-wishlist:hover{background:#fff;transform:scale(1.1)}
+
+/* ─── SECTION DIVIDER ─── */
+.sec-gap{margin-bottom:32px}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){
+  .prod-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:840px){
+  .trust{grid-template-columns:repeat(2,1fr)}
+  .prod-grid{grid-template-columns:repeat(3,1fr)}
+  .hero h1{font-size:36px}
+  .hero{padding:36px 32px}
+  .hero-right{display:none}
+}
+@media(max-width:600px){
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .promo-grid{grid-template-columns:1fr}
+  .hero h1{font-size:28px}
+  .hero{padding:28px 24px;min-height:200px}
+  .hero p{display:none}
+}
+@media(max-width:480px){
+  .trust{grid-template-columns:1fr 1fr}
+  .trust-text span{display:none}
 }
 </style>
 </head>
@@ -73,137 +349,242 @@
 <div class="page-content">
 <div class="container">
 
-  <!-- Hero -->
-  <div class="hero-banner mb-4">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-overlay"></div>
     <div class="hero-content">
-      <h2>Shop Smarter,<br>Save Bigger</h2>
-      <p>Millions of products. Best prices. Delivered fast.</p>
-      <a href="pages/products.html" class="btn">Shop Now →</a>
+      <div class="hero-pill">
+        <span class="hero-pill-dot"></span>
+        India's #1 Shopping Destination
+      </div>
+      <h1>Shop Smarter,<br><em>Save Bigger</em></h1>
+      <p>Crores of products at unbeatable prices — delivered fast, anywhere in India.</p>
+      <div class="hero-actions">
+        <a href="products.html" class="btn-cta">Shop Now →</a>
+        <a href="products.html?sort=newest" class="btn-ghost">New Arrivals</a>
+      </div>
     </div>
-  </div>
-
-  <!-- Categories -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Shop by Category</div>
-    </div>
-    <div class="cat-scroll" id="cat-row">
-      <div class="cat-chip" onclick="shopCategory('Electronics')">
-        <div class="cat-chip-icon" style="background:#e3f2fd">📱</div>
-        <span>Electronics</span>
+    <div class="hero-right">
+      <div class="hero-stat-card">
+        <strong>2Cr+</strong>
+        <span>Products</span>
       </div>
-      <div class="cat-chip" onclick="shopCategory('Fashion')">
-        <div class="cat-chip-icon" style="background:#fce4ec">👗</div>
-        <span>Fashion</span>
+      <div class="hero-stat-card">
+        <strong>98%</strong>
+        <span>Happy Buyers</span>
       </div>
-      <div class="cat-chip" onclick="shopCategory('Home')">
-        <div class="cat-chip-icon" style="background:#e8f5e9">🏠</div>
-        <span>Home</span>
-      </div>
-      <div class="cat-chip" onclick="shopCategory('Beauty')">
-        <div class="cat-chip-icon" style="background:#fff3e0">💄</div>
-        <span>Beauty</span>
-      </div>
-      <div class="cat-chip" onclick="shopCategory('Sports')">
-        <div class="cat-chip-icon" style="background:#e8eaf6">⚽</div>
-        <span>Sports</span>
-      </div>
-      <div class="cat-chip" onclick="shopCategory('Books')">
-        <div class="cat-chip-icon" style="background:#f3e5f5">📚</div>
-        <span>Books</span>
-      </div>
-      <div class="cat-chip" onclick="shopCategory('Toys')">
-        <div class="cat-chip-icon" style="background:#fff8e1">🎮</div>
-        <span>Toys</span>
-      </div>
-      <div class="cat-chip" onclick="shopCategory('Appliances')">
-        <div class="cat-chip-icon" style="background:#e0f7fa">🔌</div>
-        <span>Appliances</span>
+      <div class="hero-stat-card">
+        <strong>48hr</strong>
+        <span>Fast Delivery</span>
       </div>
     </div>
   </div>
 
-  <!-- Offer strip -->
-  <div class="offer-strip">
-    <div class="offer-strip-label">🔥 Today's Deals</div>
-    <div class="offer-strip-items">
-      <span class="offer-chip">Up to 70% off on Electronics</span>
-      <span class="offer-chip">Fashion Sale — Min 40% off</span>
-      <span class="offer-chip">Free delivery on ₹499+</span>
-      <span class="offer-chip">Flat ₹200 off on first order</span>
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-badge">🔥 Live Deals</div>
+    <div class="ticker-track">
+      <div class="ticker-items">
+        <span class="ticker-item">Up to 70% off on Electronics</span>
+        <span class="ticker-item">Fashion Sale — Min 40% off</span>
+        <span class="ticker-item">Free delivery on ₹499+</span>
+        <span class="ticker-item">Flat ₹200 off on first order</span>
+        <span class="ticker-item">Code INDIA10 for extra 10% off</span>
+        <span class="ticker-item">Up to 70% off on Electronics</span>
+        <span class="ticker-item">Fashion Sale — Min 40% off</span>
+        <span class="ticker-item">Free delivery on ₹499+</span>
+        <span class="ticker-item">Flat ₹200 off on first order</span>
+        <span class="ticker-item">Code INDIA10 for extra 10% off</span>
+      </div>
     </div>
   </div>
 
-  <!-- Banner Grid -->
-  <div class="banner-grid mb-4">
-    <div class="banner-card b1" onclick="shopCategory('Fashion')">
-      <div class="banner-card-text">
+  <!-- TRUST BAR -->
+  <div class="trust">
+    <div class="trust-item">
+      <div class="trust-icon-wrap" style="background:#fff0f0">🚚</div>
+      <div class="trust-text">
+        <strong>Fast Delivery</strong>
+        <span>48-hr across India</span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon-wrap" style="background:#f0fff8">🔄</div>
+      <div class="trust-text">
+        <strong>Easy Returns</strong>
+        <span>7-day no-questions</span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon-wrap" style="background:#fffaf0">🔒</div>
+      <div class="trust-text">
+        <strong>Secure Payments</strong>
+        <span>UPI, Cards, COD</span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon-wrap" style="background:#f0f4ff">💬</div>
+      <div class="trust-text">
+        <strong>24/7 Support</strong>
+        <span>Always here for you</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="sec-gap">
+    <div class="sec-hd">
+      <div class="sec-title"><span class="sec-title-line"></span>Shop by Category</div>
+    </div>
+    <div class="cat-row">
+      <div class="cat-chip" onclick="shopCat('Electronics')">
+        <div class="cat-icon" style="background:#e3f2fd">📱</div>
+        <span class="cat-chip-label">Electronics</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Fashion')">
+        <div class="cat-icon" style="background:#fce4ec">👗</div>
+        <span class="cat-chip-label">Fashion</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Home')">
+        <div class="cat-icon" style="background:#e8f5e9">🏠</div>
+        <span class="cat-chip-label">Home</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Beauty')">
+        <div class="cat-icon" style="background:#fff3e0">💄</div>
+        <span class="cat-chip-label">Beauty</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Sports')">
+        <div class="cat-icon" style="background:#e8eaf6">⚽</div>
+        <span class="cat-chip-label">Sports</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Books')">
+        <div class="cat-icon" style="background:#f3e5f5">📚</div>
+        <span class="cat-chip-label">Books</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Toys')">
+        <div class="cat-icon" style="background:#fff8e1">🎮</div>
+        <span class="cat-chip-label">Toys</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Appliances')">
+        <div class="cat-icon" style="background:#e0f7fa">🔌</div>
+        <span class="cat-chip-label">Appliances</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Grocery')">
+        <div class="cat-icon" style="background:#f1f8e9">🛒</div>
+        <span class="cat-chip-label">Grocery</span>
+      </div>
+      <div class="cat-chip" onclick="shopCat('Furniture')">
+        <div class="cat-icon" style="background:#efebe9">🪑</div>
+        <span class="cat-chip-label">Furniture</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMO BANNERS -->
+  <div class="promo-grid">
+    <div class="promo-card p1" onclick="shopCat('Fashion')">
+      <div class="promo-emoji">👗</div>
+      <div class="promo-content">
         <h3>Fashion Sale</h3>
         <p>Up to 60% off on top brands</p>
+        <span class="promo-tag">Shop Now →</span>
       </div>
     </div>
-    <div class="banner-card b2" onclick="shopCategory('Electronics')">
-      <div class="banner-card-text">
+    <div class="promo-card p2" onclick="shopCat('Electronics')">
+      <div class="promo-emoji">📱</div>
+      <div class="promo-content">
         <h3>Electronics</h3>
         <p>Best deals on gadgets</p>
+        <span class="promo-tag">Explore →</span>
       </div>
     </div>
   </div>
 
-  <!-- Featured Products -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Featured Products</div>
-      <a href="pages/products.html" class="section-link">See All →</a>
+  <!-- FEATURED PRODUCTS -->
+  <div class="sec-gap">
+    <div class="sec-hd">
+      <div class="sec-title"><span class="sec-title-line"></span>Featured Products</div>
+      <a href="products.html" class="sec-link">See All →</a>
     </div>
-    <div class="grid-5" id="featured-grid"></div>
+    <div class="prod-grid" id="featured-grid"></div>
   </div>
 
-  <!-- New Arrivals -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">New Arrivals</div>
-      <a href="pages/products.html?sort=newest" class="section-link">View All →</a>
+  <!-- NEW ARRIVALS -->
+  <div class="sec-gap">
+    <div class="sec-hd">
+      <div class="sec-title"><span class="sec-title-line"></span>New Arrivals</div>
+      <a href="products.html?sort=newest" class="sec-link">View All →</a>
     </div>
-    <div class="grid-5" id="new-grid"></div>
+    <div class="prod-grid" id="new-grid"></div>
   </div>
 
 </div>
 </div>
 
 <nav class="bottom-nav"></nav>
+
 <script src="static/js/main.js"></script>
 <script>
-  buildNavbar('home');
+buildNavbar('home');
 
-  function shopCategory(cat) {
-    window.location.href = `products.html?category=${encodeURIComponent(cat)}`;
+function shopCat(cat) {
+  window.location.href = `products.html?category=${encodeURIComponent(cat)}`;
+}
+
+function skeletons(n, el) {
+  el.innerHTML = Array(n).fill(0).map(() => `
+    <div class="skeleton">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line"></div>
+        <div class="skel-line s"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function prodCard(p) {
+  const disc = p.mrp && p.price ? Math.round((1 - p.price / p.mrp) * 100) : 0;
+  return `
+    <div class="prod-card" onclick="window.location.href='product.html?id=${p.id || p._id}'">
+      ${disc >= 10 ? `<div class="prod-badge">${disc}% OFF</div>` : ''}
+      <button class="prod-wishlist" onclick="event.stopPropagation();this.textContent='❤️'">🤍</button>
+      <div class="prod-img-wrap">
+        <img class="prod-img" src="${p.image || p.images?.[0] || ''}" alt="${p.name}" loading="lazy"
+          onerror="this.src='static/img/placeholder.png'">
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-pricing">
+          <span class="prod-price">₹${(p.price || 0).toLocaleString('en-IN')}</span>
+          ${p.mrp ? `<span class="prod-mrp">₹${p.mrp.toLocaleString('en-IN')}</span>` : ''}
+          ${disc >= 10 ? `<span class="prod-off">${disc}% off</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadGrid(endpoint, gridId) {
+  const el = document.getElementById(gridId);
+  skeletons(5, el);
+  try {
+    const data = await api('GET', endpoint);
+    el.innerHTML = '';
+    const items = (data.products || []).slice(0, 10);
+    if (!items.length) {
+      el.innerHTML = '<p style="grid-column:1/-1;padding:40px;text-align:center;color:#aaa;font-size:14px">No products yet.</p>';
+      return;
+    }
+    items.forEach(p => el.insertAdjacentHTML('beforeend', prodCard(p)));
+  } catch {
+    el.innerHTML = '';
   }
+}
 
-  async function loadFeatured() {
-    skeletonCards(5, document.getElementById('featured-grid'));
-    try {
-      const data = await api('GET', '/products?limit=10&sort=rating');
-      const grid = document.getElementById('featured-grid');
-      grid.innerHTML = '';
-      (data.products || []).slice(0, 10).forEach(p => grid.insertAdjacentHTML('beforeend', productCard(p)));
-      if (!data.products?.length) grid.innerHTML = '<p class="text-muted p-4" style="grid-column:1/-1">No products yet.</p>';
-    } catch { document.getElementById('featured-grid').innerHTML = ''; }
-  }
-
-  async function loadNew() {
-    skeletonCards(5, document.getElementById('new-grid'));
-    try {
-      const data = await api('GET', '/products?limit=10&sort=newest');
-      const grid = document.getElementById('new-grid');
-      grid.innerHTML = '';
-      (data.products || []).slice(0, 10).forEach(p => grid.insertAdjacentHTML('beforeend', productCard(p)));
-      if (!data.products?.length) grid.innerHTML = '';
-    } catch { document.getElementById('new-grid').innerHTML = ''; }
-  }
-
-  loadFeatured();
-  loadNew();
+loadGrid('/products?limit=10&sort=rating', 'featured-grid');
+loadGrid('/products?limit=10&sort=newest', 'new-grid');
 </script>
 </body>
 </html>
