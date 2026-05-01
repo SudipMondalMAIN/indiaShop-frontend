@@ -232,9 +232,28 @@ async function init() {
       api('GET', '/cart'),
       api('GET', '/users/addresses'),
     ]);
-    _cartData  = cartRes.status === 'fulfilled'
-      ? (cartRes.value?.data ?? cartRes.value)
-      : { items: [] };
+   const rawCart = cartRes.status === 'fulfilled'
+  ? (cartRes.value?.data ?? cartRes.value)
+  : { items: [] };
+
+// API items flatten করো
+const flatItems = (rawCart.items || []).map(it => ({
+  id:              it.id || it._id || '',
+  product_name:    it.product?.name || '',
+  primary_image:   it.product?.primary_image || '',
+  discounted_price: it.product?.discounted_price ?? it.unit_price ?? 0,
+  original_price:  it.product?.price ?? it.product?.discounted_price ?? 0,
+  unit_price:      it.product?.discounted_price ?? 0,
+  quantity:        it.quantity || 1,
+  slug:            it.product?.slug || '',
+  brand:           it.product?.brand || '',
+  subtotal:        it.subtotal || 0,
+}));
+
+_cartData = {
+  items: flatItems,
+  total_amount: flatItems.reduce((s, i) => s + i.discounted_price * i.quantity, 0),
+};
     _addresses = addrRes.status === 'fulfilled'
       ? (addrRes.value?.data ?? addrRes.value ?? [])
       : [];
