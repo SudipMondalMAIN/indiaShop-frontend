@@ -385,14 +385,14 @@ function openStep(n) {
 
     body.classList.remove('open');
     smry.style.display = 'none';
-    if (chg) chg.style.display = 'none';
+    if (chg) chg.style.display = 'none';   // ← fixed
     card.classList.remove('locked');
 
     if (i < n) {
       dot.classList.remove('active'); dot.classList.add('done');
       sc.textContent = '✓';
       smry.style.display = 'block';
-      if (chg) chg.style.display = '';
+      if (chg) chg.style.display = '';    // ← fixed
       const sl = document.getElementById('sl' + i);
       if (sl) sl.classList.add('done');
     } else if (i === n) {
@@ -408,7 +408,6 @@ function openStep(n) {
     }
   });
 
-  // ── Bottom bar ──
   const stepBtn  = document.getElementById('step-btn');
   const placeBtn = document.getElementById('place-btn');
   const bbLbl    = document.getElementById('bb-lbl');
