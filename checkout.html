@@ -24,7 +24,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 img{display:block;max-width:100%}
 .page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh}
 
-/* ── HEADER ── */
+/* HEADER */
 .header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
 .back-btn{color:#fff;display:flex;align-items:center;cursor:pointer}
@@ -32,32 +32,31 @@ img{display:block;max-width:100%}
 .header-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;flex:1}
 
 /* STEP STRIP */
-.step-strip{background:var(--green-d);padding:9px 14px;display:flex;align-items:center;justify-content:center;gap:0}
+.step-strip{background:var(--green-d);padding:9px 14px;display:flex;align-items:center;justify-content:center}
 .sdot{display:flex;flex-direction:column;align-items:center;gap:2px}
 .sdot-circle{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.25s}
 .sdot.active .sdot-circle{background:#fff;color:var(--green-d);border-color:#fff}
 .sdot.done .sdot-circle{background:#fff;color:var(--green-d);border-color:#fff}
 .sdot-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,.55);transition:.25s}
 .sdot.active .sdot-lbl,.sdot.done .sdot-lbl{color:#fff}
-.sline{width:40px;height:2px;background:rgba(255,255,255,.2);margin-bottom:13px;transition:.25s}
+.sline{width:60px;height:2px;background:rgba(255,255,255,.2);margin-bottom:13px;transition:.25s}
 .sline.done{background:#fff}
 
-/* ── SCROLL ── */
+/* SCROLL */
 .scroll-body{padding:10px 10px calc(130px + env(safe-area-inset-bottom,0px))}
 
-/* ── STEP CARD ── */
+/* STEP CARD */
 .step-card{background:#fff;border-radius:var(--r8);margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden;transition:opacity .2s}
 .step-card.locked{opacity:.5;pointer-events:none}
 .step-head{display:flex;align-items:center;gap:10px;padding:13px 14px}
-.step-num{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
-.step-num.done{background:var(--green-d)}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .step-title{font-size:15px;font-weight:700;flex:1}
 .step-change{font-size:12px;font-weight:700;color:var(--blue);background:#e3f2fd;padding:3px 10px;border-radius:99px;cursor:pointer;display:none}
-.step-summary{padding:0 14px 12px;font-size:12px;color:var(--t2);line-height:1.5;display:none;border-top:1px solid var(--border2);padding-top:10px;margin-top:0}
+.step-summary{padding:10px 14px 12px;font-size:12px;color:var(--t2);line-height:1.5;display:none;border-top:1px solid var(--border2)}
 .step-body{padding:0 14px 14px;display:none}
 .step-body.open{display:block}
 
-/* ── ADDRESS OPTIONS ── */
+/* ADDRESS OPTIONS */
 .addr-opt{border:1.5px solid var(--border);border-radius:var(--r8);padding:12px;margin-bottom:8px;cursor:pointer;display:flex;gap:10px;transition:border-color .15s,background .15s}
 .addr-opt.sel{border-color:var(--green);background:var(--green-l)}
 .addr-radio{width:17px;height:17px;accent-color:var(--green);flex-shrink:0;margin-top:2px;cursor:pointer}
@@ -68,7 +67,7 @@ img{display:block;max-width:100%}
 .add-addr-row{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--blue);padding:8px 2px;cursor:pointer}
 .add-addr-row svg{width:16px;height:16px}
 
-/* ── PAYMENT ── */
+/* PAYMENT */
 .pay-opt{border:1.5px solid var(--border);border-radius:var(--r8);padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .15s}
 .pay-opt.sel{border-color:var(--green);background:var(--green-l)}
 .pay-ico{font-size:22px;flex-shrink:0}
@@ -76,40 +75,28 @@ img{display:block;max-width:100%}
 .pay-sub{font-size:11px;color:var(--t3)}
 .pay-badge{background:var(--orange);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;margin-left:5px}
 
-/* ── REVIEW ITEMS ── */
-.rv-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2)}
-.rv-item:last-of-type{border-bottom:none}
-.rv-img{width:50px;height:50px;flex-shrink:0;background:var(--bg);border-radius:var(--r4);overflow:hidden;display:flex;align-items:center;justify-content:center}
-.rv-img img{width:100%;height:100%;object-fit:contain}
-.rv-name{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:2px}
-.rv-qty{font-size:11px;color:var(--t3)}
-.rv-price{font-size:13px;font-weight:800;margin-left:auto;flex-shrink:0;text-align:right;align-self:center}
-.prow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
-.prow.total{font-size:16px;font-weight:800;border-top:1px solid var(--border2);padding-top:10px;margin-top:4px}
-.info-box{border-radius:var(--r4);padding:9px 12px;font-size:12px;line-height:1.5;margin-bottom:8px}
-
-/* ── BUTTONS ── */
+/* BUTTONS */
 .btn-primary{width:100%;background:var(--green);color:#fff;font-family:'Mukta',sans-serif;font-size:14px;font-weight:700;padding:12px;border-radius:var(--r4);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(27,163,69,.3);transition:opacity .15s;margin-top:10px}
 .btn-primary:active{opacity:.85}
 .btn-primary:disabled{opacity:.6;cursor:not-allowed}
 
-/* ── SKELETON ── */
+/* SKELETON */
 .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--r4)}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ── BOTTOM BAR ── */
+/* BOTTOM BAR */
 .bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:#fff;border-top:1px solid var(--border);padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(0,0,0,.1)}
 .bb-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .bb-lbl{font-size:13px;font-weight:600;color:var(--t2)}
 .bb-del{font-size:11px;font-weight:600;color:var(--green)}
 .bb-total{font-size:20px;font-weight:800}
-.place-btn{width:100%;background:var(--orange);color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;padding:13px;border-radius:var(--r4);cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 14px rgba(255,102,0,.4);transition:.15s}
-.place-btn:active{transform:scale(.98)}
-.place-btn:disabled{opacity:.6;cursor:not-allowed}
 .step-btn{width:100%;background:var(--green);color:#fff;font-family:'Mukta',sans-serif;font-size:15px;font-weight:700;padding:13px;border-radius:var(--r4);cursor:pointer;border:none;box-shadow:0 3px 10px rgba(27,163,69,.35)}
 .step-btn:active{transform:scale(.98)}
+.place-btn{width:100%;background:var(--orange);color:#fff;font-family:'Baloo 2',cursive;font-size:16px;font-weight:800;padding:13px;border-radius:var(--r4);cursor:pointer;border:none;display:none;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 14px rgba(255,102,0,.4);transition:.15s}
+.place-btn:active{transform:scale(.98)}
+.place-btn:disabled{opacity:.6;cursor:not-allowed}
 
-/* ── SUCCESS ── */
+/* SUCCESS */
 .success-screen{position:fixed;inset:0;background:#fff;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;max-width:480px;margin:0 auto;left:50%;transform:translateX(-50%)}
 .success-ico{font-size:72px;margin-bottom:20px;animation:popIn .5s cubic-bezier(.175,.885,.32,1.275)}
 @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
@@ -134,8 +121,6 @@ img{display:block;max-width:100%}
       <div class="sdot active" id="sd1"><div class="sdot-circle" id="sc1">1</div><div class="sdot-lbl">Address</div></div>
       <div class="sline" id="sl1"></div>
       <div class="sdot" id="sd2"><div class="sdot-circle" id="sc2">2</div><div class="sdot-lbl">Payment</div></div>
-      <div class="sline" id="sl2"></div>
-      <div class="sdot" id="sd3"><div class="sdot-circle" id="sc3">3</div><div class="sdot-lbl">Review</div></div>
     </div>
   </header>
 
@@ -158,7 +143,7 @@ img{display:block;max-width:100%}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add New Address
         </div>
-        <button class="btn-primary" onclick="confirmAddress()">Deliver Here →</button>
+        <button class="btn-primary" onclick="confirmAddress()">Continue to Payment →</button>
       </div>
     </div>
 
@@ -191,46 +176,22 @@ img{display:block;max-width:100%}
           <div class="pay-ico">👛</div>
           <div><div class="pay-name">Wallet / Net Banking</div><div class="pay-sub">Paytm Wallet, Amazon Pay</div></div>
         </div>
-        <button class="btn-primary" onclick="confirmPayment()">Continue →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: Review -->
-    <div class="step-card locked" id="card3">
-      <div class="step-head">
-        <div class="step-num" id="num3">3</div>
-        <div class="step-title">Review & Place Order</div>
-      </div>
-      <div class="step-body" id="body3">
-        <div class="info-box" id="rv-addr-box" style="background:var(--green-l);color:var(--green-d)"></div>
-        <div class="info-box" id="rv-pay-box"  style="background:#fff3e0;color:#e65100"></div>
-        <div id="rv-items"></div>
-        <div style="border-top:1px solid var(--border2);padding-top:12px;margin-top:4px">
-          <div class="prow"><span style="color:var(--t2)">Item Total</span><span id="rv-mrp" style="font-weight:600"></span></div>
-          <div class="prow" id="rv-disc-row"><span style="color:var(--t2)">Discount</span><span id="rv-disc" style="font-weight:700;color:var(--green)"></span></div>
-          <div class="prow"><span style="color:var(--t2)">Delivery</span><span style="font-weight:700;color:var(--green)">FREE 🚚</span></div>
-          <div class="prow total"><span>Total Payable</span><span id="rv-total"></span></div>
-          <div id="rv-save" style="background:var(--green-l);color:var(--green-d);font-size:12px;font-weight:700;padding:8px;border-radius:var(--r4);text-align:center;margin-top:8px;display:none"></div>
-        </div>
-        <p style="font-size:11px;color:var(--t3);text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--border2)">
-          By placing your order you agree to our <a href="#" style="color:var(--blue)">Terms & Conditions</a>
-        </p>
       </div>
     </div>
 
   </div><!-- scroll-body -->
 
   <!-- BOTTOM BAR -->
-  <div class="bottom-bar" id="bottom-bar">
+  <div class="bottom-bar">
     <div class="bb-row">
       <div>
-        <div class="bb-lbl" id="bb-lbl">Cart Total</div>
+        <div class="bb-lbl">Total Payable</div>
         <div class="bb-del">🚚 FREE delivery</div>
       </div>
       <div class="bb-total" id="bb-total">₹0</div>
     </div>
-    <button class="step-btn" id="step-btn" onclick="handleStepBtn()">Deliver Here →</button>
-    <button class="place-btn" id="place-btn" onclick="placeOrder()" style="display:none">🛒 Place Order</button>
+    <button class="step-btn" id="step-btn" onclick="handleStepBtn()">Continue to Payment →</button>
+    <button class="place-btn" id="place-btn" onclick="placeOrder()">🛒 Place Order</button>
   </div>
 
 </div><!-- .page -->
@@ -247,7 +208,6 @@ img{display:block;max-width:100%}
 
 <script src="static/js/main.js"></script>
 <script>
-// Guard
 if (!Auth.isLoggedIn()) window.location.href = 'login.html?next=checkout.html';
 
 const fmt = n => formatPrice(n);
@@ -260,17 +220,13 @@ const PAY_LABELS = {
   wallet: '👛 Wallet / Net Banking',
 };
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
 let _step         = 1;
 let _addresses    = [];
 let _selectedAddr = null;
 let _selPay       = 'cod';
-let _cartItems    = [];   // flat, normalized items
+let _cartItems    = [];
 let _cartTotal    = 0;
-let _cartMrp      = 0;
 
-// ── FLATTEN CART ITEMS ─────────────────────────────────────────────────────────
-// API থেকে আসা cart items গুলো normalize করে একটা consistent format এ রাখি
 function flattenCartItems(rawItems) {
   return (rawItems || []).map(it => ({
     id:               it.id   || it._id   || it.item_id || '',
@@ -286,14 +242,12 @@ function flattenCartItems(rawItems) {
   }));
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
 async function init() {
   const [cartRes, addrRes] = await Promise.allSettled([
     api('GET', '/cart'),
     api('GET', '/users/addresses'),
   ]);
 
-  // ── Cart data নিয়ে flatten করো ──
   const rawCart = cartRes.status === 'fulfilled'
     ? (cartRes.value?.data ?? cartRes.value)
     : null;
@@ -304,32 +258,22 @@ async function init() {
   }
 
   _cartItems = flattenCartItems(rawCart.items);
-
-  // total: API দেয় নাকি নিজে calculate করো
   _cartTotal = rawCart.total_amount
     ?? _cartItems.reduce((s, i) => s + i.discounted_price * i.quantity, 0);
 
-  // mrp: always calculate from items
-  _cartMrp = _cartItems.reduce((s, i) => s + i.original_price * i.quantity, 0);
-
-  // ── Addresses ──
   _addresses = addrRes.status === 'fulfilled'
     ? (addrRes.value?.data ?? addrRes.value ?? [])
     : [];
   if (!Array.isArray(_addresses)) _addresses = [];
 
-  // pre-select address passed from cart page
   const preAddrId = sessionStorage.getItem('co_addr_id');
   if (preAddrId) _selectedAddr = _addresses.find(a => (a.id || a._id) === preAddrId);
   if (!_selectedAddr) _selectedAddr = _addresses.find(a => a.is_default) || _addresses[0] || null;
 
-  // Bottom bar total update
   document.getElementById('bb-total').textContent = fmt(_cartTotal);
-
   renderAddresses();
 }
 
-// ── ADDRESSES ─────────────────────────────────────────────────────────────────
 function renderAddresses() {
   const list = document.getElementById('addr-list');
   if (!_addresses.length) {
@@ -362,7 +306,6 @@ function pickAddr(id) {
   if (el) { el.classList.add('sel'); el.querySelector('input').checked = true; }
 }
 
-// ── PAYMENT ───────────────────────────────────────────────────────────────────
 function selPay(type) {
   _selPay = type;
   ['cod','upi','card','wallet'].forEach(t => {
@@ -372,10 +315,10 @@ function selPay(type) {
   });
 }
 
-// ── STEP MACHINE ──────────────────────────────────────────────────────────────
+// ── STEP MACHINE (only 2 steps now) ──────────────────────────────────────────
 function openStep(n) {
   _step = n;
-  [1, 2, 3].forEach(i => {
+  [1, 2].forEach(i => {
     const body = document.getElementById('body' + i);
     const smry = document.getElementById('smry' + i);
     const chg  = document.getElementById('chg'  + i);
@@ -385,14 +328,14 @@ function openStep(n) {
 
     body.classList.remove('open');
     smry.style.display = 'none';
-    if (chg) chg.style.display = 'none';   // ← fixed
+    if (chg) chg.style.display = 'none';
     card.classList.remove('locked');
 
     if (i < n) {
       dot.classList.remove('active'); dot.classList.add('done');
       sc.textContent = '✓';
       smry.style.display = 'block';
-      if (chg) chg.style.display = '';    // ← fixed
+      if (chg) chg.style.display = '';
       const sl = document.getElementById('sl' + i);
       if (sl) sl.classList.add('done');
     } else if (i === n) {
@@ -410,17 +353,16 @@ function openStep(n) {
 
   const stepBtn  = document.getElementById('step-btn');
   const placeBtn = document.getElementById('place-btn');
-  const bbLbl    = document.getElementById('bb-lbl');
 
-  if (n === 3) {
+  if (n === 2) {
+    // Step 2: Place Order button দেখাও
     stepBtn.style.display  = 'none';
-    placeBtn.style.display = '';
-    bbLbl.textContent      = 'Total Payable';
+    placeBtn.style.display = 'flex';
   } else {
+    // Step 1: Continue button দেখাও
     stepBtn.style.display  = '';
     placeBtn.style.display = 'none';
-    bbLbl.textContent      = 'Cart Total';
-    stepBtn.textContent    = n === 1 ? 'Deliver Here →' : 'Continue →';
+    stepBtn.textContent    = 'Continue to Payment →';
   }
 
   document.getElementById('card' + n)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -428,10 +370,8 @@ function openStep(n) {
 
 function handleStepBtn() {
   if (_step === 1) confirmAddress();
-  else if (_step === 2) confirmPayment();
 }
 
-// ── CONFIRM STEPS ─────────────────────────────────────────────────────────────
 function confirmAddress() {
   if (!_selectedAddr) { toast('Please select a delivery address', 'error'); return; }
   const a = _selectedAddr;
@@ -440,62 +380,6 @@ function confirmAddress() {
   openStep(2);
 }
 
-function confirmPayment() {
-  document.getElementById('smry2').innerHTML = `<b style="color:var(--green-d)">💳 Payment:</b> ${esc(PAY_LABELS[_selPay] || _selPay)}`;
-  openStep(3);
-  renderReview();
-}
-
-// ── REVIEW ────────────────────────────────────────────────────────────────────
-function renderReview() {
-  const a = _selectedAddr;
-  const addrLine = a
-    ? [a.full_name || a.name, a.line1, a.line2, a.city, a.state, a.pincode].filter(Boolean).join(', ')
-    : '';
-
-  document.getElementById('rv-addr-box').innerHTML =
-    `<b>📍 Delivering to:</b><br>${esc(addrLine)}`;
-  document.getElementById('rv-pay-box').innerHTML =
-    `<b>💳 Payment:</b> ${esc(PAY_LABELS[_selPay] || _selPay)}`;
-
-  // ── Items list ──
-  document.getElementById('rv-items').innerHTML = _cartItems.map(item => {
-    const img   = item.primary_image || '';
-    const name  = item.product_name  || 'Product';
-    const price = item.discounted_price ?? item.unit_price ?? 0;
-    return `
-      <div class="rv-item">
-        <div class="rv-img">
-          <img src="${esc(img || 'https://placehold.co/50x50/f1f3f6/878787?text=?')}"
-               onerror="this.src='https://placehold.co/50x50/f1f3f6/878787?text=?'" loading="lazy">
-        </div>
-        <div style="flex:1;min-width:0">
-          <div class="rv-name">${esc(name)}</div>
-          <div class="rv-qty">Qty: ${item.quantity}</div>
-        </div>
-        <div class="rv-price">${fmt(price * item.quantity)}</div>
-      </div>`;
-  }).join('');
-
-  // ── Price breakdown ──
-  const saved = Math.max(0, _cartMrp - _cartTotal);
-
-  document.getElementById('rv-mrp').textContent  = fmt(_cartMrp);
-  document.getElementById('rv-disc').textContent = saved > 0 ? `−${fmt(saved)}` : '₹0';
-  document.getElementById('rv-disc-row').style.display = saved > 0 ? '' : 'none';
-  document.getElementById('rv-total').textContent = fmt(_cartTotal);
-  document.getElementById('bb-total').textContent  = fmt(_cartTotal);
-
-  const svBox = document.getElementById('rv-save');
-  if (saved > 0) {
-    svBox.textContent    = `🎉 You save ${fmt(saved)} on this order!`;
-    svBox.style.display  = '';
-  } else {
-    svBox.style.display  = 'none';
-  }
-}
-
-// ── PLACE ORDER ───────────────────────────────────────────────────────────────
 async function placeOrder() {
   if (!_selectedAddr) { toast('No address selected', 'error'); return; }
 
