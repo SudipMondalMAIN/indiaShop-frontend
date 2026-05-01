@@ -198,7 +198,7 @@ let uploadedImages = [];
 // Load categories
 async function loadCategories() {
   try {
-    const data = await api('GET', '/api/categories');
+    const data = await api('GET', '/categories');
     const sel  = document.getElementById('category_id');
     (data.data || []).forEach(cat => {
       const o = document.createElement('option');
