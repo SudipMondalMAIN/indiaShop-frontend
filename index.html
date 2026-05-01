@@ -332,8 +332,24 @@ const _tel = document.getElementById('dtimer');
 })();
 
 // ─── LOCAL CART (object keyed by product id) ──────────────────────────────────
-function _getCart()   { try { return JSON.parse(localStorage.getItem('is_cart') || '{}'); } catch { return {}; } }
-function _saveCart(c) { localStorage.setItem('is_cart', JSON.stringify(c)); }
+function _getCart() {
+  try {
+    const raw = JSON.parse(localStorage.getItem('is_cart') || '[]');
+    if (Array.isArray(raw)) {
+      const obj = {};
+      raw.forEach(i => { if (i.id) obj[i.id] = { price: i.price, qty: i.qty, name: i.name, img: i.img || i.image || '' }; });
+      return obj;
+    }
+    return raw;
+  } catch { return {}; }
+}
+
+function _saveCart(c) {
+  const arr = Object.entries(c).map(([id, v]) => ({
+    id, price: v.price, qty: v.qty, name: v.name, img: v.img || ''
+  }));
+  localStorage.setItem('is_cart', JSON.stringify(arr));
+}
 let _cart = _getCart();
 
 function updateCartFab() {
