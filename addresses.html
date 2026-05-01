@@ -1,170 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Addresses — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/nav.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
-.address-card { background: var(--surface); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: flex-start; position: relative; }
-.address-icon { width: 38px; height: 38px; border-radius: var(--radius); background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.address-info { flex: 1; }
-.address-type { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 4px; }
-.address-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-.address-line { font-size: 13px; color: var(--text2); line-height: 1.5; }
-.address-actions { display: flex; gap: 8px; margin-top: 10px; }
-.default-badge { background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 3px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--orange:#ff6600;--orange-l:#fff3eb;--red:#e53935;--blue:#1565c0;--bg:#f1f3f6;--white:#fff;--border:#e0e0e0;--border2:#f0f0f0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--header:#1ba345;--r2:2px;--r4:4px;--r8:8px;--shadow:0 1px 4px rgba(0,0,0,.12)}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh}
+.header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-inner{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.back-btn{color:#fff;display:flex;align-items:center;flex-shrink:0}
+.header-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#fff;flex:1}
+.add-btn{background:rgba(255,255,255,.2);color:#fff;font-size:13px;font-weight:700;padding:6px 14px;border-radius:var(--r4);border:1.5px solid rgba(255,255,255,.4);flex-shrink:0;cursor:pointer}
+.scroll-body{padding:12px 12px calc(80px + env(safe-area-inset-bottom,0px))}
+.address-card{background:var(--white);border-radius:var(--r8);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--border2)}
+.address-card.is-default{border-color:var(--green)}
+.addr-icon{width:36px;height:36px;border-radius:var(--r4);background:var(--green-l);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.addr-body{flex:1;min-width:0}
+.addr-top{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap}
+.addr-type-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 8px;border-radius:99px;background:var(--bg);color:var(--t2)}
+.default-badge{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px}
+.addr-name{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.addr-line{font-size:12.5px;color:var(--t2);line-height:1.6}
+.addr-phone{font-size:12px;color:var(--t3);margin-top:5px}
+.addr-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.act-btn{font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(--r4);cursor:pointer;border:1px solid}
+.act-btn.edit{background:var(--bg);color:var(--blue);border-color:var(--border)}
+.act-btn.delete{background:#fff5f5;color:var(--red);border-color:#ffd0d0}
+.act-btn.setdef{background:var(--green-l);color:var(--green-d);border-color:#b2e4c5}
+.empty-wrap{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-ico{font-size:52px;margin-bottom:14px}
+.empty-t{font-size:16px;font-weight:700;color:var(--t2);margin-bottom:6px}
+.empty-s{font-size:13px;margin-bottom:20px}
+.btn-green{background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--r4);display:inline-block;cursor:pointer;border:none;font-family:'Mukta',sans-serif}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:var(--white);border-radius:16px 16px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:20px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 16px}
+.modal-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--t1);margin-bottom:16px}
+.input-group{display:flex;flex-direction:column;gap:4px;margin-bottom:13px}
+.input-group label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
+.input-group input,.input-group select,.input-group textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r4);font-family:'Mukta',sans-serif;font-size:14px;color:var(--t1);background:var(--white);outline:none;transition:.15s}
+.input-group input:focus,.input-group select:focus,.input-group textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(27,163,69,.08)}
+.input-group textarea{resize:none}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check-row{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--t1);cursor:pointer;margin-bottom:16px}
+.check-row input{width:17px;height:17px;accent-color:var(--green);cursor:pointer}
+.modal-actions{display:flex;gap:10px}
+.btn-cancel{flex:1;padding:12px;border:1.5px solid var(--border);border-radius:var(--r4);font-size:14px;font-weight:700;color:var(--t2);background:var(--white);cursor:pointer;font-family:'Mukta',sans-serif}
+.btn-save{flex:1;padding:12px;background:var(--green);border-radius:var(--r4);font-size:14px;font-weight:700;color:#fff;cursor:pointer;border:none;font-family:'Mukta',sans-serif}
+.btn-save:disabled{opacity:.6}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
+.bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 4px;cursor:pointer;text-decoration:none;color:var(--t3);font-size:10px;font-weight:600;border:none;background:none;font-family:'Mukta',sans-serif}
+.bn.active{color:var(--green)}
+.bn svg{width:22px;height:22px}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
-<nav class="navbar"><div class="container"></div></nav>
-<div class="page-content">
-<div class="container" style="max-width:600px">
+<div class="page">
 
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <div style="display:flex;align-items:center;gap:12px">
-      <a href="account.html" style="color:var(--text3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
-      <div class="fw-700 fs-18">Saved Addresses</div>
-    </div>
-    <button class="btn btn-outline btn-sm" onclick="openAddModal()">+ Add New</button>
+<header class="header">
+  <div class="header-inner">
+    <a href="account.html" class="back-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <div class="header-title">📍 My Addresses</div>
+    <button class="add-btn" onclick="openModal()">+ Add New</button>
   </div>
+</header>
 
-  <div id="addresses-list"></div>
-  <div id="empty-addr" class="empty-state" style="display:none">
-    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    <p>No addresses saved</p>
-    <button class="btn btn-primary" onclick="openAddModal()">Add Address</button>
+<div class="scroll-body">
+  <div id="addr-list"></div>
+  <div id="addr-empty" class="empty-wrap" style="display:none">
+    <div class="empty-ico">📭</div>
+    <div class="empty-t">No addresses saved</div>
+    <div class="empty-s">Add a delivery address to get started</div>
+    <button class="btn-green" onclick="openModal()">+ Add Address</button>
   </div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a class="bn" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a class="bn" href="products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Explore</span></a>
+    <a class="bn" href="cart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Cart</span></a>
+    <a class="bn" href="orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Orders</span></a>
+    <a class="bn active" href="account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Account</span></a>
+  </div>
+</nav>
 
 </div>
-</div>
 
-<!-- Add Address Modal -->
-<div class="modal-overlay" id="addr-modal" style="display:none" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="fw-700 fs-16 mb-4" id="modal-title">Add New Address</div>
+<!-- BOTTOM SHEET MODAL -->
+<div class="modal-overlay" id="addr-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Add New Address</div>
     <input type="hidden" id="edit-id">
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="input-wrap">
-        <label>Address Type</label>
-        <select id="addr-type">
-          <option value="home">Home</option>
-          <option value="work">Work</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div class="grid-2">
-        <div class="input-wrap"><label>Full Name</label><input type="text" id="addr-name" placeholder="Name"></div>
-        <div class="input-wrap"><label>Phone</label><input type="tel" id="addr-phone" placeholder="10-digit" maxlength="10"></div>
-      </div>
-      <div class="input-wrap"><label>Address Line</label><textarea id="addr-line" rows="2" placeholder="House no, street, locality"></textarea></div>
-      <div class="grid-2">
-        <div class="input-wrap"><label>City</label><input type="text" id="addr-city" placeholder="City"></div>
-        <div class="input-wrap"><label>State</label><input type="text" id="addr-state" placeholder="State"></div>
-      </div>
-      <div class="input-wrap"><label>Pincode</label><input type="text" id="addr-pin" placeholder="6-digit pincode" maxlength="6"></div>
-      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
-        <input type="checkbox" id="addr-default" style="accent-color:var(--primary)"> Set as default address
-      </label>
+
+    <div class="input-group">
+      <label>Address Type</label>
+      <select id="addr-type">
+        <option value="home">🏠 Home</option>
+        <option value="work">💼 Work</option>
+        <option value="other">📍 Other</option>
+      </select>
     </div>
-    <div style="display:flex;gap:10px;margin-top:20px">
-      <button class="btn btn-outline flex-1" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary flex-1" id="save-addr-btn" onclick="saveAddress()">Save Address</button>
+
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Full Name *</label>
+        <input type="text" id="addr-name" placeholder="Your name">
+      </div>
+      <div class="input-group">
+        <label>Phone *</label>
+        <input type="tel" id="addr-phone" placeholder="10-digit" maxlength="10" inputmode="numeric">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Address Line *</label>
+      <textarea id="addr-line" rows="2" placeholder="House no, street, locality, area"></textarea>
+    </div>
+
+    <div class="grid-2">
+      <div class="input-group">
+        <label>City *</label>
+        <input type="text" id="addr-city" placeholder="City">
+      </div>
+      <div class="input-group">
+        <label>State *</label>
+        <input type="text" id="addr-state" placeholder="State">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Pincode *</label>
+      <input type="text" id="addr-pin" placeholder="6-digit pincode" maxlength="6" inputmode="numeric">
+    </div>
+
+    <label class="check-row">
+      <input type="checkbox" id="addr-default"> Set as default address
+    </label>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="save-btn" onclick="saveAddress()">Save Address</button>
     </div>
   </div>
 </div>
 
-<nav class="bottom-nav"></nav>
-<script src="static/js/main.js"></script>
 <script>
-  if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-  buildNavbar('account');
+const BASE_URL = 'https://indiashop-backend-exmc.onrender.com/api';
+function getToken() { return localStorage.getItem('is_token'); }
+if (!getToken()) window.location.href = 'login.html';
 
-  async function loadAddresses() {
-    try {
-      const data = await api('GET', '/addresses');
-      const list = document.getElementById('addresses-list');
-      const addrs = data.addresses || [];
-      if (!addrs.length) { list.innerHTML = ''; document.getElementById('empty-addr').style.display = 'block'; return; }
-      document.getElementById('empty-addr').style.display = 'none';
-      list.innerHTML = addrs.map(a => `
-        <div class="address-card">
-          <div class="address-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+async function apiFetch(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + getToken() } };
+  if (body) opts.body = JSON.stringify(body);
+  const res  = await fetch(BASE_URL + path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || data.error || 'Something went wrong');
+  return data;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function showToast(msg, type) {
+  let c = document.getElementById('_tc');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = '_tc';
+    c.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none';
+    document.body.appendChild(c);
+  }
+  const t = document.createElement('div');
+  t.style.cssText = `background:${type==='error'?'#e53935':type==='success'?'#1ba345':'#333'};color:#fff;padding:10px 18px;border-radius:8px;font-family:'Mukta',sans-serif;font-size:13px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:fadeUp .3s ease;white-space:nowrap`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+async function loadAddresses() {
+  const list  = document.getElementById('addr-list');
+  const empty = document.getElementById('addr-empty');
+  list.innerHTML = '<div style="padding:40px;text-align:center;color:#878787;font-size:13px">Loading…</div>';
+  try {
+    const data  = await apiFetch('GET', '/users/addresses');
+    const addrs = data.data || [];
+    if (!addrs.length) {
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    list.innerHTML = addrs.map(a => {
+      const typeIcon = a.type === 'work' ? '💼' : a.type === 'other' ? '📍' : '🏠';
+      return `
+        <div class="address-card ${a.is_default ? 'is-default' : ''}">
+          <div class="addr-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
-          <div class="address-info">
-            <div class="address-type">${a.type || 'Home'} ${a.is_default ? '<span class="default-badge">Default</span>' : ''}</div>
-            <div class="address-name">${a.name} · ${a.phone}</div>
-            <div class="address-line">${a.address_line}, ${a.city}, ${a.state} — ${a.pincode}</div>
-            <div class="address-actions">
-              <button class="btn btn-outline btn-sm" onclick="editAddress(${JSON.stringify(a).replace(/"/g,'&quot;')})">Edit</button>
-              <button class="btn btn-ghost btn-sm text-danger" onclick="deleteAddress(${a.id})">Delete</button>
-              ${!a.is_default ? `<button class="btn btn-ghost btn-sm text-primary" onclick="setDefault(${a.id})">Set Default</button>` : ''}
+          <div class="addr-body">
+            <div class="addr-top">
+              <span class="addr-type-badge">${typeIcon} ${esc(a.type || 'home')}</span>
+              ${a.is_default ? '<span class="default-badge">✓ Default</span>' : ''}
+            </div>
+            <div class="addr-name">${esc(a.full_name)}</div>
+            <div class="addr-line">${esc(a.line1)}${a.line2 ? ', ' + esc(a.line2) : ''}<br>${esc(a.city)}, ${esc(a.state)} — ${esc(a.pincode)}</div>
+            <div class="addr-phone">📞 ${esc(a.phone)}</div>
+            <div class="addr-actions">
+              <button class="act-btn edit" onclick='editAddress(${JSON.stringify(a)})'>✏️ Edit</button>
+              <button class="act-btn delete" onclick="deleteAddress('${esc(a.id)}')">🗑 Delete</button>
+              ${!a.is_default ? `<button class="act-btn setdef" onclick="setDefault('${esc(a.id)}')">⭐ Set Default</button>` : ''}
             </div>
           </div>
-        </div>
-      `).join('');
-    } catch { document.getElementById('addresses-list').innerHTML = '<p class="text-muted p-4">Failed to load.</p>'; }
+        </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="padding:30px;text-align:center;color:#e53935;font-size:13px">Failed to load</div>';
+    showToast(e.message, 'error');
   }
+}
 
-  function openAddModal() {
-    document.getElementById('modal-title').textContent = 'Add New Address';
-    document.getElementById('edit-id').value = '';
-    ['addr-name','addr-phone','addr-line','addr-city','addr-state','addr-pin'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('addr-type').value = 'home';
-    document.getElementById('addr-default').checked = false;
-    document.getElementById('addr-modal').style.display = 'flex';
+function openModal() {
+  document.getElementById('modal-title').textContent = 'Add New Address';
+  document.getElementById('edit-id').value = '';
+  ['addr-name','addr-phone','addr-line','addr-city','addr-state','addr-pin'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('addr-type').value = 'home';
+  document.getElementById('addr-default').checked = false;
+  document.getElementById('addr-modal').classList.add('open');
+}
+
+function editAddress(a) {
+  document.getElementById('modal-title').textContent = 'Edit Address';
+  document.getElementById('edit-id').value    = a.id;
+  document.getElementById('addr-name').value  = a.full_name || '';
+  document.getElementById('addr-phone').value = a.phone     || '';
+  document.getElementById('addr-line').value  = a.line1     || '';
+  document.getElementById('addr-city').value  = a.city      || '';
+  document.getElementById('addr-state').value = a.state     || '';
+  document.getElementById('addr-pin').value   = a.pincode   || '';
+  document.getElementById('addr-type').value  = a.type      || 'home';
+  document.getElementById('addr-default').checked = !!a.is_default;
+  document.getElementById('addr-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('addr-modal').classList.remove('open');
+}
+
+async function saveAddress() {
+  const body = {
+    full_name:  document.getElementById('addr-name').value.trim(),
+    phone:      document.getElementById('addr-phone').value.trim(),
+    line1:      document.getElementById('addr-line').value.trim(),
+    city:       document.getElementById('addr-city').value.trim(),
+    state:      document.getElementById('addr-state').value.trim(),
+    pincode:    document.getElementById('addr-pin').value.trim(),
+    type:       document.getElementById('addr-type').value,
+    is_default: document.getElementById('addr-default').checked,
+  };
+  if (!body.full_name)                       return showToast('Full name is required', 'error');
+  if (!body.phone || body.phone.length < 10) return showToast('Enter valid 10-digit phone', 'error');
+  if (!body.line1)                           return showToast('Address line is required', 'error');
+  if (!body.city)                            return showToast('City is required', 'error');
+  if (!body.state)                           return showToast('State is required', 'error');
+  if (!body.pincode || body.pincode.length < 6) return showToast('Enter valid 6-digit pincode', 'error');
+
+  const btn    = document.getElementById('save-btn');
+  const editId = document.getElementById('edit-id').value;
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    if (editId) {
+      await apiFetch('PUT', `/users/addresses/${editId}`, body);
+      showToast('✅ Address updated!', 'success');
+    } else {
+      await apiFetch('POST', '/users/addresses', body);
+      showToast('✅ Address saved!', 'success');
+    }
+    closeModal();
+    loadAddresses();
+  } catch(e) {
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled  = false;
+    btn.innerHTML = 'Save Address';
   }
+}
 
-  function editAddress(a) {
-    document.getElementById('modal-title').textContent = 'Edit Address';
-    document.getElementById('edit-id').value = a.id;
-    document.getElementById('addr-name').value = a.name;
-    document.getElementById('addr-phone').value = a.phone;
-    document.getElementById('addr-line').value = a.address_line;
-    document.getElementById('addr-city').value = a.city;
-    document.getElementById('addr-state').value = a.state;
-    document.getElementById('addr-pin').value = a.pincode;
-    document.getElementById('addr-type').value = a.type || 'home';
-    document.getElementById('addr-default').checked = !!a.is_default;
-    document.getElementById('addr-modal').style.display = 'flex';
-  }
+async function deleteAddress(id) {
+  if (!confirm('Delete this address?')) return;
+  try {
+    await apiFetch('DELETE', `/users/addresses/${id}`);
+    showToast('Address deleted', 'success');
+    loadAddresses();
+  } catch(e) { showToast(e.message, 'error'); }
+}
 
-  function closeModal() { document.getElementById('addr-modal').style.display = 'none'; }
+async function setDefault(id) {
+  try {
+    await apiFetch('PUT', `/users/addresses/${id}`, { is_default: true });
+    showToast('✅ Default address updated', 'success');
+    loadAddresses();
+  } catch(e) { showToast(e.message, 'error'); }
+}
 
-  async function saveAddress() {
-    const body = {
-      name: document.getElementById('addr-name').value.trim(),
-      phone: document.getElementById('addr-phone').value.trim(),
-      address_line: document.getElementById('addr-line').value.trim(),
-      city: document.getElementById('addr-city').value.trim(),
-      state: document.getElementById('addr-state').value.trim(),
-      pincode: document.getElementById('addr-pin').value.trim(),
-      type: document.getElementById('addr-type').value,
-      is_default: document.getElementById('addr-default').checked,
-    };
-    if (!body.name || !body.phone || !body.address_line || !body.city || !body.pincode) return toast('Fill all fields', 'error');
-    const btn = document.getElementById('save-addr-btn');
-    btnLoading(btn, true);
-    try {
-      const editId = document.getElementById('edit-id').value;
-      if (editId) await api('PUT', `/addresses/${editId}`, body);
-      else await api('POST', '/addresses', body);
-      closeModal(); loadAddresses(); toast('Address saved!', 'success');
-    } catch(e) { toast(e.message, 'error'); }
-    finally { btnLoading(btn, false); }
-  }
-
-  async function deleteAddress(id) {
-    if (!confirm('Delete this address?')) return;
-    try { await api('DELETE', `/addresses/${id}`); loadAddresses(); toast('Deleted'); } catch(e) { toast(e.message,'error'); }
-  }
-
-  async function setDefault(id) {
-    try { await api('PUT', `/addresses/${id}`, { is_default: true }); loadAddresses(); toast('Default updated', 'success'); } catch(e) { toast(e.message,'error'); }
-  }
-
-  loadAddresses();
+loadAddresses();
 </script>
 </body>
 </html>
