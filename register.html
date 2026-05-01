@@ -17,33 +17,29 @@
     messagingSenderId: "897699694220",
     appId: "1:897699694220:web:d0f646c415b832e7e61da9"
   };
-
   const app      = initializeApp(firebaseConfig);
   const auth     = getAuth(app);
   const provider = new GoogleAuthProvider();
 
   window._googleSignup = async function () {
     const loader = document.getElementById('google-loading');
-    loader.style.display = 'flex';
+    if (loader) loader.style.display = 'flex';
     try {
       const result  = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
       const data    = await api('POST', '/auth/google', { id_token: idToken });
-      Auth.set(data.access_token, data.user);
-      toast('Welcome, ' + data.user.name + '!', 'success');
+      Auth.set(data.data.access_token, data.data.user);
+      toast('Welcome, ' + data.data.user.name + '!', 'success');
       setTimeout(() => window.location.href = 'index.html', 800);
     } catch (e) {
-      if (e.code !== 'auth/popup-closed-by-user') {
-        toast(e.message || 'Google sign-up failed', 'error');
-      }
+      if (e.code !== 'auth/popup-closed-by-user') toast(e.message || 'Google sign-up failed', 'error');
     } finally {
-      loader.style.display = 'none';
+      if (loader) loader.style.display = 'none';
     }
   };
 </script>
 </head>
 <body>
-
 <div class="auth-page">
   <div class="auth-banner">
     <div>
@@ -82,7 +78,7 @@
       </div>
     </div>
 
-    <!-- Step 2: OTP -->
+    <!-- Step 2: OTP Verify -->
     <div id="step-otp" style="display:none">
       <button onclick="goToStep('email')" class="back-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
@@ -116,7 +112,7 @@
           <label>Password</label>
           <div class="pw-wrap">
             <input type="password" id="password" placeholder="Min. 6 characters" autocomplete="new-password">
-            <button type="button" class="pw-toggle" onclick="togglePw('password', this)">
+            <button type="button" class="pw-toggle" onclick="togglePw('password',this)">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
@@ -138,54 +134,57 @@
 </div>
 
 <style>
-.step-progress { display:flex; align-items:center; gap:6px; margin-bottom:28px; }
-.dot { width:10px; height:10px; border-radius:50%; background:#e0e0e0; transition:background 0.3s,transform 0.3s; }
-.dot.active { background:var(--primary,#2874f0); transform:scale(1.2); }
-.dot.done   { background:#4caf50; }
-.dot-line { flex:1; height:2px; background:#e0e0e0; border-radius:2px; transition:background 0.3s; }
-.dot-line.done { background:#4caf50; }
-.back-btn { color:var(--primary,#2874f0); font-size:13px; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:4px; background:none; border:none; cursor:pointer; padding:0; }
-.pw-wrap { position:relative; }
-.pw-wrap input { width:100%; padding-right:44px; box-sizing:border-box; }
-.pw-toggle { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#888; padding:0; display:flex; align-items:center; }
-.pw-toggle:hover { color:#333; }
+@keyframes spin{to{transform:rotate(360deg)}}
+.step-progress{display:flex;align-items:center;gap:6px;margin-bottom:28px}
+.dot{width:10px;height:10px;border-radius:50%;background:#e0e0e0;transition:background .3s,transform .3s}
+.dot.active{background:var(--primary,#2874f0);transform:scale(1.2)}
+.dot.done{background:#4caf50}
+.dot-line{flex:1;height:2px;background:#e0e0e0;border-radius:2px;transition:background .3s}
+.dot-line.done{background:#4caf50}
+.back-btn{color:var(--primary,#2874f0);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0}
+.pw-wrap{position:relative}
+.pw-wrap input{width:100%;padding-right:44px;box-sizing:border-box}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888;padding:0;display:flex;align-items:center}
+.pw-toggle:hover{color:#333}
 </style>
 
 <script src="static/js/main.js"></script>
 <script>
   if (Auth.isLoggedIn()) window.location.href = 'index.html';
 
+  // OTP verified in step 2 — stored here for step 3 registration
   let _verifiedOTP = '';
 
   function goToStep(step) {
-    document.getElementById('step-email').style.display   = 'none';
-    document.getElementById('step-otp').style.display     = 'none';
-    document.getElementById('step-details').style.display = 'none';
+    ['step-email','step-otp','step-details'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
 
     const d1 = document.getElementById('dot-1');
     const d2 = document.getElementById('dot-2');
     const d3 = document.getElementById('dot-3');
     const l1 = document.getElementById('line-1');
     const l2 = document.getElementById('line-2');
-
-    [d1,d2,d3].forEach(d => d.className = 'dot');
-    [l1,l2].forEach(l => l.className = 'dot-line');
+    [d1,d2,d3].forEach(d => { if(d) d.className='dot'; });
+    [l1,l2].forEach(l => { if(l) l.className='dot-line'; });
 
     if (step === 'email') {
       document.getElementById('step-email').style.display = '';
-      d1.classList.add('active');
+      d1?.classList.add('active');
     } else if (step === 'otp') {
       document.getElementById('step-otp').style.display = '';
-      d1.classList.add('done'); l1.classList.add('done');
-      d2.classList.add('active');
+      d1?.classList.add('done'); l1?.classList.add('done');
+      d2?.classList.add('active');
     } else if (step === 'details') {
       document.getElementById('step-details').style.display = '';
-      d1.classList.add('done'); l1.classList.add('done');
-      d2.classList.add('done'); l2.classList.add('done');
-      d3.classList.add('active');
+      d1?.classList.add('done'); l1?.classList.add('done');
+      d2?.classList.add('done'); l2?.classList.add('done');
+      d3?.classList.add('active');
     }
   }
 
+  // Step 1: Send OTP
   async function sendOTP() {
     const email = document.getElementById('email').value.trim();
     if (!email) return toast('Enter your email', 'error');
@@ -205,6 +204,7 @@
     }
   }
 
+  // Step 2: Verify OTP — stores OTP for registration
   async function verifyOTP() {
     const email = document.getElementById('email').value.trim();
     const otp   = getOTPValue();
@@ -212,6 +212,7 @@
     const btn = document.getElementById('verify-btn');
     btnLoading(btn, true);
     try {
+      // Verify with backend — if success, save OTP for registration call
       await api('POST', '/auth/verify-otp', { email, otp, purpose: 'verify_email' });
       _verifiedOTP = otp;
       goToStep('details');
@@ -223,19 +224,24 @@
     }
   }
 
+  // Step 3: Create Account — sends otp so backend marks is_verified=True
   async function createAccount() {
     const name = document.getElementById('name').value.trim();
     const pwd  = document.getElementById('password').value;
     if (!name)          return toast('Enter your full name', 'error');
     if (pwd.length < 6) return toast('Password must be at least 6 characters', 'error');
+
     const email = document.getElementById('email').value.trim();
     const btn   = document.getElementById('create-btn');
     btnLoading(btn, true);
     try {
       const data = await api('POST', '/auth/register', {
-        name, email, password: pwd, email_verified: true,
+        name,
+        email,
+        password:  pwd,
+        otp:       _verifiedOTP,   // ✅ KEY FIX: backend sets is_verified=True when otp is present
       });
-      Auth.set(data.access_token, data.user);
+      Auth.set(data.data.access_token, data.data.user);
       toast('Account created! Welcome 🎉', 'success');
       setTimeout(() => window.location.href = 'index.html', 800);
     } catch (e) {
@@ -250,7 +256,8 @@
     try {
       await api('POST', '/auth/send-otp', { email, purpose: 'verify_email' });
       toast('OTP resent!', 'success');
-      document.getElementById('otp-timer-wrap').innerHTML = `Resend in <span id="otp-timer">60s</span>`;
+      const wrap = document.getElementById('otp-timer-wrap');
+      if (wrap) wrap.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
       startOTPTimer(60);
     } catch (e) { toast(e.message, 'error'); }
   }
@@ -261,7 +268,7 @@
     btn.style.color = inp.type === 'text' ? 'var(--primary,#2874f0)' : '#888';
   }
 
-  document.getElementById('email').addEventListener('keydown', e => {
+  document.getElementById('email')?.addEventListener('keydown', e => {
     if (e.key === 'Enter') sendOTP();
   });
 </script>
