@@ -3,42 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>indiaShop — Fresh Grocery</title>
+<title>indiaShop — Online Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 ::-webkit-scrollbar{display:none}*{scrollbar-width:none}
-:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--green-xl:#f2fbf5;--orange:#ff6600;--orange-l:#fff3eb;--red:#e53935;--amber:#f59e0b;--blue:#1565c0;--bg:#f1f3f6;--white:#fff;--card:#fff;--border:#e0e0e0;--border2:#f0f0f0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--header:#1ba345;--r2:2px;--r4:4px;--r8:8px;--r12:12px;--shadow:0 1px 4px rgba(0,0,0,.12);--shadow2:0 2px 12px rgba(0,0,0,.15)}
+:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--orange:#ff6600;--orange-l:#fff3eb;--red:#e53935;--blue:#1565c0;--bg:#f1f3f6;--white:#fff;--border:#e0e0e0;--border2:#f0f0f0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--header:#1ba345;--r2:2px;--r4:4px;--r8:8px;--shadow:0 1px 4px rgba(0,0,0,.12)}
 html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
 a{text-decoration:none;color:inherit}
 button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
 img{display:block;max-width:100%;object-fit:cover}
 .page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative}
+/* HEADER */
 .header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .header-top{display:flex;align-items:center;gap:10px;padding:10px 14px 8px}
 .logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;flex-shrink:0}
 .logo span{color:#ffeb3b}
-.logo small{font-size:11px;font-weight:600;display:block;color:rgba(255,255,255,0.8);margin-top:-6px;letter-spacing:0.5px}
+.logo small{font-size:11px;font-weight:600;display:block;color:rgba(255,255,255,.8);margin-top:-6px;letter-spacing:.5px}
 .search-wrap{position:relative;flex:1}
-.search-bar{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:var(--r4);padding:8px 12px;min-height:38px}
+.search-bar{display:flex;align-items:center;gap:8px;background:#fff;border-radius:var(--r4);padding:8px 12px;min-height:38px}
 .search-bar input{flex:1;border:none;outline:none;font-family:'Mukta',sans-serif;font-size:13px;color:var(--t1);background:none;width:100%}
 .search-bar input::placeholder{color:var(--t3)}
 .header-right{display:flex;align-items:center;gap:2px;flex-shrink:0}
 .hbtn{display:flex;flex-direction:column;align-items:center;gap:1px;color:#fff;font-size:10px;font-weight:600;position:relative;padding:2px 5px;cursor:pointer;text-decoration:none;border:none;background:none;font-family:'Mukta',sans-serif}
 .hbtn svg{width:22px;height:22px}
 .hbadge{position:absolute;top:-3px;right:0;min-width:16px;height:16px;border-radius:99px;background:#ff3d00;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--header);padding:0 3px}
-.loc-bar{background:var(--green-d);padding:6px 14px;display:flex;align-items:center;gap:6px;border-top:1px solid rgba(255,255,255,0.15)}
-.loc-bar .pin{font-size:13px}
+.loc-bar{background:var(--green-d);padding:6px 14px;display:flex;align-items:center;gap:6px;border-top:1px solid rgba(255,255,255,.15)}
 .loc-bar .loc-text{font-size:12px;font-weight:600;color:#fff;flex:1}
-.loc-bar .loc-sub{font-size:11px;color:rgba(255,255,255,.7)}
 .loc-change{font-size:11px;font-weight:700;color:#ffeb3b;flex-shrink:0;cursor:pointer}
+/* DELIVERY STRIP */
 .del-strip{background:#fff;padding:9px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border2)}
-.del-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 0 3px rgba(27,163,69,0.2);animation:pulse 1.8s ease-in-out infinite}
+.del-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 1.8s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(27,163,69,.5)}50%{box-shadow:0 0 0 5px rgba(27,163,69,0)}}
 .del-text{font-size:12.5px;font-weight:600;color:var(--t1);flex:1}
 .del-text span{color:var(--green)}
 .del-tag{background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:var(--r4)}
+/* TICKER */
 .ticker{overflow:hidden;background:var(--orange-l);border-bottom:1px solid #ffe0c2}
 .ticker-inner{display:flex;align-items:center;padding:7px 0}
 .ticker-label{flex-shrink:0;padding:0 10px;font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.7px;border-right:1px solid #f5caa0}
@@ -48,26 +49,30 @@ img{display:block;max-width:100%;object-fit:cover}
 .t-item{font-size:11.5px;font-weight:500;color:var(--t2);white-space:nowrap;padding:0 16px;display:flex;align-items:center;gap:4px}
 .t-item b{color:var(--orange);font-weight:700}
 .t-sep{color:var(--t4);font-size:8px}
+/* BODY */
 .scroll-body{overflow-y:auto;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+/* CATEGORIES */
 .cats-wrap{background:#fff;padding:12px 14px;border-bottom:1px solid var(--border2)}
 .cats-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px}
 .cats-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px}
 .cat-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-img-wrap{width:64px;height:64px;border-radius:50%;border:2.5px solid var(--border);overflow:hidden;background:#f5f5f5;transition:.15s}
+.cat-img-wrap{width:64px;height:64px;border-radius:50%;border:2.5px solid var(--border);overflow:hidden;background:#f5f5f5;transition:.15s;display:flex;align-items:center;justify-content:center;font-size:26px}
 .cat-img-wrap img{width:100%;height:100%;object-fit:cover}
 .cat-chip.active .cat-img-wrap{border-color:var(--green);box-shadow:0 0 0 2px var(--green-l)}
 .cat-lbl{font-size:11px;font-weight:600;color:var(--t2);text-align:center;white-space:nowrap}
 .cat-chip.active .cat-lbl{color:var(--green)}
-.hero{margin:10px;border-radius:var(--r8);overflow:hidden;position:relative;box-shadow:var(--shadow)}
+/* HERO */
+.hero{margin:10px;border-radius:var(--r8);overflow:hidden;box-shadow:var(--shadow)}
 .hero-bg{background:linear-gradient(120deg,#064e1f 0%,#1ba345 60%,#34d058 100%);padding:20px 18px;min-height:145px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
 .hero-circle1{position:absolute;right:-30px;top:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
 .hero-circle2{position:absolute;right:60px;bottom:-50px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
 .hero-img{position:absolute;right:10px;bottom:0;height:130px;width:130px;object-fit:cover;opacity:.85;pointer-events:none;border-radius:8px 8px 0 0}
-.hero-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:3px 10px;border-radius:99px;margin-bottom:10px;width:fit-content}
-.hero-h{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:#fff;line-height:1.1;letter-spacing:-.3px;margin-bottom:4px}
+.hero-tag{display:inline-flex;align-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:3px 10px;border-radius:99px;margin-bottom:10px;width:fit-content}
+.hero-h{font-family:'Baloo 2',cursive;font-size:24px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:4px}
 .hero-h span{color:#ffeb3b}
 .hero-p{font-size:12px;color:rgba(255,255,255,.75);margin-bottom:14px;line-height:1.4;max-width:58%}
 .hero-btn{display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--green-d);font-size:13px;font-weight:700;padding:8px 18px;border-radius:var(--r4);width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+/* MINI GRID */
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 10px 10px}
 .mini-card{border-radius:var(--r8);overflow:hidden;cursor:pointer;box-shadow:var(--shadow);position:relative;height:110px}
 .mini-card img{width:100%;height:100%;object-fit:cover;transition:.2s}
@@ -76,6 +81,7 @@ img{display:block;max-width:100%;object-fit:cover}
 .mini-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:2px 7px;border-radius:99px;margin-bottom:4px;display:inline-block;background:rgba(255,255,255,.2);color:#fff;width:fit-content}
 .mini-h{font-size:14px;font-weight:700;color:#fff}
 .mini-p{font-size:11px;color:rgba(255,255,255,.8)}
+/* PROMO */
 .promo{margin:0 10px 10px;background:#fff;border-radius:var(--r8);border:1.5px dashed var(--green);padding:14px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
 .promo-left .p-eyebrow{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px}
 .promo-left .p-h{font-size:20px;font-weight:800;color:var(--t1);margin-bottom:2px}
@@ -83,12 +89,14 @@ img{display:block;max-width:100%;object-fit:cover}
 .promo-right{text-align:center}
 .promo-right .p-ico{font-size:38px;margin-bottom:4px}
 .promo-code{background:var(--green-l);border:1.5px dashed var(--green);border-radius:var(--r4);padding:4px 10px;font-size:13px;font-weight:800;color:var(--green-d);letter-spacing:2px;cursor:pointer}
+/* TRUST ROW */
 .trust-row{display:flex;background:#fff;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);margin-bottom:8px}
 .trust-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px;border-right:1px solid var(--border2)}
 .trust-item:last-child{border-right:none}
 .trust-ico{font-size:22px}
 .trust-t{font-size:11px;font-weight:700;color:var(--t1);text-align:center}
 .trust-s{font-size:10px;color:var(--t3);text-align:center}
+/* PRODUCT SECTION */
 .sec{background:#fff;margin:0 0 8px;padding:14px}
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .sec-title{font-size:16px;font-weight:700;color:var(--t1)}
@@ -101,11 +109,11 @@ img{display:block;max-width:100%;object-fit:cover}
 .pc-img-wrap img{width:85%;height:85%;object-fit:contain;transition:.2s}
 .pc:hover .pc-img-wrap img{transform:scale(1.05)}
 .pc-badge{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:var(--r2);color:#fff}
-.pc-badge.off{background:var(--green)}.pc-badge.new{background:var(--orange)}.pc-badge.hot{background:var(--red)}
+.pc-badge.sale{background:var(--green)}.pc-badge.hot{background:var(--red)}
 .pc-wish{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,.1);z-index:2}
 .pc-body{padding:10px}
 .pc-name{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4}
-.pc-qty{font-size:11px;color:var(--t3);margin-bottom:5px}
+.pc-brand{font-size:11px;color:var(--t3);margin-bottom:5px}
 .pc-price-row{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;flex-wrap:wrap}
 .pc-price{font-size:15px;font-weight:700;color:var(--t1)}
 .pc-mrp{font-size:11px;color:var(--t4);text-decoration:line-through}
@@ -113,20 +121,30 @@ img{display:block;max-width:100%;object-fit:cover}
 .pc-rating{display:flex;align-items:center;gap:4px;margin-bottom:8px}
 .pc-stars-box{display:flex;align-items:center;gap:2px;background:var(--green);border-radius:3px;padding:1px 5px}
 .pc-stars-box span{font-size:10px;font-weight:700;color:#fff}
-.pc-stars-box .star{font-size:9px;color:#fff}
 .pc-rcount{font-size:10px;color:var(--t3)}
-.pc-add{width:100%;padding:7px 0;background:var(--white);border:1.5px solid var(--green);color:var(--green);font-size:13px;font-weight:700;border-radius:var(--r4);transition:.15s;cursor:pointer}
+.pc-add{width:100%;padding:7px 0;background:#fff;border:1.5px solid var(--green);color:var(--green);font-size:13px;font-weight:700;border-radius:var(--r4);cursor:pointer}
 .qty-ctrl{display:flex;align-items:center;background:#fff;border:1.5px solid var(--green);border-radius:var(--r4);overflow:hidden;width:100%}
 .qty-btn{width:34px;height:34px;font-size:20px;font-weight:700;color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
 .qty-val{flex:1;text-align:center;font-size:14px;font-weight:700;color:var(--t1)}
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{border:0.5px solid var(--border2);background:#fff}
+.skel-card:nth-child(odd){border-right:1px solid var(--border2)}
+.skel-img{width:100%;aspect-ratio:1}
+.skel-body{padding:10px}
+.skel-line{border-radius:4px;margin-bottom:8px;height:12px}
+/* EMPTY */
 .empty-state{grid-column:1/-1;padding:40px 20px;text-align:center;color:var(--t3)}
 .empty-state .e-ico{font-size:48px;margin-bottom:12px}
 .empty-state .e-t{font-size:15px;font-weight:700;color:var(--t2);margin-bottom:4px}
 .empty-state .e-s{font-size:12px}
+/* SELLER BANNER */
 .seller-banner{margin:0 10px 10px;border-radius:var(--r8);overflow:hidden;background:linear-gradient(135deg,#1565c0,#0d47a1);padding:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
 .sb-left .sb-t{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;color:#fff;margin-bottom:2px}
 .sb-left .sb-s{font-size:12px;color:rgba(255,255,255,.8)}
 .sb-btn{background:#fff;color:#0d47a1;font-size:12px;font-weight:700;padding:8px 14px;border-radius:var(--r4);flex-shrink:0;cursor:pointer;text-decoration:none;display:block}
+/* SEARCH DROPDOWN */
 .search-results{background:#fff;position:absolute;top:100%;left:0;right:0;z-index:200;border-top:1px solid var(--border2);max-height:300px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,.12);border-radius:0 0 var(--r8) var(--r8)}
 .sr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border2)}
 .sr-item:hover{background:var(--bg)}
@@ -134,6 +152,7 @@ img{display:block;max-width:100%;object-fit:cover}
 .sr-name{font-size:13px;font-weight:600;color:var(--t1)}
 .sr-cat{font-size:11px;color:var(--t3)}
 .sr-price{font-size:13px;font-weight:700;color:var(--green);margin-left:auto;flex-shrink:0}
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
 .bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 4px;cursor:pointer;text-decoration:none;color:var(--t3);font-size:10px;font-weight:600;border:none;background:none;font-family:'Mukta',sans-serif}
@@ -141,10 +160,11 @@ img{display:block;max-width:100%;object-fit:cover}
 .bn svg{width:23px;height:23px;margin-bottom:1px}
 .bn-indicator{width:4px;height:4px;border-radius:50%;background:var(--green);margin-top:2px;opacity:0}
 .bn.active .bn-indicator{opacity:1}
+/* CART FAB */
 .cart-fab{position:fixed;bottom:calc(78px + env(safe-area-inset-bottom,0px));right:14px;z-index:200;background:var(--green);border-radius:24px;align-items:center;gap:8px;padding:10px 16px;box-shadow:0 4px 20px rgba(27,163,69,.45);cursor:pointer;display:none}
-.cart-fab svg{width:20px;height:20px;fill:#fff}
 .cart-fab-text{font-size:13px;font-weight:700;color:#fff}
 .cart-fab-badge{background:#ff3d00;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid var(--green)}
+/* TOAST */
 .toast{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(20px);background:var(--t1);color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:300}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.15);border-left:1px solid var(--border);border-right:1px solid var(--border)}}
@@ -155,16 +175,17 @@ img{display:block;max-width:100%;object-fit:cover}
 
 <header class="header">
   <div class="header-top">
-    <div class="logo">india<span>Shop</span><small>🥦 Fresh Grocery</small></div>
+    <div class="logo">india<span>Shop</span><small>🛒 Online Store</small></div>
     <div class="search-wrap" style="flex:1">
       <div class="search-bar">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#878787" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="search-input" placeholder="Search vegetables, fruits, dairy…" autocomplete="off" oninput="handleSearch(this.value)" onfocus="showSR()" onblur="setTimeout(hideSR,200)">
+        <input type="text" id="search-input" placeholder="Search products…" autocomplete="off"
+               oninput="handleSearch(this.value)" onfocus="showSR()" onblur="setTimeout(hideSR,200)">
       </div>
       <div class="search-results" id="search-results" style="display:none"></div>
     </div>
     <div class="header-right">
-      <a class="hbtn" href="wishlist.html" title="Wishlist">
+      <a class="hbtn" href="wishlist.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         <span>Wishlist</span>
       </a>
@@ -180,9 +201,8 @@ img{display:block;max-width:100%;object-fit:cover}
     </div>
   </div>
   <div class="loc-bar">
-    <span class="pin">📍</span>
-    <span class="loc-text">Delivering to <b>Dhanbad, 826001</b></span>
-    <span class="loc-sub">— Bartand</span>
+    <span>📍</span>
+    <span class="loc-text">Delivering to <b>Dhanbad, 826001</b> — Bartand</span>
     <span class="loc-change">Change ▾</span>
   </div>
 </header>
@@ -198,15 +218,15 @@ img{display:block;max-width:100%;object-fit:cover}
     <span class="ticker-label">🔥 Deals</span>
     <div class="ticker-track">
       <div class="ticker-items">
-        <span class="t-item"><b>50% off</b> Fresh Vegetables<span class="t-sep">●</span></span>
-        <span class="t-item">Fruits starting at <b>₹29</b><span class="t-sep">●</span></span>
+        <span class="t-item"><b>50% off</b> Top Products<span class="t-sep">●</span></span>
+        <span class="t-item">Starting at <b>₹29</b><span class="t-sep">●</span></span>
         <span class="t-item">Free delivery on <b>₹299+</b><span class="t-sep">●</span></span>
-        <span class="t-item">Dairy &amp; Eggs <b>Flat 20% off</b><span class="t-sep">●</span></span>
+        <span class="t-item">Electronics <b>Flat 20% off</b><span class="t-sep">●</span></span>
         <span class="t-item">Use code <b>FRESH50</b><span class="t-sep">●</span></span>
-        <span class="t-item"><b>50% off</b> Fresh Vegetables<span class="t-sep">●</span></span>
-        <span class="t-item">Fruits starting at <b>₹29</b><span class="t-sep">●</span></span>
+        <span class="t-item"><b>50% off</b> Top Products<span class="t-sep">●</span></span>
+        <span class="t-item">Starting at <b>₹29</b><span class="t-sep">●</span></span>
         <span class="t-item">Free delivery on <b>₹299+</b><span class="t-sep">●</span></span>
-        <span class="t-item">Dairy &amp; Eggs <b>Flat 20% off</b><span class="t-sep">●</span></span>
+        <span class="t-item">Electronics <b>Flat 20% off</b><span class="t-sep">●</span></span>
         <span class="t-item">Use code <b>FRESH50</b><span class="t-sep">●</span></span>
       </div>
     </div>
@@ -215,110 +235,86 @@ img{display:block;max-width:100%;object-fit:cover}
 
 <div class="scroll-body">
 
-<div class="cats-wrap">
-  <div class="cats-title">Shop by Category</div>
-  <div class="cats-row">
-    <div class="cat-chip active" onclick="filterCat(this,'All')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=128&h=128&fit=crop" alt="All" onerror="this.src='https://placehold.co/64/e8f8ee/1ba345?text=All'"></div>
-      <div class="cat-lbl">All</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Vegetables')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=128&h=128&fit=crop" alt="Vegetables"></div>
-      <div class="cat-lbl">Vegetables</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Fruits')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=128&h=128&fit=crop" alt="Fruits"></div>
-      <div class="cat-lbl">Fruits</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Dairy')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=128&h=128&fit=crop" alt="Dairy"></div>
-      <div class="cat-lbl">Dairy</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Grains')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=128&h=128&fit=crop" alt="Grains"></div>
-      <div class="cat-lbl">Grains</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Snacks')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=128&h=128&fit=crop" alt="Snacks"></div>
-      <div class="cat-lbl">Snacks</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Beverages')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=128&h=128&fit=crop" alt="Beverages"></div>
-      <div class="cat-lbl">Beverages</div>
-    </div>
-    <div class="cat-chip" onclick="filterCat(this,'Spices')">
-      <div class="cat-img-wrap"><img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=128&h=128&fit=crop" alt="Spices"></div>
-      <div class="cat-lbl">Spices</div>
+  <!-- CATEGORIES -->
+  <div class="cats-wrap">
+    <div class="cats-title">Shop by Category</div>
+    <div class="cats-row" id="cats-row">
+      <!-- injected by JS from API -->
     </div>
   </div>
-</div>
 
-<div class="hero">
-  <div class="hero-bg">
-    <div class="hero-circle1"></div><div class="hero-circle2"></div>
-    <img class="hero-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=260&h=200&fit=crop" alt="Fresh Grocery">
-    <div class="hero-tag">✨ Fresh Daily</div>
-    <div class="hero-h">Farm Fresh,<br><span>Zero Compromise</span></div>
-    <div class="hero-p">Vegetables, fruits & staples delivered in 10 minutes.</div>
-    <div class="hero-btn" onclick="filterCat(document.querySelector('.cat-chip'),'All')">Shop Now →</div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg">
+      <div class="hero-circle1"></div><div class="hero-circle2"></div>
+      <img class="hero-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=260&h=200&fit=crop" alt="Shop">
+      <div class="hero-tag">✨ Best Deals</div>
+      <div class="hero-h">Shop Smart,<br><span>Save More</span></div>
+      <div class="hero-p">Top products from trusted sellers delivered fast.</div>
+      <div class="hero-btn" onclick="filterCat(null,'all')">Shop Now →</div>
+    </div>
   </div>
-</div>
 
-<div class="mini-grid">
-  <div class="mini-card" onclick="filterCat(null,'Vegetables')">
-    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop" alt="Vegetables">
-    <div class="mini-overlay"><div class="mini-tag">Farm Fresh</div><div class="mini-h">Vegetables</div><div class="mini-p">From ₹15/kg</div></div>
+  <!-- QUICK CATEGORY CARDS -->
+  <div class="mini-grid">
+    <div class="mini-card" onclick="filterCat(null,'electronics')">
+      <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=200&fit=crop" alt="Electronics">
+      <div class="mini-overlay"><div class="mini-tag">Top Picks</div><div class="mini-h">Electronics</div><div class="mini-p">Gadgets & more</div></div>
+    </div>
+    <div class="mini-card" onclick="filterCat(null,'fashion')">
+      <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=200&fit=crop" alt="Fashion">
+      <div class="mini-overlay"><div class="mini-tag">Trending</div><div class="mini-h">Fashion</div><div class="mini-p">Up to 50% off</div></div>
+    </div>
+    <div class="mini-card" onclick="filterCat(null,'home')">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=200&fit=crop" alt="Home">
+      <div class="mini-overlay"><div class="mini-tag">New Arrivals</div><div class="mini-h">Home & Living</div><div class="mini-p">Starting ₹99</div></div>
+    </div>
+    <div class="mini-card" onclick="filterCat(null,'beauty')">
+      <img src="https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=300&h=200&fit=crop" alt="Beauty">
+      <div class="mini-overlay"><div class="mini-tag">Best Sellers</div><div class="mini-h">Beauty</div><div class="mini-p">Flat 20% off</div></div>
+    </div>
   </div>
-  <div class="mini-card" onclick="filterCat(null,'Fruits')">
-    <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300&h=200&fit=crop" alt="Fruits">
-    <div class="mini-overlay"><div class="mini-tag">Seasonal</div><div class="mini-h">Fruits</div><div class="mini-p">Up to 50% off</div></div>
-  </div>
-  <div class="mini-card" onclick="filterCat(null,'Dairy')">
-    <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&h=200&fit=crop" alt="Dairy">
-    <div class="mini-overlay"><div class="mini-tag">Daily Fresh</div><div class="mini-h">Dairy & Eggs</div><div class="mini-p">Flat 20% off</div></div>
-  </div>
-  <div class="mini-card" onclick="filterCat(null,'Grains')">
-    <img src="https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=300&h=200&fit=crop" alt="Grains">
-    <div class="mini-overlay"><div class="mini-tag">Bulk Saver</div><div class="mini-h">Rice & Pulses</div><div class="mini-p">Starting ₹49</div></div>
-  </div>
-</div>
 
-<div class="promo">
-  <div class="promo-left">
-    <div class="p-eyebrow">🎉 First Order</div>
-    <div class="p-h">₹150 Off</div>
-    <div class="p-sub">On orders above ₹299<br>No minimum on veggies!</div>
+  <!-- PROMO -->
+  <div class="promo">
+    <div class="promo-left">
+      <div class="p-eyebrow">🎉 First Order</div>
+      <div class="p-h">₹150 Off</div>
+      <div class="p-sub">On orders above ₹299<br>Min. 3 items!</div>
+    </div>
+    <div class="promo-right">
+      <div class="p-ico">🎁</div>
+      <div class="promo-code" onclick="copyCode('FRESH50')">FRESH50</div>
+    </div>
   </div>
-  <div class="promo-right">
-    <div class="p-ico">🎁</div>
-    <div class="promo-code" onclick="copyCode('FRESH50')">FRESH50</div>
+
+  <!-- TRUST -->
+  <div class="trust-row">
+    <div class="trust-item"><div class="trust-ico">⚡</div><div class="trust-t">Fast</div><div class="trust-s">Delivery</div></div>
+    <div class="trust-item"><div class="trust-ico">✅</div><div class="trust-t">Verified</div><div class="trust-s">Sellers</div></div>
+    <div class="trust-item"><div class="trust-ico">🔄</div><div class="trust-t">Easy Returns</div><div class="trust-s">7 days</div></div>
+    <div class="trust-item"><div class="trust-ico">🔒</div><div class="trust-t">Safe Pay</div><div class="trust-s">UPI · COD</div></div>
   </div>
-</div>
 
-<div class="trust-row">
-  <div class="trust-item"><div class="trust-ico">⚡</div><div class="trust-t">10-min</div><div class="trust-s">Delivery</div></div>
-  <div class="trust-item"><div class="trust-ico">🌿</div><div class="trust-t">100% Fresh</div><div class="trust-s">Guaranteed</div></div>
-  <div class="trust-item"><div class="trust-ico">🔄</div><div class="trust-t">Easy Returns</div><div class="trust-s">Next day</div></div>
-  <div class="trust-item"><div class="trust-ico">🔒</div><div class="trust-t">Safe Pay</div><div class="trust-s">UPI · COD</div></div>
-</div>
-
-<div class="sec">
-  <div class="sec-head">
-    <div class="sec-title" id="sec-title">🥬 <span>Fresh</span> Picks</div>
-    <div class="sec-more" onclick="window.location='products.html'">See All →</div>
+  <!-- PRODUCTS -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-title" id="sec-title">🛍️ <span>All</span> Products</div>
+      <div class="sec-more" onclick="window.location='products.html'">See All →</div>
+    </div>
+    <div class="prod-grid" id="prod-grid"></div>
   </div>
-  <div class="prod-grid" id="prod-grid"></div>
-</div>
 
-<div class="seller-banner">
-  <div class="sb-left">
-    <div class="sb-t">🏪 Sell on indiaShop</div>
-    <div class="sb-s">Reach lakhs of customers. Zero listing fee!</div>
+  <!-- SELLER BANNER -->
+  <div class="seller-banner">
+    <div class="sb-left">
+      <div class="sb-t">🏪 Sell on indiaShop</div>
+      <div class="sb-s">Reach lakhs of customers. Zero listing fee!</div>
+    </div>
+    <a class="sb-btn" href="seller-register.html">Become a Seller →</a>
   </div>
-  <a class="sb-btn" href="seller-register.html">Become a Seller →</a>
-</div>
 
-</div>
+</div><!-- /scroll-body -->
 
 <nav class="bottom-nav">
   <div class="bottom-nav-inner">
@@ -346,7 +342,7 @@ img{display:block;max-width:100%;object-fit:cover}
 </nav>
 
 <div class="cart-fab" id="cart-fab" onclick="window.location='cart.html'">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
   <span class="cart-fab-text" id="cart-total">₹0</span>
   <span class="cart-fab-badge" id="cart-count">0</span>
 </div>
@@ -354,182 +350,287 @@ img{display:block;max-width:100%;object-fit:cover}
 </div>
 
 <script>
-// Timer
-let ts=598;const tel=document.getElementById('dtimer');
-function tick(){tel.textContent=String(Math.floor(ts/60)).padStart(2,'0')+':'+String(ts%60).padStart(2,'0');ts=ts>0?ts-1:598}
-tick();setInterval(tick,1000);
+// ══════════════════════════════════════════════════════════════════════════════
+// ⚠️  আপনার Render backend URL এখানে দিন — trailing slash ছাড়া
+// ══════════════════════════════════════════════════════════════════════════════
+const BASE_URL = 'https://your-backend.onrender.com';
 
-// Cart
-function getCart(){try{return JSON.parse(localStorage.getItem('is_cart')||'{}')}catch{return{}}}
-function saveCart(c){localStorage.setItem('is_cart',JSON.stringify(c))}
-let cart=getCart();
+// ─── DELIVERY TIMER ───────────────────────────────────────────────────────────
+let ts = 598;
+const tel = document.getElementById('dtimer');
+function tick() {
+  tel.textContent = String(Math.floor(ts/60)).padStart(2,'0') + ':' + String(ts%60).padStart(2,'0');
+  ts = ts > 0 ? ts - 1 : 598;
+}
+tick(); setInterval(tick, 1000);
 
-function updateCartFab(){
-  const items=Object.values(cart).reduce((a,b)=>a+b.qty,0);
-  const val=Object.values(cart).reduce((a,b)=>a+b.price*b.qty,0);
-  const fab=document.getElementById('cart-fab');
-  document.getElementById('cart-count').textContent=items;
-  document.getElementById('cart-total').textContent='₹'+val.toLocaleString('en-IN');
-  fab.style.display=items>0?'flex':'none';
-  const hb=document.getElementById('cart-hbadge');
-  hb.textContent=items;hb.style.display=items>0?'flex':'none';
+// ─── CART (localStorage) ──────────────────────────────────────────────────────
+function getCart()    { try { return JSON.parse(localStorage.getItem('is_cart') || '{}') } catch { return {} } }
+function saveCart(c)  { localStorage.setItem('is_cart', JSON.stringify(c)) }
+let cart = getCart();
+
+function updateCartFab() {
+  const items = Object.values(cart).reduce((a, b) => a + b.qty, 0);
+  const val   = Object.values(cart).reduce((a, b) => a + b.price * b.qty, 0);
+  document.getElementById('cart-count').textContent = items;
+  document.getElementById('cart-total').textContent  = '₹' + val.toLocaleString('en-IN');
+  document.getElementById('cart-fab').style.display  = items > 0 ? 'flex' : 'none';
+  const hb = document.getElementById('cart-hbadge');
+  hb.textContent = items; hb.style.display = items > 0 ? 'flex' : 'none';
 }
 
-// User
-function checkUser(){
-  const u=localStorage.getItem('is_user');
-  if(u){try{const d=JSON.parse(u);document.getElementById('user-label').textContent=d.name?d.name.split(' ')[0]:'Account';document.getElementById('user-btn').href='account.html';}catch{}}
+// ─── USER ─────────────────────────────────────────────────────────────────────
+function checkUser() {
+  try {
+    const d = JSON.parse(localStorage.getItem('is_user') || 'null');
+    if (d) {
+      document.getElementById('user-label').textContent = d.name ? d.name.split(' ')[0] : 'Account';
+      document.getElementById('user-btn').href = 'account.html';
+    }
+  } catch {}
 }
 
-// Products
-const PRODUCTS=[
-  {id:1,name:'Fresh Tomatoes',qty:'500g',price:29,mrp:45,off:36,img:'https://images.unsplash.com/photo-1546470427-f5b0c654fdbf?w=300&h=300&fit=crop',cat:'Vegetables',badge:'off',rating:4.4,rcount:1234,seller:'Fresh Farm Co.'},
-  {id:2,name:'Baby Spinach',qty:'250g',price:35,mrp:50,off:30,img:'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=300&h=300&fit=crop',cat:'Vegetables',badge:'off',rating:4.5,rcount:876,seller:'Green Harvest'},
-  {id:3,name:'Alphonso Mango',qty:'1 kg',price:149,mrp:199,off:25,img:'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=300&h=300&fit=crop',cat:'Fruits',badge:'hot',rating:4.7,rcount:3210,seller:'Konkan Farms'},
-  {id:4,name:'Amul Full Cream Milk',qty:'500ml',price:28,mrp:30,off:7,img:'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300&h=300&fit=crop',cat:'Dairy',badge:'',rating:4.6,rcount:5432,seller:'Amul'},
-  {id:5,name:'Red Onions',qty:'1 kg',price:39,mrp:60,off:35,img:'https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=300&h=300&fit=crop',cat:'Vegetables',badge:'off',rating:4.2,rcount:2109,seller:'Fresh Farm Co.'},
-  {id:6,name:'Green Chillies',qty:'100g',price:19,mrp:25,off:24,img:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&h=300&fit=crop',cat:'Spices',badge:'new',rating:4.3,rcount:654,seller:'Spice Garden'},
-  {id:7,name:'India Gate Basmati Rice',qty:'5 kg',price:349,mrp:450,off:22,img:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=300&fit=crop',cat:'Grains',badge:'off',rating:4.5,rcount:4321,seller:'India Gate'},
-  {id:8,name:'Organic Bananas',qty:'6 pcs',price:49,mrp:65,off:25,img:'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=300&h=300&fit=crop',cat:'Fruits',badge:'off',rating:4.4,rcount:987,seller:'Organic Valley'},
-  {id:9,name:'Fresh Coriander',qty:'100g',price:15,mrp:20,off:25,img:'https://images.unsplash.com/photo-1600623471616-8c1966c91ff6?w=300&h=300&fit=crop',cat:'Vegetables',badge:'new',rating:4.1,rcount:432,seller:'Green Harvest'},
-  {id:10,name:'Farm Fresh Eggs',qty:'12 pcs',price:89,mrp:110,off:19,img:'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=300&h=300&fit=crop',cat:'Dairy',badge:'off',rating:4.6,rcount:2876,seller:'Poultry Fresh'},
-  {id:11,name:'Watermelon',qty:'~2 kg',price:79,mrp:120,off:34,img:'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=300&h=300&fit=crop',cat:'Fruits',badge:'hot',rating:4.5,rcount:1543,seller:'Fruit King'},
-  {id:12,name:'Toor Dal',qty:'1 kg',price:135,mrp:160,off:16,img:'https://images.unsplash.com/photo-1585340083975-7c57c34ea1b2?w=300&h=300&fit=crop',cat:'Grains',badge:'',rating:4.4,rcount:1876,seller:'Dal Mandi'},
-  {id:13,name:'Greek Yogurt',qty:'400g',price:65,mrp:85,off:24,img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=300&fit=crop',cat:'Dairy',badge:'new',rating:4.5,rcount:743,seller:'Mother Dairy'},
-  {id:14,name:"Lay's Classic Salted",qty:'26g × 4',price:80,mrp:100,off:20,img:'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=300&h=300&fit=crop',cat:'Snacks',badge:'off',rating:4.3,rcount:2345,seller:'PepsiCo'},
-  {id:15,name:'Minute Maid Juice',qty:'1 L',price:85,mrp:110,off:23,img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&h=300&fit=crop',cat:'Beverages',badge:'off',rating:4.2,rcount:1122,seller:'Coca-Cola India'},
-  {id:16,name:'Turmeric Powder',qty:'200g',price:55,mrp:70,off:21,img:'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=300&h=300&fit=crop',cat:'Spices',badge:'',rating:4.6,rcount:3412,seller:'Spice Garden'},
-  {id:17,name:'Sweet Corn',qty:'2 pcs',price:35,mrp:50,off:30,img:'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300&h=300&fit=crop',cat:'Vegetables',badge:'new',rating:4.3,rcount:567,seller:'Farm Direct'},
-  {id:18,name:'Strawberries',qty:'250g',price:99,mrp:149,off:34,img:'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=300&h=300&fit=crop',cat:'Fruits',badge:'hot',rating:4.8,rcount:4521,seller:'Hill Fresh'},
-];
+// ─── CATEGORIES (from API) ────────────────────────────────────────────────────
+let allCategories = [];
 
-function getAllProducts(){
-  const sp=JSON.parse(localStorage.getItem('is_seller_products')||'[]');
-  return [...PRODUCTS,...sp];
+async function loadCategories() {
+  try {
+    const res  = await fetch(`${BASE_URL}/api/categories`);
+    const data = await res.json();
+    allCategories = data.data || [];
+  } catch { allCategories = []; }
+  renderCategoryChips();
 }
 
-let currentCat='All';
+function renderCategoryChips() {
+  const row = document.getElementById('cats-row');
+  const allChip = `
+    <div class="cat-chip active" id="chip-all" onclick="filterCat(this,'all')">
+      <div class="cat-img-wrap">🛒</div>
+      <div class="cat-lbl">All</div>
+    </div>`;
 
-function filterCat(el,cat){
-  currentCat=cat;
-  document.querySelectorAll('.cat-chip').forEach(x=>x.classList.remove('active'));
-  if(el)el.classList.add('active');
-  else{document.querySelectorAll('.cat-chip').forEach(x=>{if(x.querySelector('.cat-lbl').textContent===cat)x.classList.add('active')})}
-  const all=getAllProducts();
-  const filtered=cat==='All'?all:all.filter(p=>p.cat===cat);
-  const icons={All:'🥬',Vegetables:'🥦',Fruits:'🍎',Dairy:'🥛',Grains:'🌾',Snacks:'🍿',Beverages:'🧃',Spices:'🌶️'};
-  document.getElementById('sec-title').innerHTML=`${icons[cat]||'🛒'} <span>${cat==='All'?'Fresh':cat}</span> ${cat==='All'?'Picks':'Products'}`;
-  renderProducts(filtered);
-  setTimeout(()=>document.getElementById('prod-grid').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  const chips = allCategories.map(c => `
+    <div class="cat-chip" id="chip-${c.slug}" onclick="filterCat(this,'${c.slug}')">
+      <div class="cat-img-wrap">
+        ${c.image_url
+          ? `<img src="${c.image_url}" alt="${esc(c.name)}"
+                  onerror="this.textContent='${c.emoji || '📦'}';">`
+          : (c.emoji || '📦')}
+      </div>
+      <div class="cat-lbl">${c.name}</div>
+    </div>`).join('');
+
+  row.innerHTML = allChip + chips;
 }
 
-function renderProducts(list){
-  const grid=document.getElementById('prod-grid');
-  if(!list||!list.length){
-    grid.innerHTML='<div class="empty-state"><div class="e-ico">🔍</div><div class="e-t">No products found</div><div class="e-s">Try another category or check back later</div></div>';
+// ─── PRODUCTS (from API) ──────────────────────────────────────────────────────
+let currentCat = 'all';
+
+async function loadProducts(slug = '', search = '') {
+  showSkeleton();
+  try {
+    let url = `${BASE_URL}/api/products?limit=40`;
+    if (slug && slug !== 'all') url += `&category=${encodeURIComponent(slug)}`;
+    if (search)                  url += `&search=${encodeURIComponent(search)}`;
+
+    const res  = await fetch(url);
+    const data = await res.json();
+    renderProducts(data.data?.products || []);
+  } catch {
+    document.getElementById('prod-grid').innerHTML = `
+      <div class="empty-state">
+        <div class="e-ico">⚠️</div>
+        <div class="e-t">Could not load products</div>
+        <div class="e-s">Check your connection and try again</div>
+      </div>`;
+  }
+}
+
+function showSkeleton() {
+  document.getElementById('prod-grid').innerHTML = [1,2,3,4].map(() => `
+    <div class="skel-card">
+      <div class="skel-img skeleton"></div>
+      <div class="skel-body">
+        <div class="skel-line skeleton" style="width:80%"></div>
+        <div class="skel-line skeleton" style="width:50%"></div>
+        <div class="skel-line skeleton" style="width:100%;height:32px"></div>
+      </div>
+    </div>`).join('');
+}
+
+// Filter by category chip
+async function filterCat(el, slug) {
+  currentCat = slug;
+
+  // Highlight active chip
+  document.querySelectorAll('.cat-chip').forEach(x => x.classList.remove('active'));
+  if (el) {
+    el.classList.add('active');
+  } else {
+    const chip = document.getElementById('chip-' + slug) || document.getElementById('chip-all');
+    if (chip) chip.classList.add('active');
+  }
+
+  // Update section title
+  const cat     = allCategories.find(c => c.slug === slug);
+  const catName = slug === 'all' ? 'All'       : (cat ? cat.name        : slug);
+  const emoji   = slug === 'all' ? '🛍️'        : (cat ? (cat.emoji||'📦') : '📦');
+  document.getElementById('sec-title').innerHTML = `${emoji} <span>${catName}</span> Products`;
+
+  await loadProducts(slug);
+  setTimeout(() => document.getElementById('prod-grid').scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+}
+
+// ─── RENDER CARDS ─────────────────────────────────────────────────────────────
+function renderProducts(list) {
+  const wl   = JSON.parse(localStorage.getItem('is_wishlist') || '[]');
+  const grid = document.getElementById('prod-grid');
+  if (!list || !list.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="e-ico">🔍</div>
+        <div class="e-t">No products found</div>
+        <div class="e-s">Try another category or check back later</div>
+      </div>`;
     return;
   }
-  grid.innerHTML=list.map(p=>makeCard(p)).join('');
+  grid.innerHTML = list.map(p => makeCard(p, wl)).join('');
 }
 
-function makeCard(p){
-  const bt=p.badge==='off'?p.off+'% OFF':p.badge==='hot'?'🔥 HOT':p.badge==='new'?'NEW':'';
-  const q=cart[p.id]?.qty||0;
-  const addHTML=q>0
-    ?`<div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(event,${p.id},-1)">−</button><span class="qty-val">${q}</span><button class="qty-btn" onclick="changeQty(event,${p.id},1)">+</button></div>`
-    :`<button class="pc-add" onclick="addToCart(event,${p.id})">+ Add</button>`;
-  return`<div class="pc" onclick="goProduct(${p.id})">
+function makeCard(p, wl) {
+  const wished  = wl.includes(p.id);
+  const price   = p.discounted_price ?? p.price;
+  const hasDisc = (p.discount_pct || 0) >= 5;
+  const img     = p.primary_image || 'https://placehold.co/300x300/f9f9f9/878787?text=?';
+  const q       = cart[p.id]?.qty || 0;
+
+  const addHTML = q > 0
+    ? `<div class="qty-ctrl">
+         <button class="qty-btn" onclick="changeQty(event,'${p.id}',-1,${price},'${esc(p.name)}','${img}')">−</button>
+         <span class="qty-val">${q}</span>
+         <button class="qty-btn" onclick="changeQty(event,'${p.id}',1,${price},'${esc(p.name)}','${img}')">+</button>
+       </div>`
+    : `<button class="pc-add" onclick="addToCart(event,'${p.id}',${price},'${esc(p.name)}','${img}')">+ Add</button>`;
+
+  return `<div class="pc" onclick="goProduct('${p.slug}')">
     <div class="pc-img-wrap">
-      <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f9f9f9/878787?text=?'">
-      ${bt?`<span class="pc-badge ${p.badge}">${bt}</span>`:''}
-      <button class="pc-wish" onclick="wishlistToggle(event,this,${p.id})">🤍</button>
+      <img src="${img}" alt="${esc(p.name)}" loading="lazy"
+           onerror="this.src='https://placehold.co/300x300/f9f9f9/878787?text=?'">
+      ${hasDisc ? `<span class="pc-badge sale">${p.discount_pct}% OFF</span>` : ''}
+      ${p.is_featured ? `<span class="pc-badge hot" style="left:auto;right:36px">⭐ Top</span>` : ''}
+      <button class="pc-wish" onclick="wishToggle(event,this,'${p.id}')">${wished?'❤️':'🤍'}</button>
     </div>
     <div class="pc-body">
       <div class="pc-name">${p.name}</div>
-      <div class="pc-qty">${p.qty}</div>
-      <div class="pc-rating"><div class="pc-stars-box"><span class="star">★</span><span>${p.rating}</span></div><span class="pc-rcount">(${p.rcount.toLocaleString('en-IN')})</span></div>
+      ${p.brand ? `<div class="pc-brand">${p.brand}</div>` : ''}
+      ${p.avg_rating > 0 ? `
+        <div class="pc-rating">
+          <div class="pc-stars-box"><span>★</span><span>${p.avg_rating}</span></div>
+          <span class="pc-rcount">(${p.review_count})</span>
+        </div>` : ''}
       <div class="pc-price-row">
-        <span class="pc-price">₹${p.price}</span>
-        ${p.mrp?`<span class="pc-mrp">₹${p.mrp}</span>`:''}
-        ${p.off>=5?`<span class="pc-off">${p.off}% off</span>`:''}
+        <span class="pc-price">₹${price.toLocaleString('en-IN')}</span>
+        ${hasDisc ? `<span class="pc-mrp">₹${p.price.toLocaleString('en-IN')}</span>` : ''}
+        ${hasDisc ? `<span class="pc-off">${p.discount_pct}% off</span>` : ''}
       </div>
       <div id="add-row-${p.id}">${addHTML}</div>
     </div>
   </div>`;
 }
 
-function goProduct(id){window.location='product-detail.html?id='+id}
+function esc(s) { return String(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;'); }
+function goProduct(slug) { window.location = 'product-detail.html?slug=' + slug; }
 
-function addToCart(e,id){
+// ─── CART ACTIONS ─────────────────────────────────────────────────────────────
+function addToCart(e, id, price, name, img) {
   e.stopPropagation();
-  const p=getAllProducts().find(x=>x.id===id);if(!p)return;
-  if(!cart[id])cart[id]={price:p.price,qty:0,name:p.name,img:p.img,seller:p.seller};
-  cart[id].qty=1;
-  saveCart(cart);updateAddRow(id);updateCartFab();
-  showToast('✅ '+p.name+' added!');
+  cart[id] = { price, qty: 1, name, img };
+  saveCart(cart); updateAddRow(id, price, name, img); updateCartFab();
+  showToast('✅ ' + name + ' added!');
 }
 
-function changeQty(e,id,d){
+function changeQty(e, id, d, price, name, img) {
   e.stopPropagation();
-  const p=getAllProducts().find(x=>x.id===id);if(!p)return;
-  if(!cart[id])cart[id]={price:p.price,qty:0,name:p.name,img:p.img,seller:p.seller};
-  cart[id].qty=Math.max(0,cart[id].qty+d);
-  if(cart[id].qty===0)delete cart[id];
-  saveCart(cart);updateAddRow(id);updateCartFab();
+  if (!cart[id]) cart[id] = { price, qty: 0, name, img };
+  cart[id].qty = Math.max(0, cart[id].qty + d);
+  if (cart[id].qty === 0) delete cart[id];
+  saveCart(cart); updateAddRow(id, price, name, img); updateCartFab();
 }
 
-function updateAddRow(id){
-  const row=document.getElementById('add-row-'+id);if(!row)return;
-  const q=cart[id]?.qty||0;
-  row.innerHTML=q>0
-    ?`<div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(event,${id},-1)">−</button><span class="qty-val">${q}</span><button class="qty-btn" onclick="changeQty(event,${id},1)">+</button></div>`
-    :`<button class="pc-add" onclick="addToCart(event,${id})">+ Add</button>`;
+function updateAddRow(id, price, name, img) {
+  const row = document.getElementById('add-row-' + id);
+  if (!row) return;
+  const q = cart[id]?.qty || 0;
+  row.innerHTML = q > 0
+    ? `<div class="qty-ctrl">
+         <button class="qty-btn" onclick="changeQty(event,'${id}',-1,${price},'${esc(name)}','${img}')">−</button>
+         <span class="qty-val">${q}</span>
+         <button class="qty-btn" onclick="changeQty(event,'${id}',1,${price},'${esc(name)}','${img}')">+</button>
+       </div>`
+    : `<button class="pc-add" onclick="addToCart(event,'${id}',${price},'${esc(name)}','${img}')">+ Add</button>`;
 }
 
-function wishlistToggle(e,btn,id){
+// ─── WISHLIST ─────────────────────────────────────────────────────────────────
+function wishToggle(e, btn, id) {
   e.stopPropagation();
-  const wl=JSON.parse(localStorage.getItem('is_wishlist')||'[]');
-  const wished=btn.textContent==='❤️';
-  btn.textContent=wished?'🤍':'❤️';
-  if(!wished){if(!wl.includes(id))wl.push(id);showToast('❤️ Saved to wishlist')}
-  else{const i=wl.indexOf(id);if(i>-1)wl.splice(i,1);showToast('Removed from wishlist')}
-  localStorage.setItem('is_wishlist',JSON.stringify(wl));
+  const wl     = JSON.parse(localStorage.getItem('is_wishlist') || '[]');
+  const wished = btn.textContent === '❤️';
+  btn.textContent = wished ? '🤍' : '❤️';
+  if (!wished) { if (!wl.includes(id)) wl.push(id); showToast('❤️ Saved to wishlist'); }
+  else         { const i = wl.indexOf(id); if (i > -1) wl.splice(i, 1); showToast('Removed from wishlist'); }
+  localStorage.setItem('is_wishlist', JSON.stringify(wl));
 }
 
-// Search
-function handleSearch(val){
-  const q=val.toLowerCase().trim();
-  const res=document.getElementById('search-results');
-  if(!q){res.style.display='none';return}
-  const matches=getAllProducts().filter(p=>p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)).slice(0,6);
-  if(!matches.length){res.style.display='none';return}
-  res.innerHTML=matches.map(p=>`<div class="sr-item" onclick="goProduct(${p.id})">
-    <img class="sr-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/40/f9f9f9/878787?text=?'">
-    <div><div class="sr-name">${p.name}</div><div class="sr-cat">${p.cat}</div></div>
-    <div class="sr-price">₹${p.price}</div>
-  </div>`).join('');
-  res.style.display='block';
+// ─── SEARCH ───────────────────────────────────────────────────────────────────
+let _searchTimer = null;
+
+async function handleSearch(val) {
+  const q   = val.trim();
+  const res = document.getElementById('search-results');
+  if (!q) { res.style.display = 'none'; return; }
+  clearTimeout(_searchTimer);
+  _searchTimer = setTimeout(async () => {
+    try {
+      const r    = await fetch(`${BASE_URL}/api/products?search=${encodeURIComponent(q)}&limit=6`);
+      const data = await r.json();
+      const hits = data.data?.products || [];
+      if (!hits.length) { res.style.display = 'none'; return; }
+      res.innerHTML = hits.map(p => `
+        <div class="sr-item" onclick="goProduct('${p.slug}')">
+          <img class="sr-img" src="${p.primary_image || ''}" alt="${esc(p.name)}"
+               onerror="this.src='https://placehold.co/40/f9f9f9/878787?text=?'">
+          <div>
+            <div class="sr-name">${p.name}</div>
+            <div class="sr-cat">${p.category_name || ''}</div>
+          </div>
+          <div class="sr-price">₹${(p.discounted_price ?? p.price).toLocaleString('en-IN')}</div>
+        </div>`).join('');
+      res.style.display = 'block';
+    } catch { res.style.display = 'none'; }
+  }, 300);
 }
-function showSR(){const v=document.getElementById('search-input').value;if(v)handleSearch(v)}
-function hideSR(){document.getElementById('search-results').style.display='none'}
 
-function copyCode(code){
-  navigator.clipboard?.writeText(code).catch(()=>{});
-  showToast('📋 Code '+code+' copied!');
+function showSR() { const v = document.getElementById('search-input').value; if (v) handleSearch(v); }
+function hideSR() { document.getElementById('search-results').style.display = 'none'; }
+
+// ─── MISC ─────────────────────────────────────────────────────────────────────
+function copyCode(code) {
+  navigator.clipboard?.writeText(code).catch(() => {});
+  showToast('📋 Code ' + code + ' copied!');
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2500);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._to); t._to = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Init
-checkUser();updateCartFab();
-renderProducts(getAllProducts());
-
-// Wishlist button restore
-const wl=JSON.parse(localStorage.getItem('is_wishlist')||'[]');
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+checkUser();
+updateCartFab();
+loadCategories();      // categories থেকে API
+loadProducts('all');   // সব seller + admin products API থেকে
 </script>
 </body>
 </html>
