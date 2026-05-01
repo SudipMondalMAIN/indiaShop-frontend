@@ -504,7 +504,10 @@ function _makeCard(p, wl) {
 
 function _addCart(id, price, name, img) {
   _cart[id] = { price, qty:1, name, img };
-  _saveCart(_cart); _refreshRow(id, price, name, img); updateCartFab();
+  _saveCart(_cart);
+  console.log('Saved cart:', localStorage.getItem('is_cart'));
+  _refreshRow(id, price, name, img);
+  updateCartFab();
   toast('✅ Added to cart!', 'success');
 }
 
