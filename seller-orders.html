@@ -2,222 +2,315 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>My Orders — indiaShop Seller</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/nav.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
-.seller-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: var(--radius); padding: 22px; color: #fff; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-.seller-header-left h2 { font-size: 20px; font-weight: 800; }
-.seller-header-left p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
-.seller-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.seller-nav a { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface); border-radius: var(--radius); font-size: 13px; font-weight: 600; color: var(--text2); box-shadow: var(--shadow-sm); transition: var(--transition); }
-.seller-nav a:hover, .seller-nav a.active { background: var(--primary); color: #fff; }
-
-.order-table-wrap { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
-.order-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.order-table th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); border-bottom: 1px solid var(--border); }
-.order-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-.order-table tr:last-child td { border-bottom: none; }
-.order-table tr:hover td { background: var(--bg); }
-
-.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.badge-success  { background: #e6f9f0; color: #1a8a4a; }
-.badge-warning  { background: #fff8e1; color: #c47d00; }
-.badge-danger   { background: #ffeaea; color: #c0392b; }
-.badge-info     { background: #e8f4fd; color: #1a6fa0; }
-.badge-default  { background: var(--bg); color: var(--text3); }
-
-.order-items-mini { display: flex; flex-direction: column; gap: 4px; }
-.order-item-mini  { display: flex; align-items: center; gap: 8px; }
-.order-item-mini img { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
-
-.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-.filter-bar select { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 13px; background: var(--surface); color: var(--text); cursor: pointer; }
-.filter-bar .count-label { font-size: 13px; color: var(--text3); margin-left: auto; }
-
-.empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
-.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-.empty-state p { font-size: 14px; }
-
-.pagination { display: flex; justify-content: center; gap: 6px; padding: 16px; }
-.pagination button { padding: 6px 12px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 13px; cursor: pointer; }
-.pagination button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
-
-@media(max-width:768px) {
-  .order-table th:nth-child(3), .order-table td:nth-child(3),
-  .order-table th:nth-child(4), .order-table td:nth-child(4) { display: none; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{
+  --green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;
+  --orange:#ff6600;--red:#e53935;--blue:#1565c0;
+  --yellow:#f9a825;--yellow-l:#fff8e1;
+  --bg:#f1f3f6;
+  --border:#e0e0e0;--border2:#f0f0f0;
+  --t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;
+  --header:#1ba345;
+  --r4:4px;--r8:8px;
+  --shadow:0 1px 4px rgba(0,0,0,.12);
 }
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+img{display:block;max-width:100%}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh}
+
+.header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.back-btn{color:#fff;display:flex;align-items:center;cursor:pointer}
+.back-btn svg{width:22px;height:22px}
+.header-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;flex:1}
+.header-count{font-size:12px;font-weight:600;color:rgba(255,255,255,.75)}
+
+.seller-tabs{background:#fff;border-bottom:1px solid var(--border2);position:sticky;top:52px;z-index:90;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.seller-tabs-scroll{display:flex;overflow-x:auto;padding:0 6px}
+.stab{flex-shrink:0;font-size:12px;font-weight:600;color:var(--t3);padding:10px 12px;border-bottom:2px solid transparent;display:flex;align-items:center;gap:5px;white-space:nowrap;cursor:pointer;text-decoration:none}
+.stab.active{color:var(--green);border-bottom-color:var(--green);font-weight:700}
+.stab svg{width:14px;height:14px}
+
+/* FILTER CHIPS */
+.filter-wrap{background:#fff;border-bottom:1px solid var(--border2);position:sticky;top:96px;z-index:85}
+.filter-scroll{display:flex;gap:6px;overflow-x:auto;padding:8px 10px}
+.chip{flex-shrink:0;font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);background:#fff;color:var(--t2);cursor:pointer;white-space:nowrap}
+.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+
+.scroll-body{padding:10px 10px 24px}
+
+/* ORDER CARD */
+.order-card{background:#fff;border-radius:var(--r8);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp .2s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.order-card-head{padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.order-id{font-size:12px;font-weight:700;font-family:monospace}
+.order-date{font-size:11px;color:var(--t3)}
+
+.sbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;flex-shrink:0}
+.sbadge.pending   {background:#fff3e0;color:#e65100}
+.sbadge.confirmed {background:#e3f2fd;color:#1565c0}
+.sbadge.shipped   {background:var(--yellow-l);color:#7b5800}
+.sbadge.delivered {background:var(--green-l);color:var(--green-d)}
+.sbadge.cancelled {background:#fce4ec;color:#c62828}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sbadge.pending   .sdot{background:#e65100}
+.sbadge.confirmed .sdot{background:#1565c0}
+.sbadge.shipped   .sdot{background:var(--yellow)}
+.sbadge.delivered .sdot{background:var(--green)}
+.sbadge.cancelled .sdot{background:var(--red)}
+
+/* ORDER ITEMS */
+.order-items-wrap{padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border2)}
+.item-thumb{width:52px;height:52px;border-radius:var(--r4);background:var(--bg);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.item-thumb img{width:86%;height:86%;object-fit:contain}
+.item-info{flex:1;min-width:0}
+.item-name{font-size:12px;font-weight:600;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.item-meta{font-size:11px;color:var(--t3);margin-top:2px}
+
+/* CUSTOMER ROW */
+.cust-row{padding:10px 14px;border-bottom:1px solid var(--border2);font-size:12px;color:var(--t2)}
+.cust-name{font-weight:700;color:var(--t1);margin-bottom:2px}
+
+/* CARD FOOT */
+.order-card-foot{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:#fafafa}
+.order-total{font-size:16px;font-weight:800}
+
+/* STATUS BUTTONS */
+.status-btns{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border2);background:#fff}
+.status-btn{font-size:11px;font-weight:700;padding:6px 12px;border-radius:99px;border:1.5px solid;cursor:pointer;font-family:'Mukta',sans-serif;transition:.15s}
+.status-btn.confirm{color:#1565c0;border-color:#1565c0;background:#e3f2fd}
+.status-btn.ship{color:#7b5800;border-color:var(--yellow);background:var(--yellow-l)}
+.status-btn.deliver{color:var(--green-d);border-color:var(--green);background:var(--green-l)}
+.status-btn.cancel{color:var(--red);border-color:var(--red);background:#fce4ec}
+.status-btn:active{opacity:.8}
+.status-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* EMPTY */
+.empty-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
+.empty-ico{font-size:56px;margin-bottom:14px}
+.empty-t{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;margin-bottom:6px}
+.empty-s{font-size:13px;color:var(--t3)}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--r4)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:#fff;border-radius:var(--r8);margin-bottom:10px;padding:14px;box-shadow:var(--shadow)}
+
+.toast-msg{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
+.toast-msg.show{opacity:1}
+
+@media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.1)}}
 </style>
 </head>
 <body>
-<nav class="navbar"><div class="container"></div></nav>
-<div class="page-content"><div class="container">
+<div class="page">
 
-  <div class="seller-header">
-    <div class="seller-header-left">
-      <h2>My Orders</h2>
-      <p>Orders containing your products</p>
+  <header class="header">
+    <div class="header-top">
+      <button class="back-btn" onclick="location.href='seller-dashboard.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="header-title">My Orders</div>
+      <div class="header-count" id="hdr-count"></div>
+    </div>
+  </header>
+
+  <div class="seller-tabs">
+    <div class="seller-tabs-scroll">
+      <a class="stab" href="seller-dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
+      </a>
+      <a class="stab" href="seller-products.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Products
+      </a>
+      <a class="stab active" href="seller-orders.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Orders
+      </a>
+      <a class="stab" href="seller-add-product.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Product
+      </a>
     </div>
   </div>
 
-  <div class="seller-nav">
-    <a href="seller-dashboard.html">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Dashboard
-    </a>
-    <a href="seller-products.html">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-      Products
-    </a>
-    <a href="seller-orders.html" class="active">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Orders
-    </a>
-    <a href="seller-add-product.html">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      Add Product
-    </a>
-    <a href="index.html" style="margin-left:auto">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-      View Store
-    </a>
-  </div>
-
-  <div class="filter-bar">
-    <select id="statusFilter" onchange="applyFilter()">
-      <option value="">All Status</option>
-      <option value="pending">Pending</option>
-      <option value="confirmed">Confirmed</option>
-      <option value="shipped">Shipped</option>
-      <option value="delivered">Delivered</option>
-      <option value="cancelled">Cancelled</option>
-    </select>
-    <span class="count-label" id="order-count"></span>
-  </div>
-
-  <div class="order-table-wrap">
-    <div id="orders-loading" style="padding:40px;text-align:center;color:var(--text3)">Loading orders…</div>
-    <div id="orders-empty" class="empty-state" style="display:none">
-      <div class="icon">📦</div>
-      <p>No orders found</p>
+  <div class="filter-wrap">
+    <div class="filter-scroll">
+      <button class="chip active" onclick="setFilter('',this)">All</button>
+      <button class="chip" onclick="setFilter('pending',this)">⏳ Pending</button>
+      <button class="chip" onclick="setFilter('confirmed',this)">✅ Confirmed</button>
+      <button class="chip" onclick="setFilter('shipped',this)">🚚 Shipped</button>
+      <button class="chip" onclick="setFilter('delivered',this)">🎉 Delivered</button>
+      <button class="chip" onclick="setFilter('cancelled',this)">❌ Cancelled</button>
     </div>
-    <table class="order-table" id="orders-table" style="display:none">
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Items</th>
-          <th>Customer</th>
-          <th>Date</th>
-          <th>Amount</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="orders-body"></tbody>
-    </table>
   </div>
 
-  <div class="pagination" id="pagination"></div>
+  <div class="scroll-body">
+    <div id="skel-wrap">
+      <div class="skel-card"><div class="skeleton" style="height:14px;width:55%;margin-bottom:10px"></div><div class="skeleton" style="height:52px;margin-bottom:10px"></div><div class="skeleton" style="height:32px;width:60%"></div></div>
+      <div class="skel-card"><div class="skeleton" style="height:14px;width:45%;margin-bottom:10px"></div><div class="skeleton" style="height:52px;margin-bottom:10px"></div><div class="skeleton" style="height:32px;width:50%"></div></div>
+    </div>
+    <div id="orders-list"></div>
+    <div id="empty-wrap" style="display:none">
+      <div class="empty-wrap">
+        <div class="empty-ico">📦</div>
+        <div class="empty-t">No Orders Found</div>
+        <div class="empty-s">Orders containing your products will appear here.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-</div></div>
-<nav class="bottom-nav"></nav>
+<div class="toast-msg" id="toast"></div>
 
 <script src="static/js/main.js"></script>
 <script>
 if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-if (!Auth.isSeller()) window.location.href = 'account.html';
-buildNavbar('account');
+if (!Auth.isSeller()) window.location.href = 'seller-register.html';
 
-let allOrders = [];
-let currentPage = 1;
-const perPage = 20;
+let _allOrders  = [];
+let _filterStatus = '';
 
-const STATUS_BADGES = {
-  pending:   'badge-warning',
-  confirmed: 'badge-info',
-  shipped:   'badge-info',
-  delivered: 'badge-success',
-  cancelled: 'badge-danger',
-};
+const urlP = new URLSearchParams(window.location.search);
+if (urlP.get('status')) _filterStatus = urlP.get('status');
 
-async function loadOrders(page = 1) {
-  const status = document.getElementById('statusFilter').value;
-  const qp = `?page=${page}&limit=${perPage}` + (status ? `&status=${status}` : '');
+const STATUS_LABEL = {pending:'Pending',confirmed:'Confirmed',shipped:'Shipped',delivered:'Delivered',cancelled:'Cancelled'};
+const esc = s => String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-  document.getElementById('orders-loading').style.display = 'block';
-  document.getElementById('orders-table').style.display  = 'none';
-  document.getElementById('orders-empty').style.display  = 'none';
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
 
+function setFilter(status, btn) {
+  _filterStatus = status;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+async function loadOrders() {
   try {
-    const data = await api('GET', '/seller/orders' + qp);
-    allOrders = (data.data && data.data.orders) ? data.data.orders : [];
-    const total = (data.data && data.data.total) || 0;
-    const totalPages = (data.data && data.data.total_pages) || 1;
+    const res  = await api('GET', '/seller/orders?page=1&limit=50');
+    const data = res?.data ?? res;
+    _allOrders = data?.orders || [];
+  } catch(e) {
+    _allOrders = [];
+  }
+  document.getElementById('skel-wrap').style.display = 'none';
 
-    document.getElementById('order-count').textContent = `${total} order${total !== 1 ? 's' : ''}`;
-    document.getElementById('orders-loading').style.display = 'none';
+  // pre-select filter chip from URL
+  if (_filterStatus) {
+    document.querySelectorAll('.chip').forEach(c => {
+      if (c.textContent.toLowerCase().includes(_filterStatus)) c.classList.add('active');
+      else c.classList.remove('active');
+    });
+  }
 
-    if (!allOrders.length) {
-      document.getElementById('orders-empty').style.display = 'flex';
-      return;
+  renderOrders();
+}
+
+function renderOrders() {
+  const list = document.getElementById('orders-list');
+  const empty = document.getElementById('empty-wrap');
+
+  const filtered = _filterStatus
+    ? _allOrders.filter(o => (o.status||'').toLowerCase() === _filterStatus)
+    : _allOrders;
+
+  document.getElementById('hdr-count').textContent = _allOrders.length ? `(${_allOrders.length})` : '';
+
+  if (!filtered.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = filtered.map((o, idx) => {
+    const oid    = o.id || o._id || '';
+    const status = (o.status || 'pending').toLowerCase();
+    const items  = o.items || [];
+    const addr   = o.address || {};
+    const date   = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '';
+
+    const itemsHtml = items.slice(0, 2).map(it => `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div class="item-thumb">
+          <img src="${esc(it.product_image||'https://placehold.co/52x52/f1f3f6/878787?text=?')}"
+               onerror="this.src='https://placehold.co/52x52/f1f3f6/878787?text=?'" loading="lazy">
+        </div>
+        <div class="item-info">
+          <div class="item-name">${esc(it.product_name||'Product')}</div>
+          <div class="item-meta">Qty: ${it.quantity} × ${formatPrice(it.unit_price||0)}</div>
+        </div>
+      </div>`).join('') + (items.length > 2 ? `<div style="font-size:11px;color:var(--t3)">+${items.length-2} more item(s)</div>` : '');
+
+    // Action buttons based on current status
+    let actionBtns = '';
+    if (status === 'pending') {
+      actionBtns = `
+        <button class="status-btn confirm" onclick="updateStatus('${oid}','confirmed',this)">✅ Confirm</button>
+        <button class="status-btn cancel"  onclick="updateStatus('${oid}','cancelled',this)">❌ Cancel</button>`;
+    } else if (status === 'confirmed') {
+      actionBtns = `
+        <button class="status-btn ship"   onclick="updateStatus('${oid}','shipped',this)">🚚 Mark Shipped</button>
+        <button class="status-btn cancel" onclick="updateStatus('${oid}','cancelled',this)">❌ Cancel</button>`;
+    } else if (status === 'shipped') {
+      actionBtns = `
+        <button class="status-btn deliver" onclick="updateStatus('${oid}','delivered',this)">🎉 Mark Delivered</button>`;
     }
 
-    renderOrders(allOrders);
-    renderPagination(page, totalPages);
-  } catch(e) {
-    document.getElementById('orders-loading').textContent = 'Failed to load orders. ' + (e.message || '');
-    toast('Failed to load orders', 'error');
-  }
-}
-
-function renderOrders(orders) {
-  const tbody = document.getElementById('orders-body');
-  tbody.innerHTML = orders.map(o => {
-    const items = o.items || [];
-    const itemsHtml = `<div class="order-items-mini">
-      ${items.slice(0, 2).map(it => `
-        <div class="order-item-mini">
-          <img src="${it.product_image || 'https://placehold.co/32x32?text=P'}" alt="${it.product_name}">
-          <span>${it.product_name} × ${it.quantity}</span>
-        </div>`).join('')}
-      ${items.length > 2 ? `<span style="font-size:11px;color:var(--text3)">+${items.length - 2} more</span>` : ''}
-    </div>`;
-
-    const address = o.address || {};
-    const customer = address.full_name || '—';
-    const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'}) : '—';
-    const badge   = STATUS_BADGES[o.status] || 'badge-default';
-
-    return `<tr>
-      <td style="font-family:monospace;font-size:12px;color:var(--text3)">#${(o.id||'').slice(-8).toUpperCase()}</td>
-      <td>${itemsHtml}</td>
-      <td>${customer}<br><span style="font-size:11px;color:var(--text3)">${address.city || ''}</span></td>
-      <td style="white-space:nowrap">${dateStr}</td>
-      <td style="font-weight:700">${formatPrice(o.total_amount || 0)}</td>
-      <td><span class="badge ${badge}">${(o.status||'').charAt(0).toUpperCase() + (o.status||'').slice(1)}</span></td>
-    </tr>`;
+    return `
+      <div class="order-card" style="animation-delay:${idx*.05}s" id="ocard-${esc(oid)}">
+        <div class="order-card-head">
+          <div>
+            <div class="order-id">#${esc(String(oid).slice(-10).toUpperCase())}</div>
+            <div class="order-date">${date}</div>
+          </div>
+          <span class="sbadge ${status}"><span class="sdot"></span>${STATUS_LABEL[status]||status}</span>
+        </div>
+        <div class="order-items-wrap">${itemsHtml}</div>
+        <div class="cust-row">
+          <div class="cust-name">👤 ${esc(addr.full_name||'Customer')}</div>
+          <div>${esc([addr.city,addr.state,addr.pincode].filter(Boolean).join(', '))}</div>
+        </div>
+        <div class="order-card-foot">
+          <div>
+            <div style="font-size:10px;color:var(--t3);font-weight:600">ORDER TOTAL</div>
+            <div class="order-total">${formatPrice(o.total_amount||0)}</div>
+          </div>
+          <div style="font-size:11px;color:var(--t3)">${items.length} item${items.length!==1?'s':''}</div>
+        </div>
+        ${actionBtns ? `<div class="status-btns">${actionBtns}</div>` : ''}
+      </div>`;
   }).join('');
-
-  document.getElementById('orders-table').style.display = 'table';
 }
 
-function renderPagination(current, total) {
-  const pg = document.getElementById('pagination');
-  if (total <= 1) { pg.innerHTML = ''; return; }
-  let html = `<button ${current === 1 ? 'disabled' : ''} onclick="loadOrders(${current - 1})">←</button>`;
-  for (let i = 1; i <= total; i++) {
-    html += `<button class="${i === current ? 'active' : ''}" onclick="loadOrders(${i})">${i}</button>`;
+async function updateStatus(orderId, newStatus, btn) {
+  if (!confirm(`Mark order as ${newStatus}?`)) return;
+  btn.disabled = true;
+  btn.textContent = '⏳';
+  try {
+    await api('PATCH', `/seller/orders/${orderId}/status`, { status: newStatus });
+    const o = _allOrders.find(x => (x.id||x._id) === orderId);
+    if (o) o.status = newStatus;
+    showToast(`Order marked as ${newStatus} ✓`);
+    renderOrders();
+  } catch(e) {
+    showToast('Failed to update status');
+    btn.disabled = false;
   }
-  html += `<button ${current === total ? 'disabled' : ''} onclick="loadOrders(${current + 1})">→</button>`;
-  pg.innerHTML = html;
 }
 
-function applyFilter() {
-  loadOrders(1);
-}
-
-loadOrders(1);
+loadOrders();
 </script>
 </body>
 </html>
