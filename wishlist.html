@@ -1,100 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Wishlist — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/nav.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
-.wish-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; position: relative; }
-.wish-remove { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); z-index: 1; }
-.wish-img { aspect-ratio: 1; background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
-.wish-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
-.wish-info { padding: 10px 12px 12px; }
-.wish-name { font-size: 13px; font-weight: 500; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
-.wish-price { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{
+  --green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;
+  --orange:#ff6600;--orange-l:#fff3eb;
+  --red:#e53935;--blue:#1565c0;
+  --bg:#f1f3f6;--white:#fff;
+  --border:#e0e0e0;--border2:#f0f0f0;
+  --t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;
+  --header:#1ba345;
+  --r2:2px;--r4:4px;--r8:8px;
+  --shadow:0 1px 4px rgba(0,0,0,.12);
+  --shadow-md:0 2px 12px rgba(0,0,0,.14);
+}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+img{display:block;max-width:100%;object-fit:cover}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;flex-shrink:0}
+.logo span{color:#ffeb3b}
+.logo small{font-size:11px;font-weight:600;display:block;color:rgba(255,255,255,.8);margin-top:-6px;letter-spacing:.5px}
+.header-right{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-left:auto}
+.hbtn{display:flex;flex-direction:column;align-items:center;gap:1px;color:#fff;font-size:10px;font-weight:600;position:relative;padding:2px 5px;cursor:pointer;text-decoration:none;border:none;background:none;font-family:'Mukta',sans-serif}
+.hbtn svg{width:22px;height:22px}
+.hbadge{position:absolute;top:-3px;right:0;min-width:16px;height:16px;border-radius:99px;background:#ff3d00;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--header);padding:0 3px}
+
+/* ── SCROLL BODY ── */
+.scroll-body{overflow-y:auto;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+
+/* ── PAGE TITLE BAR ── */
+.page-title-bar{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;background:var(--white);margin-bottom:8px;border-bottom:1px solid var(--border2)}
+.back-btn{width:34px;height:34px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--t2);flex-shrink:0;transition:.15s}
+.back-btn:active{background:var(--border)}
+.page-title-text{flex:1}
+.page-title-text h2{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--t1);line-height:1.1}
+.page-title-text span{font-size:12px;color:var(--t3);font-weight:500}
+.clear-all-btn{font-size:12px;font-weight:700;color:var(--red);padding:6px 10px;border-radius:var(--r4);background:transparent;transition:.15s}
+.clear-all-btn:active{background:#fce4e4}
+
+/* ── SORT / FILTER BAR ── */
+.sort-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--white);margin-bottom:8px;border-bottom:1px solid var(--border2)}
+.sort-bar-label{font-size:12px;color:var(--t3);font-weight:600;margin-right:2px}
+.sort-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);color:var(--t2);background:var(--white);transition:.15s;cursor:pointer}
+.sort-chip.active{border-color:var(--green);color:var(--green);background:var(--green-l)}
+.sort-chip:active{background:var(--bg)}
+
+/* ── WISH GRID ── */
+.wish-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 10px 10px}
+
+/* ── WISH CARD ── */
+.wish-card{background:var(--white);border-radius:var(--r8);box-shadow:var(--shadow);overflow:hidden;position:relative;display:flex;flex-direction:column;transition:.15s}
+.wish-card:active{transform:scale(.98)}
+
+.wish-remove{position:absolute;top:7px;right:7px;width:28px;height:28px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.18);z-index:2;transition:.15s}
+.wish-remove:active{background:#fce4e4;transform:scale(.9)}
+.wish-remove svg{color:var(--t3);transition:.15s}
+.wish-remove:hover svg{color:var(--red)}
+
+.wish-img-wrap{position:relative;aspect-ratio:1;background:var(--bg);overflow:hidden;cursor:pointer}
+.wish-img-wrap img{width:100%;height:100%;object-fit:contain;padding:10px;transition:.2s}
+.wish-img-wrap:active img{transform:scale(.95)}
+
+.disc-badge{position:absolute;bottom:7px;left:7px;background:var(--green);color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:var(--r4);letter-spacing:.3px}
+.out-of-stock-overlay{position:absolute;inset:0;background:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center}
+.out-badge{background:var(--t1);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:99px;letter-spacing:.5px}
+
+.wish-info{padding:9px 10px 10px;flex:1;display:flex;flex-direction:column;gap:5px}
+.wish-brand{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px}
+.wish-name{font-size:12.5px;font-weight:600;color:var(--t1);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;flex:1}
+.wish-rating{display:flex;align-items:center;gap:4px}
+.wish-rating-pill{display:flex;align-items:center;gap:3px;background:var(--green);color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:99px}
+.wish-rating-count{font-size:10px;color:var(--t4)}
+.wish-price-row{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.wish-price{font-size:15px;font-weight:800;color:var(--t1)}
+.wish-original{font-size:11px;color:var(--t4);text-decoration:line-through}
+.wish-atc{width:100%;margin-top:4px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:8px 0;border-radius:var(--r4);text-align:center;transition:.15s;letter-spacing:.2px}
+.wish-atc:active{background:var(--green-d)}
+.wish-atc.oos{background:var(--t4);cursor:not-allowed}
+.wish-atc.added{background:var(--blue)}
+
+/* ── SKELETON ── */
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--white);border-radius:var(--r8);overflow:hidden;box-shadow:var(--shadow)}
+.skel-img{aspect-ratio:1}
+.skel-line{height:12px;border-radius:3px;margin:8px 10px}
+.skel-line.w80{width:80%}
+.skel-line.w60{width:60%}
+.skel-line.w50{width:50%}
+.skel-btn{height:30px;margin:4px 10px 10px;border-radius:var(--r4)}
+
+/* ── EMPTY STATE ── */
+.empty-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;gap:0}
+.empty-icon{width:90px;height:90px;background:var(--green-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.empty-icon svg{color:var(--green)}
+.empty-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:var(--t1);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--t3);margin-bottom:24px;line-height:1.5}
+.empty-cta{background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--r8);display:inline-block;transition:.15s}
+.empty-cta:active{background:var(--green-d)}
+
+/* ── ERROR STATE ── */
+.error-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;gap:12px}
+.error-wrap p{font-size:13px;color:var(--t3)}
+.retry-btn{background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:9px 22px;border-radius:var(--r4)}
+
+/* ── SUMMARY BAR ── */
+.summary-bar{background:var(--white);border-top:1px solid var(--border2);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:0}
+.summary-bar-info{font-size:12px;color:var(--t3)}
+.summary-bar-info strong{color:var(--t1);font-weight:700}
+.add-all-btn{background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:9px 16px;border-radius:var(--r4);white-space:nowrap;transition:.15s}
+.add-all-btn:active{background:var(--green-d)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;display:flex;flex-direction:column;gap:6px;align-items:center}
+.toast{background:rgba(33,33,33,.92);color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:99px;white-space:nowrap;backdrop-filter:blur(8px);animation:toastIn .25s ease both}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
+.bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 4px;cursor:pointer;text-decoration:none;color:var(--t3);font-size:10px;font-weight:600;border:none;background:none;font-family:'Mukta',sans-serif}
+.bn.active{color:var(--green)}
+.bn svg{width:23px;height:23px;margin-bottom:1px}
+.bn-indicator{width:4px;height:4px;border-radius:50%;background:var(--green);margin-top:2px;opacity:0}
+.bn.active .bn-indicator{opacity:1}
+
+@media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.15);border-left:1px solid var(--border);border-right:1px solid var(--border)}}
 </style>
 </head>
 <body>
-<nav class="navbar"><div class="container"></div></nav>
-<div class="page-content">
-<div class="container" style="max-width:900px">
+<div class="page">
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-    <a href="account.html" style="color:var(--text3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
-    <div class="fw-700 fs-18">My Wishlist <span id="wish-count" class="text-muted fw-500 fs-14"></span></div>
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">india<span>Shop</span><small>❤️ My Wishlist</small></a>
+    <div class="header-right">
+      <a class="hbtn" href="cart.html" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Cart</span>
+        <span class="hbadge" id="cart-hbadge" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="scroll-body">
+
+  <!-- TITLE BAR -->
+  <div class="page-title-bar">
+    <a href="account.html" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <div class="page-title-text">
+      <h2>My Wishlist</h2>
+      <span id="wish-subtitle">Loading…</span>
+    </div>
+    <button class="clear-all-btn" id="clear-all-btn" onclick="clearAll()" style="display:none">Clear All</button>
   </div>
 
-  <div class="grid-4" id="wish-grid"></div>
-  <div id="wish-empty" class="empty-state" style="display:none">
-    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-    <p>Your wishlist is empty</p>
-    <a href="products.html" class="btn btn-primary">Discover Products</a>
+  <!-- SORT BAR -->
+  <div class="sort-bar" id="sort-bar" style="display:none">
+    <span class="sort-bar-label">Sort:</span>
+    <button class="sort-chip active" data-sort="added" onclick="setSort('added')">Recently Added</button>
+    <button class="sort-chip" data-sort="price_asc" onclick="setSort('price_asc')">Price ↑</button>
+    <button class="sort-chip" data-sort="price_desc" onclick="setSort('price_desc')">Price ↓</button>
   </div>
 
-</div>
-</div>
-<nav class="bottom-nav"></nav>
+  <!-- MAIN CONTENT -->
+  <div id="main-content">
+    <!-- Skeleton loader -->
+    <div class="wish-grid" id="skeleton-grid">
+      ${[1,2,3,4].map(()=>`
+      <div class="skel-card">
+        <div class="skel-img skeleton"></div>
+        <div class="skel-line w80 skeleton"></div>
+        <div class="skel-line w60 skeleton"></div>
+        <div class="skel-line w50 skeleton"></div>
+        <div class="skel-btn skeleton"></div>
+      </div>`).join('')}
+    </div>
+  </div>
 
-<script src="../static/js/main.js"></script>
+  <!-- SUMMARY BAR (shown when items exist) -->
+  <div class="summary-bar" id="summary-bar" style="display:none">
+    <div class="summary-bar-info" id="summary-text"></div>
+    <button class="add-all-btn" id="add-all-btn" onclick="addAllToCart()">Add All to Cart</button>
+  </div>
+
+</div><!-- /scroll-body -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bn" onclick="window.location='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='products.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Explore</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='products.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Categories</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='orders.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Orders</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span><span class="bn-indicator"></span>
+    </button>
+  </div>
+</nav>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+</div><!-- /page -->
+
 <script>
-  if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-  buildNavbar('account');
+// ── Auth guard ──────────────────────────────────────────────────────────────
+const token = localStorage.getItem('is_token');
+if (!token) window.location.href = 'login.html';
 
-  // Wishlist stored locally
-  const Wish = {
-    get: () => { try { return JSON.parse(localStorage.getItem('is_wish')) || []; } catch { return []; } },
-    save: (items) => localStorage.setItem('is_wish', JSON.stringify(items)),
-    remove: (id) => { Wish.save(Wish.get().filter(i => i.id !== id)); },
-    toggle: (product) => {
-      const items = Wish.get();
-      const idx = items.findIndex(i => i.id === product.id);
-      if (idx >= 0) { items.splice(idx, 1); Wish.save(items); return false; }
-      else { items.push(product); Wish.save(items); return true; }
-    },
-    has: (id) => Wish.get().some(i => i.id === id),
-  };
+// ── Wishlist key (same as account.html: is_wishlist) ──────────────────────
+const WISH_KEY = 'is_wishlist';
+const CART_KEY = 'is_cart';
 
-  function renderWishlist() {
-    const items = Wish.get();
-    const grid = document.getElementById('wish-grid');
-    if (!items.length) {
-      grid.innerHTML = '';
-      document.getElementById('wish-empty').style.display = 'flex';
-      document.getElementById('wish-count').textContent = '';
-      return;
-    }
-    document.getElementById('wish-empty').style.display = 'none';
-    document.getElementById('wish-count').textContent = `(${items.length})`;
-    const disc = (p) => p.original_price > p.price ? Math.round((1 - p.price / p.original_price) * 100) : 0;
-    grid.innerHTML = items.map(p => `
-      <div class="wish-card">
-        <div class="wish-remove" onclick="removeWish(${p.id})">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+// ── State ──────────────────────────────────────────────────────────────────
+let wishItems  = [];
+let sortMode   = 'added';
+let cartCounts = {};
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function fmt(price) {
+  return '₹' + Number(price).toLocaleString('en-IN', {maximumFractionDigits:0});
+}
+function discPct(p) {
+  const op = p.original_price || p.mrp || 0;
+  const sp = p.price || p.sale_price || 0;
+  if (!op || op <= sp) return 0;
+  return Math.round((1 - sp / op) * 100);
+}
+function salePrice(p) {
+  return p.price || p.sale_price || 0;
+}
+
+// ── Wishlist localStorage helpers ──────────────────────────────────────────
+function getWishlist() {
+  try { return JSON.parse(localStorage.getItem(WISH_KEY) || '[]'); } catch { return []; }
+}
+function saveWishlist(items) {
+  localStorage.setItem(WISH_KEY, JSON.stringify(items));
+  wishItems = items;
+}
+function removeFromWishlist(id) {
+  saveWishlist(getWishlist().filter(i => (i.id || i._id) != id));
+}
+function clearWishlist() {
+  saveWishlist([]);
+}
+
+// ── Cart localStorage helpers ──────────────────────────────────────────────
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY) || '{}'); } catch { return {}; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  cartCounts = cart;
+}
+function addToCartLocal(product) {
+  const cart  = getCart();
+  const id    = String(product.id || product._id);
+  const price = salePrice(product);
+  if (cart[id]) {
+    cart[id].qty = (cart[id].qty || 1) + 1;
+  } else {
+    cart[id] = {
+      id, qty: 1, price,
+      name:  product.name,
+      image: product.image || (product.images && product.images[0]?.url) || '',
+    };
+  }
+  saveCart(cart);
+  updateCartBadge();
+}
+function updateCartBadge() {
+  const cart  = getCart();
+  const count = Object.values(cart).reduce((a, b) => a + (b.qty || 0), 0);
+  const el    = document.getElementById('cart-hbadge');
+  if (!el) return;
+  if (count > 0) { el.textContent = count; el.style.display = 'flex'; }
+  else           { el.style.display = 'none'; }
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const wrap = document.getElementById('toast-wrap');
+  const el   = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+// ── Sort ───────────────────────────────────────────────────────────────────
+function setSort(mode) {
+  sortMode = mode;
+  document.querySelectorAll('.sort-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.sort === mode);
+  });
+  render();
+}
+function sorted(items) {
+  const arr = [...items];
+  if (sortMode === 'price_asc')  return arr.sort((a,b) => salePrice(a) - salePrice(b));
+  if (sortMode === 'price_desc') return arr.sort((a,b) => salePrice(b) - salePrice(a));
+  return arr; // 'added' = original order
+}
+
+// ── Render ──────────────────────────────────────────────────────────────────
+function render() {
+  const items = sorted(getWishlist());
+  const grid  = document.getElementById('main-content');
+  const sortBar  = document.getElementById('sort-bar');
+  const clearBtn = document.getElementById('clear-all-btn');
+  const summaryBar = document.getElementById('summary-bar');
+  const subtitle   = document.getElementById('wish-subtitle');
+
+  if (!items.length) {
+    sortBar.style.display  = 'none';
+    clearBtn.style.display = 'none';
+    summaryBar.style.display = 'none';
+    subtitle.textContent = '0 items';
+    grid.innerHTML = `
+      <div class="empty-wrap">
+        <div class="empty-icon">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
         </div>
-        <div class="wish-img" onclick="window.location='product-detail.html?id=${p.id}'">
-          <img src="${p.image || 'https://placehold.co/200x200?text=Img'}" alt="${p.name}">
-          ${disc(p) ? `<div class="product-disc-badge">${disc(p)}% off</div>` : ''}
-        </div>
-        <div class="wish-info">
-          <div class="wish-name" onclick="window.location='product-detail.html?id=${p.id}'">${p.name}</div>
-          <div class="wish-price">${formatPrice(p.price)}</div>
-          <button class="btn btn-accent btn-block btn-sm" onclick="addToCartFromWish(${JSON.stringify(p).replace(/"/g,'&quot;')})">Add to Cart</button>
-        </div>
-      </div>`).join('');
+        <div class="empty-title">Your wishlist is empty</div>
+        <div class="empty-sub">Save items you love and come back to them anytime. Start exploring!</div>
+        <a href="products.html" class="empty-cta">Discover Products →</a>
+      </div>`;
+    return;
   }
 
-  function removeWish(id) {
-    Wish.remove(id);
-    renderWishlist();
+  subtitle.textContent = `${items.length} item${items.length !== 1 ? 's' : ''} saved`;
+  sortBar.style.display  = 'flex';
+  clearBtn.style.display = 'block';
+  summaryBar.style.display = 'flex';
+
+  // Summary bar
+  const available = items.filter(p => (p.stock ?? 1) > 0);
+  const totalVal  = available.reduce((a,p) => a + salePrice(p), 0);
+  document.getElementById('summary-text').innerHTML =
+    `<strong>${available.length}</strong> in-stock · Total <strong>${fmt(totalVal)}</strong>`;
+
+  grid.innerHTML = `<div class="wish-grid">${items.map(p => cardHTML(p)).join('')}</div>`;
+}
+
+function cardHTML(p) {
+  const id       = p.id || p._id;
+  const name     = p.name || 'Product';
+  const brand    = p.brand || '';
+  const price    = salePrice(p);
+  const op       = p.original_price || p.mrp || 0;
+  const disc     = discPct(p);
+  const rating   = p.avg_rating || p.rating || 0;
+  const rCount   = p.review_count || p.rating_count || 0;
+  const stock    = p.stock ?? 1;
+  const inStock  = stock > 0;
+  const imgSrc   = p.image || (p.images && (p.images[0]?.url || p.images[0])) || 'https://placehold.co/200x200/f1f3f6/aaa?text=No+Image';
+  const slug     = p.slug || id;
+
+  const cart    = getCart();
+  const inCart  = !!cart[String(id)];
+
+  return `
+  <div class="wish-card" id="card-${id}">
+    <button class="wish-remove" onclick="removeItem('${id}')" title="Remove">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="wish-img-wrap" onclick="window.location='product-detail.html?id=${slug}'">
+      <img src="${imgSrc}" alt="${name}" onerror="this.src='https://placehold.co/200x200/f1f3f6/aaa?text=No+Image'">
+      ${disc ? `<div class="disc-badge">${disc}% off</div>` : ''}
+      ${!inStock ? `<div class="out-of-stock-overlay"><span class="out-badge">Out of Stock</span></div>` : ''}
+    </div>
+
+    <div class="wish-info">
+      ${brand ? `<div class="wish-brand">${brand}</div>` : ''}
+      <div class="wish-name" onclick="window.location='product-detail.html?id=${slug}'">${name}</div>
+
+      ${rating ? `
+      <div class="wish-rating">
+        <div class="wish-rating-pill">
+          ★ ${rating.toFixed(1)}
+        </div>
+        ${rCount ? `<span class="wish-rating-count">(${rCount})</span>` : ''}
+      </div>` : ''}
+
+      <div class="wish-price-row">
+        <div class="wish-price">${fmt(price)}</div>
+        ${op && disc ? `<div class="wish-original">${fmt(op)}</div>` : ''}
+      </div>
+
+      <button
+        class="wish-atc ${!inStock ? 'oos' : inCart ? 'added' : ''}"
+        id="atc-${id}"
+        onclick="${inStock ? `addToCart('${id}')` : ''}"
+        ${!inStock ? 'disabled' : ''}
+      >
+        ${!inStock ? 'Out of Stock' : inCart ? '✓ Added to Cart' : 'Add to Cart'}
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+function removeItem(id) {
+  const card = document.getElementById(`card-${id}`);
+  if (card) { card.style.opacity='0'; card.style.transform='scale(.9)'; card.style.transition='.2s'; }
+  setTimeout(() => {
+    removeFromWishlist(id);
+    render();
     toast('Removed from wishlist');
-  }
+    updateAccountStats();
+  }, 180);
+}
 
-  function addToCartFromWish(p) {
-    Cart.add(p, 1);
-  }
+function clearAll() {
+  if (!confirm('Remove all items from wishlist?')) return;
+  clearWishlist();
+  render();
+  toast('Wishlist cleared');
+  updateAccountStats();
+}
 
-  renderWishlist();
+function addToCart(id) {
+  const items = getWishlist();
+  const prod  = items.find(p => String(p.id || p._id) === String(id));
+  if (!prod) return;
+
+  addToCartLocal(prod);
+
+  const btn = document.getElementById(`atc-${id}`);
+  if (btn) {
+    btn.textContent = '✓ Added to Cart';
+    btn.classList.add('added');
+    btn.classList.remove('oos');
+  }
+  toast('Added to cart!');
+}
+
+function addAllToCart() {
+  const items = getWishlist().filter(p => (p.stock ?? 1) > 0);
+  if (!items.length) { toast('No in-stock items to add'); return; }
+  items.forEach(p => addToCartLocal(p));
+  render();
+  toast(`${items.length} item${items.length > 1 ? 's' : ''} added to cart!`);
+}
+
+// ── Update account stats ───────────────────────────────────────────────────
+function updateAccountStats() {
+  // sync stat-wishlist element if on same session
+  try {
+    const el = document.getElementById && window.parent?.document?.getElementById('stat-wishlist');
+    if (el) el.textContent = getWishlist().length;
+  } catch {}
+}
+
+// ── Try fetching product details from API to enrich stored wishlist ────────
+async function enrichFromAPI() {
+  const items = getWishlist();
+  if (!items.length) { render(); return; }
+
+  // Check if items already have full details (price set)
+  const needsEnrich = items.some(p => !p.price && !p.sale_price);
+  if (!needsEnrich) { render(); return; }
+
+  try {
+    const res = await fetch('/api/products?limit=100', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    const apiProds = (data?.data?.products || []);
+    const enriched = items.map(p => {
+      const id = String(p.id || p._id);
+      const found = apiProds.find(ap => String(ap.id || ap._id) === id);
+      return found ? { ...p, ...found } : p;
+    });
+    saveWishlist(enriched);
+  } catch (e) {
+    // silently fail — use stored data
+  }
+  render();
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+wishItems = getWishlist();
+updateCartBadge();
+
+// Hide skeleton quickly and start
+setTimeout(() => {
+  const sk = document.getElementById('skeleton-grid');
+  if (sk) sk.remove();
+  enrichFromAPI();
+}, 300);
+
+// Also just render immediately with stored data then enrich
+setTimeout(() => {
+  const sk = document.getElementById('skeleton-grid');
+  if (sk) {
+    sk.remove();
+    render();
+    enrichFromAPI();
+  }
+}, 0);
 </script>
+
 </body>
 </html>
