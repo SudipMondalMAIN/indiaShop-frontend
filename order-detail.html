@@ -1,126 +1,470 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Detail — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/nav.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Order Details — indiaShop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <style>
-.tracker { display: flex; align-items: center; margin: 20px 0; }
-.track-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-.track-step::after { content: ''; position: absolute; left: 50%; top: 18px; width: 100%; height: 2px; background: var(--border); z-index: 0; }
-.track-step:last-child::after { display: none; }
-.track-dot { width: 36px; height: 36px; border-radius: 50%; border: 3px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: all 0.3s; }
-.track-dot.done { background: var(--success); border-color: var(--success); color: #fff; }
-.track-dot.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-.track-label { font-size: 11px; font-weight: 600; color: var(--text3); margin-top: 6px; text-align: center; }
-.track-step.done .track-label { color: var(--success); }
-.track-step.active .track-label { color: var(--primary); }
-.info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-.info-row:last-child { border-bottom: none; }
-.info-row span:first-child { color: var(--text3); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{
+  --green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;
+  --orange:#ff6600;--red:#e53935;--blue:#1565c0;
+  --yellow:#f9a825;--yellow-l:#fff8e1;
+  --bg:#f1f3f6;
+  --border:#e0e0e0;--border2:#f0f0f0;
+  --t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;
+  --header:#1ba345;
+  --r4:4px;--r8:8px;
+  --shadow:0 1px 4px rgba(0,0,0,.12);
+}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+img{display:block;max-width:100%}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.back-btn{color:#fff;display:flex;align-items:center;cursor:pointer}
+.back-btn svg{width:22px;height:22px}
+.header-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;flex:1}
+.header-oid{font-size:11px;font-weight:600;color:rgba(255,255,255,.75);font-family:monospace}
+
+/* ── SCROLL ── */
+.scroll-body{padding:10px 10px 32px}
+
+/* ── SECTION CARD ── */
+.sec-card{background:#fff;border-radius:var(--r8);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden;animation:fadeUp .22s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sec-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);padding:11px 14px;border-bottom:1px solid var(--border2)}
+
+/* ── STATUS BADGE ── */
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:99px}
+.status-badge.pending    {background:#fff3e0;color:#e65100}
+.status-badge.confirmed  {background:#e3f2fd;color:#1565c0}
+.status-badge.processing {background:#e3f2fd;color:#1565c0}
+.status-badge.shipped    {background:var(--yellow-l);color:#7b5800}
+.status-badge.delivered  {background:var(--green-l);color:var(--green-d)}
+.status-badge.cancelled  {background:#fce4ec;color:#c62828}
+.status-dot{width:7px;height:7px;border-radius:50%}
+.status-badge.pending    .status-dot{background:#e65100}
+.status-badge.confirmed  .status-dot{background:#1565c0}
+.status-badge.processing .status-dot{background:#1565c0}
+.status-badge.shipped    .status-dot{background:var(--yellow)}
+.status-badge.delivered  .status-dot{background:var(--green)}
+.status-badge.cancelled  .status-dot{background:var(--red)}
+
+/* ── ORDER META ── */
+.order-meta-block{padding:14px}
+.order-meta-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:8px}
+.order-meta-id{font-family:monospace;font-size:13px;font-weight:700;color:var(--t1)}
+.order-meta-date{font-size:12px;color:var(--t3);margin-top:2px}
+.info-rows{padding:0 14px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border2);font-size:13px;gap:12px}
+.info-row:last-child{border-bottom:none}
+.info-row-label{color:var(--t3);font-weight:600;flex-shrink:0}
+.info-row-val{font-weight:700;color:var(--t1);text-align:right}
+
+/* ── TRACKER ── */
+.tracker-wrap{padding:20px 14px 14px}
+.tracker{display:flex;align-items:flex-start;justify-content:space-between;position:relative}
+.tracker::before{content:'';position:absolute;top:18px;left:18px;right:18px;height:2px;background:var(--border2);z-index:0}
+.track-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;z-index:1}
+.track-dot{width:36px;height:36px;border-radius:50%;border:2.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--t4);transition:.3s;flex-shrink:0}
+.track-step.done  .track-dot{background:var(--green);border-color:var(--green);color:#fff}
+.track-step.active .track-dot{background:#fff;border-color:var(--green);color:var(--green);box-shadow:0 0 0 4px var(--green-l)}
+.track-step.done  .track-line{background:var(--green)}
+.track-label{font-size:10px;font-weight:700;color:var(--t4);text-align:center;line-height:1.3}
+.track-step.done   .track-label{color:var(--green-d)}
+.track-step.active .track-label{color:var(--green)}
+
+/* progress line between steps */
+.tracker-progress{position:absolute;top:18px;left:18px;height:2px;background:var(--green);z-index:0;transition:width .4s ease}
+
+/* cancelled banner */
+.cancelled-banner{margin:14px;background:#fce4ec;border-radius:var(--r8);padding:14px;display:flex;align-items:center;gap:10px}
+.cancelled-banner-ico{font-size:22px;flex-shrink:0}
+.cancelled-banner-txt{font-size:13px;font-weight:700;color:#c62828}
+.cancelled-banner-sub{font-size:11px;color:#e57373;margin-top:2px}
+
+/* ── ORDER ITEMS ── */
+.order-item{display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;transition:background .15s}
+.order-item:last-child{border-bottom:none}
+.order-item:active{background:var(--bg)}
+.order-item-img{width:68px;height:68px;flex-shrink:0;background:var(--bg);border-radius:var(--r4);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.order-item-img img{width:88%;height:88%;object-fit:contain}
+.order-item-info{flex:1;min-width:0}
+.order-item-name{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.order-item-meta{font-size:11px;color:var(--t3);margin-bottom:4px}
+.order-item-price{font-size:14px;font-weight:800}
+.order-item-arrow{color:var(--t4);display:flex;align-items:center;flex-shrink:0;margin-top:4px}
+.order-item-arrow svg{width:15px;height:15px}
+
+/* ── PRICE SUMMARY ── */
+.price-rows{padding:0 14px}
+.price-row{display:flex;justify-content:space-between;font-size:13px;padding:9px 0;border-bottom:1px solid var(--border2)}
+.price-row:last-child{border-bottom:none}
+.price-row.total{font-size:16px;font-weight:800;padding-top:12px}
+.price-row.saving{color:var(--green);font-weight:700}
+
+/* ── ADDRESS ── */
+.addr-block{padding:14px}
+.addr-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.addr-line{font-size:12px;color:var(--t2);line-height:1.55}
+.addr-phone{font-size:12px;color:var(--t3);margin-top:4px}
+
+/* ── ACTIONS ── */
+.actions-wrap{padding:4px 10px 10px;display:flex;flex-direction:column;gap:8px}
+.btn-cancel-order{width:100%;padding:13px;border-radius:var(--r4);border:1.5px solid var(--red);background:#fff;color:var(--red);font-family:'Mukta',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.btn-cancel-order:active{background:#fce4ec}
+.btn-reorder{width:100%;padding:13px;border-radius:var(--r4);background:var(--green);color:#fff;font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(27,163,69,.3);transition:.15s}
+.btn-reorder:active{opacity:.85}
+
+/* ── SKELETON ── */
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:var(--r4)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:#fff;border-radius:var(--r8);margin-bottom:10px;padding:16px;box-shadow:var(--shadow)}
+
+/* ── NOT FOUND ── */
+.not-found{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+.not-found-ico{font-size:60px;margin-bottom:14px}
+.not-found-t{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;margin-bottom:6px}
+.not-found-s{font-size:13px;color:var(--t3);margin-bottom:22px}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:11px 24px;border-radius:var(--r4);border:none;font-family:'Mukta',sans-serif}
+
+/* ── TOAST ── */
+.toast-msg{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
+.toast-msg.show{opacity:1}
+
+/* ── PAYMENT METHOD DISPLAY ── */
+.pay-method{display:inline-flex;align-items:center;gap:5px;font-weight:700}
+
+@media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.1)}}
 </style>
 </head>
 <body>
-<nav class="navbar"><div class="container"></div></nav>
-<div class="page-content">
-<div class="container" style="max-width:700px">
+<div class="page">
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-    <a href="orders.html" style="color:var(--text3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
-    <div class="fw-700 fs-18">Order Details</div>
-  </div>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <button class="back-btn" onclick="location.href='orders.html'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="header-title">Order Details</div>
+      <div class="header-oid" id="hdr-oid"></div>
+    </div>
+  </header>
 
-  <div id="order-wrap">
-    <div class="card p-4 mb-3"><div class="skeleton" style="height:120px"></div></div>
-  </div>
-
-</div>
-</div>
-<nav class="bottom-nav"></nav>
-
-<script src="../static/js/main.js"></script>
-<script>
-  if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-  buildNavbar('account');
-
-  const oid = new URLSearchParams(window.location.search).get('id');
-  if (!oid) window.location.href = 'orders.html';
-
-  const statusSteps = ['pending', 'processing', 'shipped', 'delivered'];
-  const statusLabel = { pending: 'Pending', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
-  const statusClass = { processing: 'primary', shipped: 'warning', delivered: 'success', cancelled: 'danger', pending: 'gray' };
-
-  async function loadOrder() {
-    try {
-      const order = await api('GET', `/orders/${oid}`);
-      document.title = `Order #${order.id} — indiaShop`;
-
-      const stepIdx = statusSteps.indexOf(order.status);
-      const trackerHTML = order.status === 'cancelled' ? `<div style="background:#fce4e4;color:var(--danger);border-radius:var(--radius);padding:14px;text-align:center;font-weight:600;margin:16px 0">❌ Order Cancelled</div>` : `
-        <div class="tracker">
-          ${statusSteps.map((s, i) => {
-            const done = i < stepIdx;
-            const active = i === stepIdx;
-            return `<div class="track-step${done?' done':active?' active':''}">
-              <div class="track-dot${done?' done':active?' active':''}">
-                ${done ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>` : `<span style="font-size:11px;font-weight:700">${i+1}</span>`}
-              </div>
-              <div class="track-label">${statusLabel[s]}</div>
-            </div>`;
-          }).join('')}
-        </div>`;
-
-      document.getElementById('order-wrap').innerHTML = `
-        <div class="card p-4 mb-3">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-            <div class="fw-700 fs-16">Order #${order.id}</div>
-            <span class="badge badge-${statusClass[order.status]||'gray'}">${statusLabel[order.status]||order.status}</span>
+  <!-- BODY -->
+  <div class="scroll-body" id="scroll-body">
+    <!-- skeleton -->
+    <div id="skel-wrap">
+      <div class="skel-card">
+        <div class="skeleton" style="height:14px;width:55%;margin-bottom:10px"></div>
+        <div class="skeleton" style="height:50px;margin-bottom:10px"></div>
+        <div class="skeleton" style="height:12px;width:70%;margin-bottom:8px"></div>
+        <div class="skeleton" style="height:12px;width:50%"></div>
+      </div>
+      <div class="skel-card">
+        <div class="skeleton" style="height:12px;width:40%;margin-bottom:14px"></div>
+        <div style="display:flex;gap:12px">
+          <div class="skeleton" style="width:68px;height:68px;flex-shrink:0;border-radius:4px"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:4px">
+            <div class="skeleton" style="height:13px;width:80%"></div>
+            <div class="skeleton" style="height:12px;width:40%"></div>
+            <div class="skeleton" style="height:14px;width:30%"></div>
           </div>
-          ${trackerHTML}
-          <div class="info-row"><span>Ordered On</span><span>${new Date(order.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span></div>
-          <div class="info-row"><span>Payment</span><span>${(order.payment_method||'cod').toUpperCase()}</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- real content -->
+    <div id="order-wrap"></div>
+  </div>
+
+</div>
+
+<div class="toast-msg" id="toast"></div>
+
+<script src="static/js/main.js"></script>
+<script>
+if (!Auth.isLoggedIn()) window.location.href = 'login.html?next=' + encodeURIComponent(location.href);
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt = n => (typeof formatPrice === 'function') ? formatPrice(n) : '₹' + Number(n).toLocaleString('en-IN');
+
+// order id URL param — 'id' অথবা 'order_id' দুটোই handle করি
+const urlP  = new URLSearchParams(window.location.search);
+const _oid  = urlP.get('id') || urlP.get('order_id') || '';
+if (!_oid) window.location.href = 'orders.html';
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── STATUS CONFIG ─────────────────────────────────────────────────────────────
+const STATUS_STEPS  = ['pending', 'confirmed', 'shipped', 'delivered'];
+const STATUS_LABELS = {
+  pending:    'Pending',
+  confirmed:  'Confirmed',
+  processing: 'Confirmed',   // processing → confirmed step visually
+  shipped:    'Shipped',
+  delivered:  'Delivered',
+  cancelled:  'Cancelled',
+};
+const STEP_EMOJIS = ['🕐', '✅', '🚚', '🎉'];
+const PAY_LABELS  = {
+  cod:    '💵 Cash on Delivery',
+  upi:    '📱 UPI',
+  card:   '💳 Card',
+  wallet: '👛 Wallet / Net Banking',
+};
+
+// ── TRACKER HTML ──────────────────────────────────────────────────────────────
+function buildTracker(status) {
+  // processing কে confirmed এর সমতুল্য ধরি
+  const normStatus = status === 'processing' ? 'confirmed' : status;
+  const stepIdx    = STATUS_STEPS.indexOf(normStatus);
+
+  // progress line width calculate
+  const totalSteps  = STATUS_STEPS.length - 1; // 3 gaps
+  const progressPct = stepIdx < 0 ? 0 : (stepIdx / totalSteps) * 100;
+
+  const stepsHtml = STATUS_STEPS.map((s, i) => {
+    const done   = i < stepIdx;
+    const active = i === stepIdx;
+    const cls    = done ? 'done' : active ? 'active' : '';
+    return `
+      <div class="track-step ${cls}">
+        <div class="track-dot">
+          ${done
+            ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
+            : `<span>${STEP_EMOJIS[i]}</span>`
+          }
+        </div>
+        <div class="track-label">${STATUS_LABELS[s]}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="tracker-wrap">
+      <div class="tracker">
+        <div class="tracker-progress" style="width:calc(${progressPct}% - 36px + ${progressPct > 0 ? 18 : 0}px)"></div>
+        ${stepsHtml}
+      </div>
+    </div>`;
+}
+
+// ── LOAD ORDER ────────────────────────────────────────────────────────────────
+async function loadOrder() {
+  try {
+    const res   = await api('GET', '/orders/' + _oid);
+    // backend returns { success, data: {...} } অথবা order object সরাসরি
+    const order = res?.data ?? res;
+
+    const orderId  = order.id || order._id || order.order_id || _oid;
+    const status   = (order.status || 'pending').toLowerCase();
+    const items    = order.items || [];
+    const addr     = order.address || {};
+    const payMethod= order.payment_method || 'cod';
+    const total    = order.total_amount ?? order.total ?? 0;
+    const createdAt= order.created_at
+      ? new Date(order.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })
+      : '—';
+
+    document.title = `Order #${String(orderId).slice(-8).toUpperCase()} — indiaShop`;
+    document.getElementById('hdr-oid').textContent = '#' + String(orderId).slice(-8).toUpperCase();
+
+    const canCancel = status === 'pending' || status === 'confirmed' || status === 'processing';
+
+    // ── Address display ──
+    // backend: addr.full_name, addr.line1, addr.line2, addr.city, addr.state, addr.pincode, addr.phone
+    const addrName  = addr.full_name || addr.name || '';
+    const addrLine  = [addr.line1, addr.line2, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ');
+    const addrPhone = addr.phone || '';
+
+    // ── Items HTML ──
+    const itemsHtml = items.map(item => {
+      const pid    = item.product_id || item.id || '';
+      const name   = item.product_name || item.name || 'Product';
+      const img    = item.product_image || item.image || item.primary_image || '';
+      const qty    = item.quantity || item.qty || 1;
+      const price  = item.unit_price ?? item.price ?? 0;
+      const sub    = item.subtotal ?? (price * qty);
+      const slug   = item.slug || '';
+      const href   = slug ? `product-detail.html?slug=${esc(slug)}` : (pid ? `product-detail.html?id=${esc(pid)}` : '#');
+      return `
+        <div class="order-item" onclick="location.href='${href}'">
+          <div class="order-item-img">
+            <img src="${esc(img || 'https://placehold.co/68x68/f1f3f6/878787?text=?')}"
+                 alt="${esc(name)}"
+                 onerror="this.src='https://placehold.co/68x68/f1f3f6/878787?text=?'"
+                 loading="lazy">
+          </div>
+          <div class="order-item-info">
+            <div class="order-item-name">${esc(name)}</div>
+            <div class="order-item-meta">Qty: ${qty} × ${fmt(price)}</div>
+            <div class="order-item-price">${fmt(sub)}</div>
+          </div>
+          <div class="order-item-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>`;
+    }).join('');
+
+    // ── Price summary ──
+    const itemsTotal = items.reduce((s, i) => s + (i.subtotal ?? (i.unit_price ?? i.price ?? 0) * (i.quantity ?? i.qty ?? 1)), 0);
+
+    // ── Full render ──
+    document.getElementById('order-wrap').innerHTML = `
+
+      <!-- Order Status Card -->
+      <div class="sec-card" style="animation-delay:.0s">
+        <div class="order-meta-block">
+          <div class="order-meta-top">
+            <div>
+              <div class="order-meta-id">#${esc(String(orderId).slice(-10).toUpperCase())}</div>
+              <div class="order-meta-date">Placed on ${createdAt}</div>
+            </div>
+            <span class="status-badge ${status}">
+              <span class="status-dot"></span>
+              ${STATUS_LABELS[status] || status}
+            </span>
+          </div>
         </div>
 
-        <div class="card mb-3">
-          <div style="padding:12px 16px;font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)">Items</div>
-          ${(order.items||[]).map(item => `
-            <div style="display:flex;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer" onclick="window.location='product-detail.html?id=${item.product_id}'">
-              <img src="${item.image||'https://placehold.co/60x60?text=Img'}" style="width:60px;height:60px;object-fit:contain;background:var(--bg);border-radius:var(--radius)">
-              <div style="flex:1">
-                <div style="font-size:14px;font-weight:500;margin-bottom:4px">${item.name}</div>
-                <div style="font-size:12px;color:var(--text3)">Qty: ${item.qty}</div>
-                <div style="font-size:14px;font-weight:700">${formatPrice(item.price * item.qty)}</div>
-              </div>
-            </div>`).join('')}
-          <div style="padding:14px 16px;display:flex;justify-content:flex-end;font-size:15px;font-weight:700">Total: ${formatPrice(order.total_amount)}</div>
+        ${status === 'cancelled'
+          ? `<div class="cancelled-banner">
+               <div class="cancelled-banner-ico">❌</div>
+               <div>
+                 <div class="cancelled-banner-txt">Order Cancelled</div>
+                 <div class="cancelled-banner-sub">This order has been cancelled</div>
+               </div>
+             </div>`
+          : buildTracker(status)
+        }
+
+        <div class="info-rows">
+          <div class="info-row">
+            <span class="info-row-label">Payment</span>
+            <span class="info-row-val">${esc(PAY_LABELS[payMethod] || payMethod.toUpperCase())}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-label">Delivery</span>
+            <span class="info-row-val" style="color:var(--green);font-weight:700">🚚 FREE</span>
+          </div>
         </div>
+      </div>
 
-        ${order.address ? `
-        <div class="card p-4 mb-3">
-          <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:10px">Delivery Address</div>
-          <div style="font-size:14px;font-weight:600">${order.address.name} · ${order.address.phone}</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:4px">${order.address.address_line}, ${order.address.city}, ${order.address.state} — ${order.address.pincode}</div>
-        </div>` : ''}
+      <!-- Items Card -->
+      <div class="sec-card" style="animation-delay:.06s">
+        <div class="sec-head">🛍️ Items (${items.length})</div>
+        ${itemsHtml}
+      </div>
 
-        ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
-        <button class="btn btn-outline w-100" style="color:var(--danger);border-color:var(--danger)" onclick="cancelOrder(${order.id})">Cancel Order</button>` : ''}
-      `;
-    } catch {
-      document.getElementById('order-wrap').innerHTML = `<div class="empty-state"><p>Order not found.</p><a href="orders.html" class="btn btn-outline">Back to Orders</a></div>`;
+      <!-- Price Summary Card -->
+      <div class="sec-card" style="animation-delay:.1s">
+        <div class="sec-head">💰 Price Summary</div>
+        <div class="price-rows">
+          <div class="price-row">
+            <span style="color:var(--t2)">Items Total</span>
+            <span style="font-weight:600">${fmt(itemsTotal)}</span>
+          </div>
+          <div class="price-row">
+            <span style="color:var(--t2)">Delivery</span>
+            <span style="color:var(--green);font-weight:700">FREE</span>
+          </div>
+          <div class="price-row total">
+            <span>Total Paid</span>
+            <span>${fmt(total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery Address Card -->
+      ${addrLine || addrName ? `
+      <div class="sec-card" style="animation-delay:.13s">
+        <div class="sec-head">📍 Delivery Address</div>
+        <div class="addr-block">
+          ${addrName ? `<div class="addr-name">${esc(addrName)}</div>` : ''}
+          ${addrLine ? `<div class="addr-line">${esc(addrLine)}</div>` : ''}
+          ${addrPhone ? `<div class="addr-phone">📞 ${esc(addrPhone)}</div>` : ''}
+        </div>
+      </div>` : ''}
+
+      <!-- Actions -->
+      <div class="actions-wrap" style="animation:fadeUp .22s .16s ease both">
+        ${status === 'delivered'
+          ? `<button class="btn-reorder" onclick="reorder(${JSON.stringify(items).replace(/"/g,'&quot;')})">🔁 Reorder</button>`
+          : ''
+        }
+        ${canCancel
+          ? `<button class="btn-cancel-order" onclick="cancelOrder('${esc(String(orderId))}')">Cancel Order</button>`
+          : ''
+        }
+      </div>`;
+
+    document.getElementById('skel-wrap').style.display = 'none';
+
+  } catch (err) {
+    console.error('Order load failed:', err);
+    document.getElementById('skel-wrap').style.display = 'none';
+    document.getElementById('order-wrap').innerHTML = `
+      <div class="sec-card">
+        <div class="not-found">
+          <div class="not-found-ico">📦</div>
+          <div class="not-found-t">Order Not Found</div>
+          <div class="not-found-s">This order doesn't exist or you don't have access.</div>
+          <button class="btn-back" onclick="location.href='orders.html'">← Back to Orders</button>
+        </div>
+      </div>`;
+  }
+}
+
+// ── CANCEL ORDER ──────────────────────────────────────────────────────────────
+async function cancelOrder(orderId) {
+  if (!confirm('Are you sure you want to cancel this order?')) return;
+  const btn = document.querySelector('.btn-cancel-order');
+  if (btn) { btn.disabled = true; btn.textContent = 'Cancelling…'; }
+  try {
+    // backend: DELETE /api/orders/:id
+    await api('DELETE', '/orders/' + orderId);
+    showToast('Order cancelled successfully');
+    setTimeout(() => loadOrder(), 800);
+  } catch (err) {
+    console.error('Cancel failed:', err);
+    showToast('Could not cancel. Please try again.');
+    if (btn) { btn.disabled = false; btn.textContent = 'Cancel Order'; }
+  }
+}
+
+// ── REORDER ───────────────────────────────────────────────────────────────────
+async function reorder(items) {
+  const btn = document.querySelector('.btn-reorder');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Adding to cart…'; }
+  try {
+    for (const item of items) {
+      const pid = item.product_id || item.id || '';
+      if (pid) await api('POST', '/cart', { product_id: pid, quantity: item.quantity || 1 });
     }
+    showToast('Items added to cart 🛒');
+    setTimeout(() => location.href = 'cart.html', 900);
+  } catch {
+    showToast('Could not add some items. Please try again.');
+    if (btn) { btn.disabled = false; btn.textContent = '🔁 Reorder'; }
   }
+}
 
-  async function cancelOrder(id) {
-    if (!confirm('Cancel this order?')) return;
-    try {
-      await api('PUT', `/orders/${id}/cancel`);
-      toast('Order cancelled', 'success');
-      loadOrder();
-    } catch(e) { toast(e.message, 'error'); }
-  }
-
-  loadOrder();
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadOrder();
 </script>
 </body>
 </html>
