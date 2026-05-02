@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Categories — indiaShop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--orange:#ff6600;--orange-l:#fff3eb;--red:#e53935;--blue:#1565c0;--bg:#f1f3f6;--white:#fff;--border:#e0e0e0;--border2:#f0f0f0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--header:#1ba345;--r2:2px;--r4:4px;--r8:8px;--shadow:0 1px 4px rgba(0,0,0,.12)}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+img{display:block;max-width:100%;object-fit:cover}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;flex-shrink:0}
+.logo span{color:#ffeb3b}
+.logo small{font-size:11px;font-weight:600;display:block;color:rgba(255,255,255,.8);margin-top:-6px;letter-spacing:.5px}
+.header-right{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-left:auto}
+.hbtn{display:flex;flex-direction:column;align-items:center;gap:1px;color:#fff;font-size:10px;font-weight:600;position:relative;padding:2px 5px;cursor:pointer;text-decoration:none;border:none;background:none;font-family:'Mukta',sans-serif}
+.hbtn svg{width:22px;height:22px}
+.hbadge{position:absolute;top:-3px;right:0;min-width:16px;height:16px;border-radius:99px;background:#ff3d00;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--header);padding:0 3px}
+
+/* ── SEARCH BAR ── */
+.search-bar{background:var(--header);padding:0 14px 12px}
+.search-inner{display:flex;align-items:center;background:#fff;border-radius:var(--r4);overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.search-inner svg{margin-left:10px;flex-shrink:0;color:var(--t3)}
+.search-inner input{flex:1;border:none;outline:none;font-family:'Mukta',sans-serif;font-size:14px;padding:9px 10px;color:var(--t1);background:transparent}
+.search-inner input::placeholder{color:var(--t4)}
+.search-clear{padding:8px 10px;color:var(--t3);cursor:pointer;font-size:18px;line-height:1;display:none}
+.search-clear.visible{display:block}
+
+/* ── SCROLL BODY ── */
+.scroll-body{overflow-y:auto;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+
+/* ── FEATURED BANNER ── */
+.feat-banner{margin:10px;border-radius:var(--r8);overflow:hidden;background:linear-gradient(120deg,#064e1f 0%,#1ba345 60%,#34d058 100%);padding:16px 18px;position:relative;box-shadow:var(--shadow)}
+.feat-banner-circle1{position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.feat-banner-circle2{position:absolute;left:-20px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.feat-banner-inner{position:relative}
+.feat-banner-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;line-height:1.1}
+.feat-banner-title span{color:#ffeb3b}
+.feat-banner-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px}
+.feat-banner-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.feat-banner-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;cursor:pointer}
+.feat-banner-tag:active{background:rgba(255,255,255,.3)}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;padding:12px 14px 8px;background:var(--bg)}
+
+/* ── CATEGORY GRID ── */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);margin:0}
+.cat-card{background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px 14px;cursor:pointer;text-decoration:none;transition:.15s;position:relative;overflow:hidden}
+.cat-card:active{background:#f8f8f8}
+.cat-card-img{width:64px;height:64px;border-radius:var(--r8);object-fit:cover;margin-bottom:8px;background:var(--bg);display:block}
+.cat-img-wrap{width:64px;height:64px;border-radius:var(--r8);margin-bottom:8px;overflow:hidden;flex-shrink:0;position:relative}
+.cat-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.cat-emoji-fb{width:64px;height:64px;border-radius:var(--r8);align-items:center;justify-content:center;font-size:30px;background:var(--bg);position:absolute;top:0;left:0}
+.cat-name{font-size:12px;font-weight:700;color:var(--t1);text-align:center;line-height:1.2}
+.cat-count{font-size:10px;color:var(--t3);margin-top:2px;text-align:center}
+.cat-badge{position:absolute;top:7px;right:7px;background:var(--orange);color:#fff;font-size:8.5px;font-weight:700;padding:1.5px 5px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px}
+.cat-badge.green{background:var(--green)}
+.cat-badge.blue{background:var(--blue)}
+
+/* ── SPECIAL DEALS ROW ── */
+.deals-scroll{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto}
+.deal-card{flex-shrink:0;width:140px;background:var(--white);border-radius:var(--r8);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;text-decoration:none}
+.deal-card:active{opacity:.9}
+.deal-img-wrap{height:80px;overflow:hidden;position:relative}
+.deal-img-wrap img{width:100%;height:100%;object-fit:cover}
+.deal-img-wrap .deal-off{position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:var(--r2)}
+.deal-body{padding:8px 10px}
+.deal-cat{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.3px}
+.deal-name{font-size:12px;font-weight:700;color:var(--t1);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deal-price{font-size:11px;font-weight:700;color:var(--orange);margin-top:2px}
+
+/* ── TRENDING LIST ── */
+.trend-sec{background:var(--white);margin:0 0 8px}
+.trend-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;text-decoration:none;color:var(--t1)}
+.trend-item:last-child{border-bottom:none}
+.trend-item:active{background:var(--bg)}
+.trend-rank{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--border);width:28px;flex-shrink:0;text-align:center;line-height:1}
+.trend-rank.top3{color:var(--orange)}
+.trend-emoji{font-size:22px;flex-shrink:0}
+.trend-info{flex:1;min-width:0}
+.trend-name{font-size:13px;font-weight:700;color:var(--t1)}
+.trend-sub{font-size:11px;color:var(--t3);margin-top:1px}
+.trend-arrow{color:var(--t4);flex-shrink:0}
+
+/* ── BRAND STRIP ── */
+.brand-scroll{display:flex;gap:10px;padding:0 14px 14px;overflow-x:auto;align-items:center}
+.brand-chip{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:99px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;white-space:nowrap;box-shadow:var(--shadow)}
+.brand-chip:active{background:var(--green-l);border-color:var(--green);color:var(--green)}
+.brand-chip.active{background:var(--green-l);border-color:var(--green);color:var(--green)}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
+.bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 4px;cursor:pointer;text-decoration:none;color:var(--t3);font-size:10px;font-weight:600;border:none;background:none;font-family:'Mukta',sans-serif}
+.bn.active{color:var(--green)}
+.bn svg{width:23px;height:23px;margin-bottom:1px}
+.bn-indicator{width:4px;height:4px;border-radius:50%;background:var(--green);margin-top:2px;opacity:0}
+.bn.active .bn-indicator{opacity:1}
+
+/* ── LOADING SKELETON ── */
+.skel{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:skel-shine 1.4s infinite;border-radius:var(--r4)}
+@keyframes skel-shine{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;gap:8px}
+.empty-state .es-emoji{font-size:48px;margin-bottom:6px}
+.empty-state .es-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--t2)}
+.empty-state .es-sub{font-size:13px;color:var(--t3)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast{background:#212121;color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.15);border-left:1px solid var(--border);border-right:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <a class="logo" href="index.html">india<span>Shop</span><small>🗂️ All Categories</small></a>
+    <div class="header-right">
+      <a class="hbtn" href="wishlist.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Wishlist</span>
+      </a>
+      <a class="hbtn" href="cart.html" style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Cart</span>
+        <span class="hbadge" id="cart-hbadge" style="display:none">0</span>
+      </a>
+    </div>
+  </div>
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <div class="search-inner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" placeholder="Search categories, brands…" oninput="onSearch(this.value)">
+      <span class="search-clear" id="search-clear" onclick="clearSearch()">✕</span>
+    </div>
+  </div>
+</header>
+
+<div class="scroll-body">
+
+  <!-- FEATURED BANNER -->
+  <div class="feat-banner">
+    <div class="feat-banner-circle1"></div>
+    <div class="feat-banner-circle2"></div>
+    <div class="feat-banner-inner">
+      <div class="feat-banner-title">Shop by <span>Category</span> 🛍️</div>
+      <div class="feat-banner-sub">Explore 9 categories · 1000+ top brands · Best prices</div>
+      <div class="feat-banner-tags">
+        <span class="feat-banner-tag" onclick="filterTag('featured')">⭐ Featured</span>
+        <span class="feat-banner-tag" onclick="filterTag('sale')">🔥 On Sale</span>
+        <span class="feat-banner-tag" onclick="filterTag('new')">🆕 New Arrivals</span>
+        <span class="feat-banner-tag" onclick="filterTag('')">🗂️ All</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL CATEGORIES GRID -->
+  <div class="sec-title">Browse All Categories</div>
+  <div class="cat-grid" id="cat-grid">
+    <!-- Skeletons while loading -->
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+    <div style="background:#fff;padding:22px 8px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="skel" style="width:60px;height:60px;border-radius:8px"></div>
+      <div class="skel" style="width:50px;height:10px"></div>
+    </div>
+  </div>
+
+  <!-- TRENDING NOW -->
+  <div class="sec-title" id="trend-title">🔥 Trending Now</div>
+  <div class="trend-sec" id="trend-sec"></div>
+
+  <!-- SHOP BY BRAND -->
+  <div class="sec-title">🏷️ Top Brands</div>
+  <div class="brand-scroll" id="brand-scroll">
+    <!-- populated via JS -->
+  </div>
+
+  <!-- SPECIAL DEALS -->
+  <div class="sec-title">⚡ Deals by Category</div>
+  <div class="deals-scroll" id="deals-scroll"></div>
+
+  <div style="height:8px"></div>
+
+</div><!-- /scroll-body -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bn" onclick="window.location='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='products.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Explore</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Categories</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='orders.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Orders</span><span class="bn-indicator"></span>
+    </button>
+    <button class="bn" onclick="window.location='account.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span><span class="bn-indicator"></span>
+    </button>
+  </div>
+</nav>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const API_BASE = (typeof window !== 'undefined' && window.API_BASE) || '/api';
+
+// ── FALLBACK CATEGORIES (shown if API not available) ──────────────────────────
+const FALLBACK_CATS = [
+  { name:"Electronics", slug:"electronics", emoji:"📱", badge:"Hot", badgeType:"orange",
+    image:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&h=200&fit=crop", count:"12k+ products" },
+  { name:"Fashion",     slug:"fashion",     emoji:"👗", badge:"New",  badgeType:"green",
+    image:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=200&h=200&fit=crop", count:"8k+ products" },
+  { name:"Home",        slug:"home",        emoji:"🏠", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop", count:"5k+ products" },
+  { name:"Beauty",      slug:"beauty",      emoji:"💄", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=200&h=200&fit=crop", count:"3k+ products" },
+  { name:"Sports",      slug:"sports",      emoji:"⚽", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=200&h=200&fit=crop", count:"4k+ products" },
+  { name:"Books",       slug:"books",       emoji:"📚", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=200&h=200&fit=crop", count:"6k+ products" },
+  { name:"Toys",        slug:"toys",        emoji:"🎮", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=200&h=200&fit=crop", count:"2k+ products" },
+  { name:"Appliances",  slug:"appliances",  emoji:"🔌", badge:"Deal", badgeType:"blue",
+    image:"https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=200&h=200&fit=crop", count:"1k+ products" },
+  { name:"Grocery",     slug:"grocery",     emoji:"🛒", badge:"",    badgeType:"",
+    image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop", count:"7k+ products" },
+];
+
+const TRENDING = [
+  { rank:1, emoji:"📱", name:"Smartphones",  sub:"60% off on top brands",   slug:"electronics" },
+  { rank:2, emoji:"👟", name:"Running Shoes", sub:"New arrivals this week",  slug:"sports"      },
+  { rank:3, emoji:"👗", name:"Ethnic Wear",   sub:"Festival season sale",    slug:"fashion"     },
+  { rank:4, emoji:"🎧", name:"Headphones",    sub:"Starting ₹499",           slug:"electronics" },
+  { rank:5, emoji:"📚", name:"NCERT Books",   sub:"Academic essentials",     slug:"books"       },
+];
+
+const BRANDS = ["Samsung","Apple","Nike","Adidas","boAt","Myntra","Nykaa","LG","Sony","Prestige","Himalaya","Wildcraft","Puma","Titan","Bata"];
+
+const DEALS = [
+  { cat:"Electronics", name:"Smart TV 43\"", off:"32%", price:"₹21,999",
+    img:"https://images.unsplash.com/photo-1593359677879-a4bb92f829e1?w=300&h=200&fit=crop", slug:"electronics" },
+  { cat:"Fashion", name:"Ethnic Sarees",    off:"55%", price:"₹699",
+    img:"https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=300&h=200&fit=crop", slug:"fashion" },
+  { cat:"Home",    name:"Storage Organizer",off:"40%", price:"₹349",
+    img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop", slug:"home" },
+  { cat:"Beauty",  name:"Skincare Kit",     off:"25%", price:"₹799",
+    img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop", slug:"beauty" },
+  { cat:"Sports",  name:"Yoga Mat Pro",     off:"30%", price:"₹499",
+    img:"https://images.unsplash.com/photo-1601925228016-c13a3c8d02ca?w=300&h=200&fit=crop", slug:"sports" },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let allCats = [];
+let searchQuery = '';
+
+// ── RENDER CATEGORIES ─────────────────────────────────────────────────────────
+function renderCategories(cats) {
+  const grid = document.getElementById('cat-grid');
+  if (!cats.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="es-emoji">🔍</div>
+      <div class="es-title">No categories found</div>
+      <div class="es-sub">Try a different search term</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = cats.map(c => `
+    <a href="products.html?category=${c.slug || c.name}" class="cat-card">
+      ${c.badge ? `<div class="cat-badge ${c.badgeType||''}">${c.badge}</div>` : ''}
+      <div class="cat-img-wrap">
+        ${c.image
+          ? `<img class="cat-card-img" src="${c.image}" alt="${c.name}" loading="lazy"
+               onerror="this.style.display='none';this.parentElement.querySelector('.cat-emoji-fb').style.display='flex'">`
+          : ''}
+        <div class="cat-emoji-fb" style="${c.image ? 'display:none' : 'display:flex'}">${c.emoji || '🗂️'}</div>
+      </div>
+      <div class="cat-name">${c.name}</div>
+      ${c.count ? `<div class="cat-count">${c.count}</div>` : ''}
+    </a>
+  `).join('');
+}
+
+// ── RENDER TRENDING ───────────────────────────────────────────────────────────
+function renderTrending() {
+  const sec = document.getElementById('trend-sec');
+  sec.innerHTML = TRENDING.map(t => `
+    <a href="products.html?category=${t.slug}" class="trend-item">
+      <div class="trend-rank${t.rank <= 3 ? ' top3' : ''}">${t.rank}</div>
+      <div class="trend-emoji">${t.emoji}</div>
+      <div class="trend-info">
+        <div class="trend-name">${t.name}</div>
+        <div class="trend-sub">${t.sub}</div>
+      </div>
+      <svg class="trend-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  `).join('');
+}
+
+// ── RENDER BRANDS ─────────────────────────────────────────────────────────────
+function renderBrands() {
+  const wrap = document.getElementById('brand-scroll');
+  wrap.innerHTML = BRANDS.map(b => `
+    <div class="brand-chip" onclick="window.location='products.html?search=${b}'">${b}</div>
+  `).join('');
+}
+
+// ── RENDER DEALS ──────────────────────────────────────────────────────────────
+function renderDeals() {
+  const wrap = document.getElementById('deals-scroll');
+  wrap.innerHTML = DEALS.map(d => `
+    <a href="products.html?category=${d.slug}" class="deal-card">
+      <div class="deal-img-wrap">
+        <img src="${d.img}" alt="${d.name}" loading="lazy">
+        <div class="deal-off">-${d.off}</div>
+      </div>
+      <div class="deal-body">
+        <div class="deal-cat">${d.cat}</div>
+        <div class="deal-name">${d.name}</div>
+        <div class="deal-price">${d.price}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+// ── LOAD FROM API ─────────────────────────────────────────────────────────────
+async function loadCategories() {
+  try {
+    const resp = await fetch(`${API_BASE}/categories`);
+    const json = await resp.json();
+    if (json.success && json.data && json.data.length) {
+      // Merge API data with fallback extras (badge, count)
+      allCats = json.data.map(c => {
+        const fb = FALLBACK_CATS.find(f => f.slug === c.slug) || {};
+        return {
+          name:      c.name,
+          slug:      c.slug,
+          emoji:     c.emoji || fb.emoji || '🗂️',
+          image:     c.image_url || c.image || fb.image || '',
+          badge:     fb.badge || '',
+          badgeType: fb.badgeType || '',
+          count:     fb.count || '',
+        };
+      });
+    } else {
+      allCats = FALLBACK_CATS;
+    }
+  } catch {
+    allCats = FALLBACK_CATS;
+  }
+  renderCategories(allCats);
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function onSearch(val) {
+  searchQuery = val.trim().toLowerCase();
+  const clearBtn = document.getElementById('search-clear');
+  clearBtn.classList.toggle('visible', searchQuery.length > 0);
+
+  // hide/show trending & deals when searching
+  const trendTitle = document.getElementById('trend-title');
+  const trendSec   = document.getElementById('trend-sec');
+  if (searchQuery) {
+    trendTitle.style.display = 'none';
+    trendSec.style.display   = 'none';
+  } else {
+    trendTitle.style.display = '';
+    trendSec.style.display   = '';
+  }
+
+  const filtered = searchQuery
+    ? allCats.filter(c => c.name.toLowerCase().includes(searchQuery))
+    : allCats;
+  renderCategories(filtered);
+}
+
+function clearSearch() {
+  const inp = document.getElementById('search-input');
+  inp.value = '';
+  onSearch('');
+  inp.focus();
+}
+
+// ── TAG FILTER ────────────────────────────────────────────────────────────────
+function filterTag(tag) {
+  if (!tag || tag === '') {
+    renderCategories(allCats);
+    return;
+  }
+  if (tag === 'featured') {
+    // Show all (all are featured)
+    renderCategories(allCats);
+    showToast('⭐ Showing featured categories');
+  } else if (tag === 'sale') {
+    const saleSlug = ['electronics', 'fashion', 'appliances'];
+    renderCategories(allCats.filter(c => saleSlug.includes(c.slug)));
+    showToast('🔥 Showing sale categories');
+  } else if (tag === 'new') {
+    const newSlug = ['fashion', 'beauty', 'sports'];
+    renderCategories(allCats.filter(c => newSlug.includes(c.slug)));
+    showToast('🆕 Showing new arrivals');
+  }
+}
+
+// ── CART BADGE ────────────────────────────────────────────────────────────────
+(function updateCartBadge() {
+  try {
+    const cart  = JSON.parse(localStorage.getItem('is_cart') || '{}');
+    const count = Object.values(cart).reduce((a, b) => a + (b.qty || 0), 0);
+    const hb    = document.getElementById('cart-hbadge');
+    if (hb && count > 0) { hb.textContent = count; hb.style.display = 'flex'; }
+  } catch {}
+})();
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg, dur = 2200) {
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => t.remove(), dur);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadCategories();
+renderTrending();
+renderBrands();
+renderDeals();
+</script>
+</body>
+</html>
