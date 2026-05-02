@@ -68,37 +68,6 @@ img{display:block;max-width:100%;object-fit:cover}
 .cat-badge.green{background:var(--green)}
 .cat-badge.blue{background:var(--blue)}
 
-/* ── SPECIAL DEALS ROW ── */
-.deals-scroll{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto}
-.deal-card{flex-shrink:0;width:140px;background:var(--white);border-radius:var(--r8);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;text-decoration:none}
-.deal-card:active{opacity:.9}
-.deal-img-wrap{height:80px;overflow:hidden;position:relative}
-.deal-img-wrap img{width:100%;height:100%;object-fit:cover}
-.deal-img-wrap .deal-off{position:absolute;top:6px;left:6px;background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:var(--r2)}
-.deal-body{padding:8px 10px}
-.deal-cat{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.3px}
-.deal-name{font-size:12px;font-weight:700;color:var(--t1);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.deal-price{font-size:11px;font-weight:700;color:var(--orange);margin-top:2px}
-
-/* ── TRENDING LIST ── */
-.trend-sec{background:var(--white);margin:0 0 8px}
-.trend-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border2);cursor:pointer;text-decoration:none;color:var(--t1)}
-.trend-item:last-child{border-bottom:none}
-.trend-item:active{background:var(--bg)}
-.trend-rank{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--border);width:28px;flex-shrink:0;text-align:center;line-height:1}
-.trend-rank.top3{color:var(--orange)}
-.trend-emoji{font-size:22px;flex-shrink:0}
-.trend-info{flex:1;min-width:0}
-.trend-name{font-size:13px;font-weight:700;color:var(--t1)}
-.trend-sub{font-size:11px;color:var(--t3);margin-top:1px}
-.trend-arrow{color:var(--t4);flex-shrink:0}
-
-/* ── BRAND STRIP ── */
-.brand-scroll{display:flex;gap:10px;padding:0 14px 14px;overflow-x:auto;align-items:center}
-.brand-chip{flex-shrink:0;background:var(--white);border:1.5px solid var(--border);border-radius:99px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--t2);cursor:pointer;white-space:nowrap;box-shadow:var(--shadow)}
-.brand-chip:active{background:var(--green-l);border-color:var(--green);color:var(--green)}
-.brand-chip.active{background:var(--green-l);border-color:var(--green);color:var(--green)}
-
 /* ── BOTTOM NAV ── */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
 .bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
@@ -202,20 +171,6 @@ img{display:block;max-width:100%;object-fit:cover}
     </div>
   </div>
 
-  <!-- TRENDING NOW -->
-  <div class="sec-title" id="trend-title">🔥 Trending Now</div>
-  <div class="trend-sec" id="trend-sec"></div>
-
-  <!-- SHOP BY BRAND -->
-  <div class="sec-title">🏷️ Top Brands</div>
-  <div class="brand-scroll" id="brand-scroll">
-    <!-- populated via JS -->
-  </div>
-
-  <!-- SPECIAL DEALS -->
-  <div class="sec-title">⚡ Deals by Category</div>
-  <div class="deals-scroll" id="deals-scroll"></div>
-
   <div style="height:8px"></div>
 
 </div><!-- /scroll-body -->
@@ -274,29 +229,6 @@ const FALLBACK_CATS = [
     image:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop", count:"7k+ products" },
 ];
 
-const TRENDING = [
-  { rank:1, emoji:"📱", name:"Smartphones",  sub:"60% off on top brands",   slug:"electronics" },
-  { rank:2, emoji:"👟", name:"Running Shoes", sub:"New arrivals this week",  slug:"sports"      },
-  { rank:3, emoji:"👗", name:"Ethnic Wear",   sub:"Festival season sale",    slug:"fashion"     },
-  { rank:4, emoji:"🎧", name:"Headphones",    sub:"Starting ₹499",           slug:"electronics" },
-  { rank:5, emoji:"📚", name:"NCERT Books",   sub:"Academic essentials",     slug:"books"       },
-];
-
-const BRANDS = ["Samsung","Apple","Nike","Adidas","boAt","Myntra","Nykaa","LG","Sony","Prestige","Himalaya","Wildcraft","Puma","Titan","Bata"];
-
-const DEALS = [
-  { cat:"Electronics", name:"Smart TV 43\"", off:"32%", price:"₹21,999",
-    img:"https://images.unsplash.com/photo-1593359677879-a4bb92f829e1?w=300&h=200&fit=crop", slug:"electronics" },
-  { cat:"Fashion", name:"Ethnic Sarees",    off:"55%", price:"₹699",
-    img:"https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=300&h=200&fit=crop", slug:"fashion" },
-  { cat:"Home",    name:"Storage Organizer",off:"40%", price:"₹349",
-    img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop", slug:"home" },
-  { cat:"Beauty",  name:"Skincare Kit",     off:"25%", price:"₹799",
-    img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop", slug:"beauty" },
-  { cat:"Sports",  name:"Yoga Mat Pro",     off:"30%", price:"₹499",
-    img:"https://images.unsplash.com/photo-1601925228016-c13a3c8d02ca?w=300&h=200&fit=crop", slug:"sports" },
-];
-
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let allCats = [];
 let searchQuery = '';
@@ -325,48 +257,6 @@ function renderCategories(cats) {
       </div>
       <div class="cat-name">${c.name}</div>
       ${c.count ? `<div class="cat-count">${c.count}</div>` : ''}
-    </a>
-  `).join('');
-}
-
-// ── RENDER TRENDING ───────────────────────────────────────────────────────────
-function renderTrending() {
-  const sec = document.getElementById('trend-sec');
-  sec.innerHTML = TRENDING.map(t => `
-    <a href="products.html?category=${t.slug}" class="trend-item">
-      <div class="trend-rank${t.rank <= 3 ? ' top3' : ''}">${t.rank}</div>
-      <div class="trend-emoji">${t.emoji}</div>
-      <div class="trend-info">
-        <div class="trend-name">${t.name}</div>
-        <div class="trend-sub">${t.sub}</div>
-      </div>
-      <svg class="trend-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-    </a>
-  `).join('');
-}
-
-// ── RENDER BRANDS ─────────────────────────────────────────────────────────────
-function renderBrands() {
-  const wrap = document.getElementById('brand-scroll');
-  wrap.innerHTML = BRANDS.map(b => `
-    <div class="brand-chip" onclick="window.location='products.html?search=${b}'">${b}</div>
-  `).join('');
-}
-
-// ── RENDER DEALS ──────────────────────────────────────────────────────────────
-function renderDeals() {
-  const wrap = document.getElementById('deals-scroll');
-  wrap.innerHTML = DEALS.map(d => `
-    <a href="products.html?category=${d.slug}" class="deal-card">
-      <div class="deal-img-wrap">
-        <img src="${d.img}" alt="${d.name}" loading="lazy">
-        <div class="deal-off">-${d.off}</div>
-      </div>
-      <div class="deal-body">
-        <div class="deal-cat">${d.cat}</div>
-        <div class="deal-name">${d.name}</div>
-        <div class="deal-price">${d.price}</div>
-      </div>
     </a>
   `).join('');
 }
@@ -404,17 +294,6 @@ function onSearch(val) {
   searchQuery = val.trim().toLowerCase();
   const clearBtn = document.getElementById('search-clear');
   clearBtn.classList.toggle('visible', searchQuery.length > 0);
-
-  // hide/show trending & deals when searching
-  const trendTitle = document.getElementById('trend-title');
-  const trendSec   = document.getElementById('trend-sec');
-  if (searchQuery) {
-    trendTitle.style.display = 'none';
-    trendSec.style.display   = 'none';
-  } else {
-    trendTitle.style.display = '';
-    trendSec.style.display   = '';
-  }
 
   const filtered = searchQuery
     ? allCats.filter(c => c.name.toLowerCase().includes(searchQuery))
@@ -472,9 +351,6 @@ function showToast(msg, dur = 2200) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 loadCategories();
-renderTrending();
-renderBrands();
-renderDeals();
 </script>
 </body>
 </html>
