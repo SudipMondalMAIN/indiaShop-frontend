@@ -254,6 +254,8 @@ _cartData = {
   items: flatItems,
   total_amount: flatItems.reduce((s, i) => s + i.discounted_price * i.quantity, 0),
 };
+    // API থেকে পাওয়া data দিয়ে localStorage update করো
+    _syncCartToLocal(flatItems);
     _addresses = addrRes.status === 'fulfilled'
       ? (addrRes.value?.data ?? addrRes.value ?? [])
       : [];
@@ -471,6 +473,20 @@ function renderCart() {
 }
 
 // ── CHANGE QTY ────────────────────────────────────────────────────────────────
+// ── localStorage এ cart sync করো (home page এর জন্য) ──────────────────────────
+function _syncCartToLocal(items) {
+  if (!items) { localStorage.removeItem('is_cart'); return; }
+  const arr = items.map(it => ({
+    id:    it.id || it._id || '',
+    name:  it.product_name || it.name || '',
+    price: it.discounted_price ?? it.unit_price ?? 0,
+    qty:   it.quantity || 1,
+    img:   it.primary_image || it.product_image || '',
+    slug:  it.slug || '',
+  }));
+  localStorage.setItem('is_cart', JSON.stringify(arr));
+}
+
 async function changeQty(itemId, newQty) {
   if (newQty < 1) { removeItem(itemId); return; }
 
@@ -489,6 +505,7 @@ async function changeQty(itemId, newQty) {
   try {
     const res = await api('PUT', '/cart/' + itemId, { quantity: newQty });
     _cartData = res?.data ?? res;
+    _syncCartToLocal(_cartData?.items);
     renderCart();
   } catch { await init(); }
 }
@@ -506,6 +523,7 @@ async function removeItem(itemId) {
   try {
     const res = await api('DELETE', '/cart/' + itemId);
     _cartData = res?.data ?? res;
+    _syncCartToLocal(_cartData?.items);
     toast('Item removed');
     renderCart();
   } catch {
