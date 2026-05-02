@@ -166,15 +166,6 @@ img{display:block;max-width:100%}
 .toast-msg{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
 .toast-msg.show{opacity:1}
 
-/* ── INVOICE PRINT STYLES ── */
-@media print{
-  .header,.actions-wrap,.toast-msg{display:none!important}
-  .page{box-shadow:none!important;max-width:100%!important}
-  .sec-card{box-shadow:none!important;border:1px solid #ddd!important;break-inside:avoid}
-  .scroll-body{padding:0!important}
-  body{background:#fff!important}
-}
-
 @media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.1)}}
 </style>
 </head>
@@ -233,6 +224,7 @@ img{display:block;max-width:100%}
 if (!Auth.isLoggedIn()) window.location.href = 'login.html?next=' + encodeURIComponent(location.href);
 
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const escRaw = s => String(s).replace(/</g,'<').replace(/>/g,'>').replace(/&/g,'&');
 const fmt = n => (typeof formatPrice === 'function') ? formatPrice(n) : '₹' + Number(n).toLocaleString('en-IN');
 
 const urlP = new URLSearchParams(window.location.search);
@@ -309,6 +301,9 @@ async function loadOrder() {
   try {
     const res   = await api('GET', '/orders/' + _oid);
     const order = res?.data ?? res;
+
+    // Save for invoice generation
+    window._loadedOrder = order;
 
     const orderId   = order.id || order._id || order.order_id || _oid;
     const status    = (order.status || 'pending').toLowerCase();
@@ -534,13 +529,257 @@ async function loadOrder() {
   }
 }
 
-// ── DOWNLOAD INVOICE (print / save as PDF) ───────────────────────────────────
+// ── DOWNLOAD INVOICE ──────────────────────────────────────────────────────────
 function downloadInvoice() {
-  // Temporarily hide action buttons during print
-  const actions = document.querySelector('.actions-wrap');
-  if (actions) actions.style.display = 'none';
-  window.print();
-  if (actions) actions.style.display = '';
+  const order = window._loadedOrder;
+  if (!order) { showToast('Order data not loaded yet'); return; }
+
+  const orderId   = order.id || order._id || order.order_id || _oid;
+  const status    = (order.status || 'pending').toLowerCase();
+  const items     = order.items || [];
+  const addr      = order.address || {};
+  const payMethod = order.payment_method || 'cod';
+  const total     = order.total_amount ?? order.total ?? 0;
+
+  const createdAt = order.created_at
+    ? new Date(order.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' })
+    : new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+  const addrName  = addr.full_name || addr.name || '';
+  const addrLine1 = addr.line1 || '';
+  const addrLine2 = addr.line2 || '';
+  const addrCity  = addr.city  || '';
+  const addrState = addr.state || '';
+  const addrPin   = addr.pincode || '';
+  const addrPhone = addr.phone || '';
+  const addrCountry = addr.country || 'India';
+  const fullAddr  = [addrLine1, addrLine2, addrCity, addrState, addrPin, addrCountry].filter(Boolean).join(', ');
+
+  const itemsTotal = items.reduce((s, i) => s + (i.subtotal ?? ((i.unit_price ?? i.price ?? 0) * (i.quantity ?? 1))), 0);
+
+  const fmtInv = n => '&#8377;' + Number(n).toLocaleString('en-IN');
+
+  const itemRows = items.map((item, idx) => {
+    const name  = escRaw(item.product_name || item.name || 'Product');
+    const qty   = item.quantity || item.qty || 1;
+    const price = item.unit_price ?? item.price ?? 0;
+    const sub   = item.subtotal ?? (price * qty);
+    const bg    = idx % 2 === 0 ? '#ffffff' : '#f9fdf9';
+    return `<tr style="background:${bg}">
+      <td style="padding:11px 14px;font-size:13px;color:#212121;font-weight:600;border-bottom:1px solid #f0f0f0">${name}</td>
+      <td style="padding:11px 10px;font-size:13px;color:#555;text-align:center;border-bottom:1px solid #f0f0f0">${qty}</td>
+      <td style="padding:11px 10px;font-size:13px;color:#555;text-align:right;border-bottom:1px solid #f0f0f0">${fmtInv(price)}</td>
+      <td style="padding:11px 14px;font-size:13px;color:#212121;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">${fmtInv(sub)}</td>
+    </tr>`;
+  }).join('');
+
+  const payStatusLabel = order.payment_status === 'paid' ? 'Paid' : order.payment_status === 'failed' ? 'Failed' : 'Pending';
+  const payStatusBg    = order.payment_status === 'paid' ? '#e8f8ee' : order.payment_status === 'failed' ? '#fce4ec' : '#fff3e0';
+  const payStatusColor = order.payment_status === 'paid' ? '#147a34' : order.payment_status === 'failed' ? '#c62828' : '#e65100';
+  const orderStatusLabel = STATUS_LABELS[status] || status;
+  const PAY_LABELS_INV = { cod:'Cash on Delivery', upi:'UPI', card:'Card', wallet:'Wallet / Net Banking', online:'Online Payment' };
+
+  const invoiceHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invoice #${String(orderId).slice(-8).toUpperCase()} — indiaShop</title>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Mukta',sans-serif;background:#f0f4f0;color:#212121;-webkit-print-color-adjust:exact;print-color-adjust:exact;min-height:100vh}
+.no-print{display:block}
+@media print{
+  body{background:#fff!important}
+  .no-print{display:none!important}
+  .invoice-wrap{box-shadow:none!important;margin:0!important;border-radius:0!important;max-width:100%!important}
+}
+.top-bar{background:#1ba345;padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:16px}
+.top-bar-btn{background:#fff;color:#1ba345;font-family:'Mukta',sans-serif;font-size:14px;font-weight:700;border:none;padding:10px 28px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s}
+.top-bar-btn:hover{background:#e8f8ee}
+.top-bar-btn svg{flex-shrink:0}
+.top-bar-hint{font-size:12px;color:rgba(255,255,255,.8);font-family:'Mukta',sans-serif}
+.invoice-wrap{max-width:680px;margin:28px auto 40px;background:#fff;border-radius:12px;box-shadow:0 4px 32px rgba(0,0,0,.14);overflow:hidden}
+
+/* ── Invoice Header ── */
+.inv-head{background:linear-gradient(135deg,#1ba345 60%,#22c55e 100%);padding:30px 36px 24px;display:flex;justify-content:space-between;align-items:flex-start;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.brand-block{}
+.brand-logo{font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1}
+.brand-tagline{font-size:12px;color:rgba(255,255,255,.75);margin-top:3px}
+.inv-meta{text-align:right}
+.inv-word{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;letter-spacing:3px;line-height:1}
+.inv-id{font-family:monospace;font-size:13px;color:rgba(255,255,255,.9);margin-top:6px;background:rgba(0,0,0,.15);display:inline-block;padding:3px 10px;border-radius:4px}
+.inv-date{font-size:12px;color:rgba(255,255,255,.75);margin-top:5px}
+
+/* ── Status strip ── */
+.status-strip{background:#f8fdf9;border-bottom:1px solid #e8f0ea;padding:12px 36px;display:flex;align-items:center;gap:20px}
+.sstatus-item{display:flex;flex-direction:column;gap:2px}
+.sstatus-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#9e9e9e}
+.sstatus-val{font-size:13px;font-weight:700;color:#212121}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 11px;border-radius:99px}
+
+/* ── Body ── */
+.inv-body{padding:28px 36px}
+
+/* ── Two col grid ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px}
+.col-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#9e9e9e;margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #e8f0ea}
+.col-name{font-size:15px;font-weight:700;color:#212121;margin-bottom:4px}
+.col-addr{font-size:13px;color:#555;line-height:1.7}
+.col-phone{font-size:12px;color:#878787;margin-top:5px}
+.col-row{margin-bottom:10px}
+.col-row-label{font-size:11px;color:#9e9e9e;margin-bottom:2px}
+.col-row-val{font-size:13px;font-weight:700;color:#212121}
+
+/* ── Items table ── */
+.items-section{margin-bottom:0}
+.items-table{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;border:1px solid #e8f0ea}
+.items-table thead tr{background:#1ba345}
+.items-table thead th{padding:11px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff;text-align:left}
+.items-table thead th.right{text-align:right}
+.items-table thead th.center{text-align:center}
+.items-table tfoot td{padding:10px 14px;font-size:13px;color:#555;border-top:1px solid #e8f0ea}
+.items-table tfoot tr.grand td{font-size:17px;font-weight:800;color:#212121;padding-top:14px;border-top:2px solid #1ba345}
+.items-table tfoot tr.free td{color:#1ba345;font-weight:700}
+
+/* ── Footer ── */
+.inv-foot{background:#f8fdf9;border-top:2px solid #e8f0ea;padding:20px 36px;display:flex;justify-content:space-between;align-items:center}
+.foot-thanks{font-family:'Baloo 2',cursive;font-size:15px;font-weight:700;color:#1ba345}
+.foot-right{text-align:right;font-size:11px;color:#9e9e9e;line-height:1.8}
+.foot-note{font-size:11px;color:#bbb;text-align:center;padding:10px 36px 16px;background:#fff}
+</style>
+</head>
+<body>
+
+<!-- Top action bar (hidden on print) -->
+<div class="top-bar no-print">
+  <button class="top-bar-btn" onclick="window.print()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download / Print Invoice
+  </button>
+  <span class="top-bar-hint">Print kore PDF hisebe save korun</span>
+</div>
+
+<div class="invoice-wrap">
+
+  <!-- GREEN HEADER -->
+  <div class="inv-head">
+    <div class="brand-block">
+      <div class="brand-logo">indiaShop</div>
+      <div class="brand-tagline">www.indiashop.in</div>
+    </div>
+    <div class="inv-meta">
+      <div class="inv-word">INVOICE</div>
+      <div class="inv-id">#${escRaw(String(orderId).toUpperCase())}</div>
+      <div class="inv-date">Date: ${createdAt}</div>
+    </div>
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip">
+    <div class="sstatus-item">
+      <span class="sstatus-label">Order Status</span>
+      <span class="badge" style="background:${status==='delivered'?'#e8f8ee':status==='cancelled'?'#fce4ec':status==='shipped'?'#fff8e1':'#e3f2fd'};color:${status==='delivered'?'#147a34':status==='cancelled'?'#c62828':status==='shipped'?'#7b5800':'#1565c0'}">${escRaw(orderStatusLabel)}</span>
+    </div>
+    <div class="sstatus-item">
+      <span class="sstatus-label">Payment Status</span>
+      <span class="badge" style="background:${payStatusBg};color:${payStatusColor}">${payStatusLabel}</span>
+    </div>
+    <div class="sstatus-item">
+      <span class="sstatus-label">Payment Method</span>
+      <span class="sstatus-val">${escRaw(PAY_LABELS_INV[payMethod] || payMethod.toUpperCase())}</span>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="inv-body">
+
+    <!-- Bill To + Payment Info -->
+    <div class="two-col">
+      <div>
+        <div class="col-label">Bill To</div>
+        ${addrName ? `<div class="col-name">${escRaw(addrName)}</div>` : ''}
+        ${fullAddr  ? `<div class="col-addr">${escRaw(fullAddr)}</div>` : '<div class="col-addr" style="color:#bbb">Address not provided</div>'}
+        ${addrPhone ? `<div class="col-phone">&#128222; ${escRaw(addrPhone)}</div>` : ''}
+      </div>
+      <div>
+        <div class="col-label">Invoice Info</div>
+        <div class="col-row">
+          <div class="col-row-label">Invoice No.</div>
+          <div class="col-row-val" style="font-family:monospace">#${escRaw(String(orderId).toUpperCase())}</div>
+        </div>
+        <div class="col-row">
+          <div class="col-row-label">Invoice Date</div>
+          <div class="col-row-val">${createdAt}</div>
+        </div>
+        <div class="col-row">
+          <div class="col-row-label">Total Items</div>
+          <div class="col-row-val">${items.length} item${items.length !== 1 ? 's' : ''}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="items-section">
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th style="width:45%">Item Description</th>
+            <th class="center" style="width:12%">Qty</th>
+            <th class="right" style="width:20%">Unit Price</th>
+            <th class="right" style="width:23%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemRows}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="text-align:right;color:#555">Subtotal</td>
+            <td style="text-align:right;font-weight:700">${fmtInv(itemsTotal)}</td>
+          </tr>
+          <tr class="free">
+            <td colspan="3" style="text-align:right">Delivery Charges</td>
+            <td style="text-align:right">FREE</td>
+          </tr>
+          <tr class="grand">
+            <td colspan="3" style="text-align:right">Total Amount</td>
+            <td style="text-align:right">${fmtInv(total)}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="inv-foot">
+    <div>
+      <div class="foot-thanks">&#127881; Thank you for shopping with indiaShop!</div>
+      <div style="font-size:12px;color:#878787;margin-top:3px">We appreciate your business.</div>
+    </div>
+    <div class="foot-right">
+      support@indiashop.in<br>
+      www.indiashop.in<br>
+      India
+    </div>
+  </div>
+  <div class="foot-note">
+    This is a computer-generated invoice and does not require a physical signature.
+  </div>
+
+</div>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) {
+    showToast('Popup blocked! Browser settings-এ popup allow করুন।');
+    return;
+  }
+  win.document.write(invoiceHtml);
+  win.document.close();
 }
 
 // ── CANCEL ORDER ──────────────────────────────────────────────────────────────
