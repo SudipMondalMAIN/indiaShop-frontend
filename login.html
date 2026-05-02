@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Login — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/auth.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+
 <!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyCdSG1DYsDLH72G4JWmtKz2hm1szAsmxD0",
     authDomain: "indiashop-beb1c.firebaseapp.com",
@@ -18,8 +19,8 @@
     messagingSenderId: "897699694220",
     appId: "1:897699694220:web:d0f646c415b832e7e61da9"
   };
-  const app      = initializeApp(firebaseConfig);
-  const auth     = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
   window._firebaseGoogleLogin = async function () {
@@ -42,344 +43,313 @@
     }
   };
 </script>
-</head>
-<body>
-<div class="auth-page">
-  <div class="auth-banner">
-    <div>
-      <h1>India's Most<br>Trusted Shop</h1>
-      <p>Millions of products. Best prices. Fast delivery.</p>
-    </div>
-  </div>
-
-  <div class="auth-form-wrap">
-    <div class="auth-logo">india<span>Shop</span></div>
-
-    <!-- Step 1: Email -->
-    <div id="step-email">
-      <div class="auth-title">Sign in</div>
-      <div class="auth-sub">Enter your email to continue</div>
-      <div class="auth-form">
-        <div class="input-wrap">
-          <label>Email address</label>
-          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Continue</button>
-        <div style="text-align:center;margin-top:4px">
-          <button onclick="goToForgot()" class="link-btn">Forgot password?</button>
-        </div>
-        <div class="divider-text">or</div>
-        <button class="google-btn" onclick="window._firebaseGoogleLogin()">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-          Continue with Google
-        </button>
-        <div class="auth-footer">New to indiaShop? <a href="register.html">Create account</a></div>
-      </div>
-    </div>
-
-    <!-- Step 2: OTP Login -->
-    <div id="step-otp" style="display:none">
-      <button onclick="showStep('email')" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
-      </button>
-      <div class="auth-title">Enter OTP</div>
-      <div class="auth-sub" id="otp-sub">Sent to your email</div>
-      <div class="auth-form">
-        <div class="otp-inputs">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-        </div>
-        <div class="otp-timer" id="otp-timer-wrap">Resend in <span id="otp-timer">60s</span></div>
-        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Verify &amp; Login</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Forgot — Email -->
-    <div id="step-forgot-email" style="display:none">
-      <button onclick="showStep('email')" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
-      </button>
-      <div class="auth-title">Forgot Password</div>
-      <div class="auth-sub">We'll send a reset OTP to your email</div>
-      <div class="auth-form">
-        <div class="input-wrap">
-          <label>Email address</label>
-          <input type="email" id="forgot-email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <button class="btn btn-primary btn-block btn-lg" id="forgot-send-btn" onclick="sendForgotOTP()">Send Reset OTP</button>
-      </div>
-    </div>
-
-    <!-- Step 4: Forgot — OTP -->
-    <div id="step-forgot-otp" style="display:none">
-      <button onclick="showStep('forgot-email')" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
-      </button>
-      <div class="auth-title">Enter OTP</div>
-      <div class="auth-sub" id="forgot-otp-sub">Sent to your email</div>
-      <div class="auth-form">
-        <div class="otp-inputs" id="forgot-otp-inputs">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-        </div>
-        <div class="otp-timer" id="forgot-otp-timer-wrap">Resend in <span id="forgot-otp-timer">60s</span></div>
-        <button class="btn btn-primary btn-block btn-lg" id="forgot-verify-btn" onclick="verifyForgotOTP()">Verify OTP</button>
-      </div>
-    </div>
-
-    <!-- Step 5: New Password -->
-    <div id="step-new-password" style="display:none">
-      <div class="auth-title">Set New Password</div>
-      <div class="auth-sub">Choose a strong password</div>
-      <div class="auth-form">
-        <div class="input-wrap">
-          <label>New password</label>
-          <div class="pw-wrap">
-            <input type="password" id="new-password" placeholder="Min. 6 characters" autocomplete="new-password">
-            <button type="button" class="pw-toggle" onclick="togglePw('new-password',this)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="input-wrap">
-          <label>Confirm password</label>
-          <div class="pw-wrap">
-            <input type="password" id="confirm-password" placeholder="Re-enter password" autocomplete="new-password">
-            <button type="button" class="pw-toggle" onclick="togglePw('confirm-password',this)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-block btn-lg" id="reset-btn" onclick="resetPassword()">Reset Password</button>
-      </div>
-    </div>
-
-    <p class="terms-text mt-4">By continuing, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></p>
-  </div>
-</div>
-
-<!-- Google loading overlay -->
-<div id="google-loading" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:12px;padding:32px;text-align:center;min-width:200px">
-    <div style="width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#2874f0;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 16px"></div>
-    <div style="font-size:14px;color:#555">Signing in with Google...</div>
-  </div>
-</div>
 
 <style>
-@keyframes spin{to{transform:rotate(360deg)}}
-.back-btn{color:var(--primary,#2874f0);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0}
-.link-btn{background:none;border:none;color:var(--primary,#2874f0);font-size:13px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--orange:#ff6600;--red:#e53935;--bg:#f1f3f6;--white:#fff;--border:#e0e0e0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--r4:4px;--r8:8px;--shadow:0 1px 4px rgba(0,0,0,.12)}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh;font-size:14px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+
+/* ── PAGE LAYOUT ── */
+.auth-page{min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--white)}
+
+/* ── TOP HERO BANNER ── */
+.auth-hero{background:linear-gradient(140deg,#064e1f 0%,#1ba345 55%,#34d058 100%);padding:36px 24px 44px;position:relative;overflow:hidden;flex-shrink:0}
+.hero-circle1{position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero-circle2{position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-inner{position:relative}
+.hero-logo{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:14px}
+.hero-logo span{color:#ffeb3b}
+.hero-title{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:6px}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+.hero-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px}
+
+/* ── FORM CARD ── */
+.auth-card{background:var(--white);border-radius:20px 20px 0 0;margin-top:-16px;padding:28px 22px 40px;flex:1;position:relative;z-index:2}
+
+/* ── STEP TITLE ── */
+.step-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--t1);margin-bottom:4px}
+.step-sub{font-size:13px;color:var(--t3);margin-bottom:22px}
+
+/* ── INPUT ── */
+.input-wrap{margin-bottom:14px}
+.input-wrap label{display:block;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.input-wrap input{width:100%;border:1.5px solid var(--border);border-radius:var(--r8);padding:12px 14px;font-family:'Mukta',sans-serif;font-size:15px;color:var(--t1);background:var(--white);transition:border-color .2s;outline:none}
+.input-wrap input:focus{border-color:var(--green)}
+.input-wrap input::placeholder{color:var(--t4)}
 .pw-wrap{position:relative}
-.pw-wrap input{width:100%;padding-right:44px;box-sizing:border-box}
-.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888;padding:0;display:flex;align-items:center}
-.pw-toggle:hover{color:#333}
+.pw-wrap input{padding-right:46px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--t4);display:flex;align-items:center}
+.pw-toggle:hover{color:var(--green)}
+
+/* ── BUTTONS ── */
+.btn-primary{display:block;width:100%;background:var(--green);color:#fff;font-family:'Mukta',sans-serif;font-size:16px;font-weight:700;padding:13px;border-radius:var(--r8);border:none;cursor:pointer;transition:background .2s;margin-top:4px}
+.btn-primary:active{background:var(--green-d)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:10px;margin:18px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:12px;color:var(--t4);font-weight:600}
+
+/* ── GOOGLE BTN ── */
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid var(--border);border-radius:var(--r8);padding:12px;font-family:'Mukta',sans-serif;font-size:14px;font-weight:700;color:var(--t1);background:#fff;cursor:pointer;transition:border-color .2s,background .2s}
+.google-btn:active{background:var(--bg);border-color:#aaa}
+.google-btn img{width:20px;height:20px;flex-shrink:0}
+
+/* ── OTP INPUTS ── */
+.otp-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.otp-box{width:44px;height:52px;border:1.5px solid var(--border);border-radius:var(--r8);text-align:center;font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--t1);outline:none;transition:border-color .2s;background:var(--white)}
+.otp-box:focus{border-color:var(--green);background:var(--green-l)}
+
+/* ── TIMER ── */
+.otp-timer{text-align:center;font-size:12px;color:var(--t3);margin-bottom:16px}
+
+/* ── BACK BTN ── */
+.back-btn{display:flex;align-items:center;gap:4px;color:var(--green);font-size:13px;font-weight:700;margin-bottom:18px;padding:0;background:none;border:none;cursor:pointer}
+
+/* ── FOOTER LINKS ── */
+.auth-footer{text-align:center;font-size:13px;color:var(--t3);margin-top:20px}
+.auth-footer a{color:var(--green);font-weight:700}
+.terms{text-align:center;font-size:11px;color:var(--t4);margin-top:16px;line-height:1.6}
+.terms a{color:var(--green)}
+
+/* ── GOOGLE LOADER ── */
+.g-loader{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center}
+.g-loader-box{background:#fff;border-radius:14px;padding:32px;text-align:center;min-width:200px}
+.g-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+.g-loader-box p{font-size:13px;color:var(--t2);font-weight:600}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast-msg{background:#212121;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(min-width:481px){.auth-page{box-shadow:0 0 40px rgba(0,0,0,.15)}}
 </style>
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- HERO -->
+  <div class="auth-hero">
+    <div class="hero-circle1"></div>
+    <div class="hero-circle2"></div>
+    <div class="hero-inner">
+      <div class="hero-logo">india<span>Shop</span></div>
+      <div class="hero-title">Welcome<br>Back! 👋</div>
+      <div class="hero-sub">Sign in to continue shopping at India's most trusted store.</div>
+      <div class="hero-badges">
+        <span class="hero-badge">🚀 Fast Delivery</span>
+        <span class="hero-badge">🔒 Secure Payments</span>
+        <span class="hero-badge">⭐ 1Cr+ Happy Customers</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="auth-card">
+
+    <!-- STEP 1: EMAIL -->
+    <div id="step-email">
+      <div class="step-title">Sign In</div>
+      <div class="step-sub">Enter your email to receive an OTP</div>
+
+      <div class="input-wrap">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <button class="btn-primary" id="send-otp-btn" onclick="sendOTP()">Continue →</button>
+
+      <div class="divider"><span>or</span></div>
+
+      <button class="google-btn" onclick="window._firebaseGoogleLogin()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <div class="auth-footer">New to indiaShop? <a href="register.html">Create account</a></div>
+    </div>
+
+    <!-- STEP 2: OTP -->
+    <div id="step-otp" style="display:none">
+      <button class="back-btn" onclick="showStep('email')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
+      </button>
+      <div class="step-title">Enter OTP</div>
+      <div class="step-sub" id="otp-sub">Sent to your email</div>
+
+      <div class="otp-row" id="otp-row">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+      </div>
+
+      <div class="otp-timer" id="otp-timer-wrap">Resend in <span id="otp-timer">60s</span></div>
+      <button class="btn-primary" id="verify-btn" onclick="verifyOTP()">Verify &amp; Login</button>
+    </div>
+
+    <p class="terms">By continuing, you agree to our <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<!-- GOOGLE LOADER -->
+<div class="g-loader" id="google-loading">
+  <div class="g-loader-box">
+    <div class="g-spinner"></div>
+    <p>Signing in with Google…</p>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <script src="static/js/main.js"></script>
 <script>
   if (Auth.isLoggedIn()) window.location.href = 'index.html';
 
-  const ALL_STEPS = ['email','otp','forgot-email','forgot-otp','new-password'];
-
+  const ALL_STEPS = ['email', 'otp'];
   function showStep(name) {
     ALL_STEPS.forEach(s => {
-      const el = document.getElementById('step-'+s);
+      const el = document.getElementById('step-' + s);
       if (el) el.style.display = 'none';
     });
-    const target = document.getElementById('step-'+name);
-    if (target) target.style.display = '';
+    const t = document.getElementById('step-' + name);
+    if (t) t.style.display = '';
   }
 
-  function goToForgot() {
-    const email = document.getElementById('email').value.trim();
-    if (email) {
-      const fe = document.getElementById('forgot-email');
-      if (fe) fe.value = email;
-    }
-    showStep('forgot-email');
-  }
-
-  // ── Login: Send OTP ──────────────────────────────────────────────────────────
-  async function sendOTP() {
-    const email = document.getElementById('email').value.trim();
-    if (!email) return toast('Enter your email', 'error');
-    const btn = document.getElementById('send-otp-btn');
-    btnLoading(btn, true);
-    try {
-      await api('POST', '/auth/send-otp', { email, purpose: 'login_otp' });
-      document.getElementById('otp-sub').textContent = `Sent to ${email}`;
-      showStep('otp');
-      initOTPInputs();
-      startOTPTimer(60);
-      toast('OTP sent!', 'success');
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
-  }
-
-  // ── Login: Verify OTP ────────────────────────────────────────────────────────
-  async function verifyOTP() {
-    const email = document.getElementById('email').value.trim();
-    const otp   = getOTPValue();
-    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
-    const btn = document.getElementById('verify-btn');
-    btnLoading(btn, true);
-    try {
-      const data = await api('POST', '/auth/login-otp', { email, otp });
-      Auth.set(data.data.access_token, data.data.user);
-      toast('Welcome back!', 'success');
-      setTimeout(() => {
-        const redirect = new URLSearchParams(window.location.search).get('next') || 'index.html';
-        window.location.href = redirect;
-      }, 800);
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
-  }
-
-  async function resendOTP() {
-    const email = document.getElementById('email').value.trim();
-    try {
-      await api('POST', '/auth/send-otp', { email, purpose: 'login_otp' });
-      toast('OTP resent!', 'success');
-      const wrap = document.getElementById('otp-timer-wrap');
-      if (wrap) wrap.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
-      startOTPTimer(60);
-    } catch (e) { toast(e.message, 'error'); }
-  }
-
-  // ── Forgot: Send OTP ─────────────────────────────────────────────────────────
-  async function sendForgotOTP() {
-    const email = document.getElementById('forgot-email').value.trim();
-    if (!email) return toast('Enter your email', 'error');
-    const btn = document.getElementById('forgot-send-btn');
-    btnLoading(btn, true);
-    try {
-      await api('POST', '/auth/send-otp', { email, purpose: 'reset_password' });
-      document.getElementById('forgot-otp-sub').textContent = `Sent to ${email}`;
-      showStep('forgot-otp');
-      // Init OTP inputs inside forgot-otp-inputs container
-      const inputs = document.querySelectorAll('#forgot-otp-inputs .otp-input');
-      inputs.forEach((inp, i) => {
-        inp.value = '';
-        inp.addEventListener('input', () => {
-          inp.value = inp.value.replace(/\D/g,'');
-          if (inp.value && i < inputs.length-1) inputs[i+1].focus();
-        });
-        inp.addEventListener('keydown', e => {
-          if (e.key==='Backspace' && !inp.value && i>0) inputs[i-1].focus();
-        });
-        inp.addEventListener('paste', e => {
-          const p = e.clipboardData.getData('text').replace(/\D/g,'');
-          if (p.length===6) { [...inputs].forEach((x,j) => x.value=p[j]||''); inputs[5].focus(); e.preventDefault(); }
-        });
+  // ── OTP Input behaviour ───────────────────────────────────────────────────
+  function initOTPBoxes() {
+    const boxes = document.querySelectorAll('#otp-row .otp-box');
+    boxes.forEach((box, i) => {
+      box.value = '';
+      box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
       });
-      inputs[0]?.focus();
-      _startForgotTimer(60);
-      toast('Reset OTP sent!', 'success');
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
-  }
-
-  // ── Forgot: Verify OTP ───────────────────────────────────────────────────────
-  let _resetOTP = '';
-  async function verifyForgotOTP() {
-    const inputs = document.querySelectorAll('#forgot-otp-inputs .otp-input');
-    const otp    = [...inputs].map(i => i.value).join('');
-    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
-    const email = document.getElementById('forgot-email').value.trim();
-    const btn   = document.getElementById('forgot-verify-btn');
-    btnLoading(btn, true);
-    try {
-      await api('POST', '/auth/verify-otp', { email, otp, purpose: 'reset_password' });
-      _resetOTP = otp;
-      showStep('new-password');
-      toast('OTP verified!', 'success');
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
-  }
-
-  async function resendForgotOTP() {
-    const email = document.getElementById('forgot-email').value.trim();
-    try {
-      await api('POST', '/auth/send-otp', { email, purpose: 'reset_password' });
-      toast('OTP resent!', 'success');
-      const wrap = document.getElementById('forgot-otp-timer-wrap');
-      if (wrap) wrap.innerHTML = `Resend in <span id="forgot-otp-timer">60s</span>`;
-      _startForgotTimer(60);
-    } catch (e) { toast(e.message, 'error'); }
-  }
-
-  // ── Forgot: Reset Password ───────────────────────────────────────────────────
-  async function resetPassword() {
-    const newPw  = document.getElementById('new-password').value;
-    const confPw = document.getElementById('confirm-password').value;
-    if (newPw.length < 6) return toast('Password must be at least 6 characters', 'error');
-    if (newPw !== confPw)  return toast('Passwords do not match', 'error');
-    const email = document.getElementById('forgot-email').value.trim();
-    const btn   = document.getElementById('reset-btn');
-    btnLoading(btn, true);
-    try {
-      await api('POST', '/auth/reset-password', {
-        email,
-        otp:      _resetOTP,
-        password: newPw,        // backend accepts both "password" and "new_password"
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
       });
-      toast('Password reset! Please sign in.', 'success');
-      setTimeout(() => showStep('email'), 1200);
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
+      box.addEventListener('paste', e => {
+        const p = e.clipboardData.getData('text').replace(/\D/g, '');
+        if (p.length === 6) {
+          [...boxes].forEach((b, j) => b.value = p[j] || '');
+          boxes[5].focus();
+          e.preventDefault();
+        }
+      });
+    });
+    boxes[0]?.focus();
   }
 
-  function togglePw(id, btn) {
-    const inp = document.getElementById(id);
-    inp.type  = inp.type === 'password' ? 'text' : 'password';
-    btn.style.color = inp.type === 'text' ? 'var(--primary,#2874f0)' : '#888';
+  function getOTP() {
+    return [...document.querySelectorAll('#otp-row .otp-box')].map(b => b.value).join('');
   }
 
-  // Forgot OTP countdown (separate from login OTP timer)
-  let _forgotInterval;
-  function _startForgotTimer(secs) {
-    clearInterval(_forgotInterval);
+  // ── Timer ─────────────────────────────────────────────────────────────────
+  let _timerInt;
+  function startTimer(secs) {
+    clearInterval(_timerInt);
     let s = secs;
-    _forgotInterval = setInterval(() => {
+    const wrap = document.getElementById('otp-timer-wrap');
+    if (wrap) wrap.innerHTML = `Resend in <span id="otp-timer">${s}s</span>`;
+    _timerInt = setInterval(() => {
       s--;
-      const el = document.getElementById('forgot-otp-timer');
-      if (!el) { clearInterval(_forgotInterval); return; }
+      const el = document.getElementById('otp-timer');
+      if (!el) { clearInterval(_timerInt); return; }
       if (s <= 0) {
-        clearInterval(_forgotInterval);
-        el.parentElement.innerHTML = `<a href="#" onclick="resendForgotOTP();return false" style="color:var(--primary,#2874f0);font-weight:600;font-size:13px">Resend OTP</a>`;
+        clearInterval(_timerInt);
+        el.parentElement.innerHTML = `<a href="#" onclick="resendOTP();return false" style="color:var(--green);font-weight:700;font-size:13px">Resend OTP</a>`;
       } else {
         el.textContent = s + 's';
       }
     }, 1000);
   }
 
-  // Enter key helpers
-  document.getElementById('email')?.addEventListener('keydown', e => { if (e.key==='Enter') sendOTP(); });
-  document.getElementById('forgot-email')?.addEventListener('keydown', e => { if (e.key==='Enter') sendForgotOTP(); });
+  // ── Button loading ────────────────────────────────────────────────────────
+  function setLoading(btn, on) {
+    if (!btn) return;
+    btn.disabled = on;
+    if (on) { btn._orig = btn.textContent; btn.textContent = 'Please wait…'; }
+    else    { btn.textContent = btn._orig || btn.textContent; }
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────────────
+  function showToast(msg, dur = 2500) {
+    const wrap = document.getElementById('toast-wrap');
+    const t = document.createElement('div');
+    t.className = 'toast-msg';
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => t.remove(), dur);
+  }
+  // Allow main.js toast() to also work
+  if (typeof toast === 'undefined') window.toast = showToast;
+
+  // ── Send OTP ──────────────────────────────────────────────────────────────
+  async function sendOTP() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) return showToast('Please enter your email');
+    const btn = document.getElementById('send-otp-btn');
+    setLoading(btn, true);
+    try {
+      await api('POST', '/auth/send-otp', { email, purpose: 'login_otp' });
+      document.getElementById('otp-sub').textContent = `OTP sent to ${email}`;
+      showStep('otp');
+      initOTPBoxes();
+      startTimer(60);
+      showToast('OTP sent! ✅');
+    } catch (e) {
+      showToast(e.message || 'Something went wrong');
+    } finally {
+      setLoading(btn, false);
+    }
+  }
+
+  // ── Verify OTP ────────────────────────────────────────────────────────────
+  async function verifyOTP() {
+    const email = document.getElementById('email').value.trim();
+    const otp   = getOTP();
+    if (otp.length < 6) return showToast('Enter all 6 digits');
+    const btn = document.getElementById('verify-btn');
+    setLoading(btn, true);
+    try {
+      const data = await api('POST', '/auth/login-otp', { email, otp });
+      Auth.set(data.data.access_token, data.data.user);
+      showToast('Welcome back! 🎉');
+      setTimeout(() => {
+        const redirect = new URLSearchParams(window.location.search).get('next') || 'index.html';
+        window.location.href = redirect;
+      }, 800);
+    } catch (e) {
+      showToast(e.message || 'Invalid OTP');
+    } finally {
+      setLoading(btn, false);
+    }
+  }
+
+  // ── Resend OTP ────────────────────────────────────────────────────────────
+  async function resendOTP() {
+    const email = document.getElementById('email').value.trim();
+    try {
+      await api('POST', '/auth/send-otp', { email, purpose: 'login_otp' });
+      showToast('OTP resent! ✅');
+      startTimer(60);
+    } catch (e) { showToast(e.message || 'Failed to resend'); }
+  }
+
+  // ── Enter key ─────────────────────────────────────────────────────────────
+  document.getElementById('email')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendOTP();
+  });
 </script>
 </body>
 </html>
