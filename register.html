@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Register — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/auth.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyCdSG1DYsDLH72G4JWmtKz2hm1szAsmxD0",
     authDomain: "indiashop-beb1c.firebaseapp.com",
@@ -17,8 +19,8 @@
     messagingSenderId: "897699694220",
     appId: "1:897699694220:web:d0f646c415b832e7e61da9"
   };
-  const app      = initializeApp(firebaseConfig);
-  const auth     = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
   window._googleSignup = async function () {
@@ -29,243 +31,427 @@
       const idToken = await result.user.getIdToken();
       const data    = await api('POST', '/auth/google', { id_token: idToken });
       Auth.set(data.data.access_token, data.data.user);
-      toast('Welcome, ' + data.data.user.name + '!', 'success');
+      showToast('Welcome, ' + data.data.user.name + '! 🎉');
       setTimeout(() => window.location.href = 'index.html', 800);
     } catch (e) {
-      if (e.code !== 'auth/popup-closed-by-user') toast(e.message || 'Google sign-up failed', 'error');
+      if (e.code !== 'auth/popup-closed-by-user') showToast(e.message || 'Google sign-up failed');
     } finally {
       if (loader) loader.style.display = 'none';
     }
   };
 </script>
-</head>
-<body>
-<div class="auth-page">
-  <div class="auth-banner">
-    <div>
-      <h1>Join Millions<br>of Shoppers</h1>
-      <p>Get the best deals, exclusive offers, and fast delivery right to your door.</p>
-    </div>
-  </div>
-
-  <div class="auth-form-wrap">
-    <div class="auth-logo">india<span>Shop</span></div>
-
-    <div class="step-progress">
-      <span class="dot active" id="dot-1"></span>
-      <span class="dot-line" id="line-1"></span>
-      <span class="dot" id="dot-2"></span>
-      <span class="dot-line" id="line-2"></span>
-      <span class="dot" id="dot-3"></span>
-    </div>
-
-    <!-- Step 1: Email -->
-    <div id="step-email">
-      <div class="auth-title">Create account</div>
-      <div class="auth-sub">Enter your email to get started</div>
-      <div class="auth-form">
-        <div class="input-wrap">
-          <label>Email address</label>
-          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <button class="btn btn-primary btn-block btn-lg" id="send-otp-btn" onclick="sendOTP()">Send OTP</button>
-        <div class="divider-text">or</div>
-        <button class="google-btn" onclick="window._googleSignup()">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-          Sign up with Google
-        </button>
-        <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
-      </div>
-    </div>
-
-    <!-- Step 2: OTP Verify -->
-    <div id="step-otp" style="display:none">
-      <button onclick="goToStep('email')" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
-      </button>
-      <div class="auth-title">Verify Email</div>
-      <div class="auth-sub" id="otp-sub">OTP sent to your email</div>
-      <div class="auth-form">
-        <div class="otp-inputs">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-          <input class="otp-input" type="text" maxlength="1" inputmode="numeric">
-        </div>
-        <div class="otp-timer" id="otp-timer-wrap">Resend in <span id="otp-timer">60s</span></div>
-        <button class="btn btn-primary btn-block btn-lg" id="verify-btn" onclick="verifyOTP()">Verify OTP</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Name & Password -->
-    <div id="step-details" style="display:none">
-      <div class="auth-title">Almost done!</div>
-      <div class="auth-sub">Tell us a little about yourself</div>
-      <div class="auth-form">
-        <div class="input-wrap">
-          <label>Full name</label>
-          <input type="text" id="name" placeholder="Your full name" autocomplete="name">
-        </div>
-        <div class="input-wrap">
-          <label>Password</label>
-          <div class="pw-wrap">
-            <input type="password" id="password" placeholder="Min. 6 characters" autocomplete="new-password">
-            <button type="button" class="pw-toggle" onclick="togglePw('password',this)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-block btn-lg" id="create-btn" onclick="createAccount()">Create Account</button>
-      </div>
-    </div>
-
-    <p class="terms-text mt-4">By creating an account, you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a></p>
-  </div>
-</div>
-
-<!-- Google loading overlay -->
-<div id="google-loading" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:9999;align-items:center;justify-content:center">
-  <div style="background:#fff;border-radius:12px;padding:32px;text-align:center;min-width:200px">
-    <div style="width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#2874f0;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 16px"></div>
-    <div style="font-size:14px;color:#555">Signing in with Google...</div>
-  </div>
-</div>
 
 <style>
-@keyframes spin{to{transform:rotate(360deg)}}
-.step-progress{display:flex;align-items:center;gap:6px;margin-bottom:28px}
-.dot{width:10px;height:10px;border-radius:50%;background:#e0e0e0;transition:background .3s,transform .3s}
-.dot.active{background:var(--primary,#2874f0);transform:scale(1.2)}
-.dot.done{background:#4caf50}
-.dot-line{flex:1;height:2px;background:#e0e0e0;border-radius:2px;transition:background .3s}
-.dot-line.done{background:#4caf50}
-.back-btn{color:var(--primary,#2874f0);font-size:13px;font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{--green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;--orange:#ff6600;--red:#e53935;--bg:#f1f3f6;--white:#fff;--border:#e0e0e0;--t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;--r4:4px;--r8:8px;--shadow:0 1px 4px rgba(0,0,0,.12)}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh;font-size:14px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+
+/* ── PAGE LAYOUT ── */
+.auth-page{min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--white)}
+
+/* ── TOP HERO BANNER ── */
+.auth-hero{background:linear-gradient(140deg,#064e1f 0%,#1ba345 55%,#34d058 100%);padding:36px 24px 44px;position:relative;overflow:hidden;flex-shrink:0}
+.hero-circle1{position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero-circle2{position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-inner{position:relative}
+.hero-logo{font-family:'Baloo 2',cursive;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:14px}
+.hero-logo span{color:#ffeb3b}
+.hero-title{font-family:'Baloo 2',cursive;font-size:26px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:6px}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+.hero-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hero-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:99px}
+
+/* ── STEP PROGRESS ── */
+.step-prog{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.prog-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.prog-dot{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--t4);transition:.3s;z-index:1;position:relative}
+.prog-step.active .prog-dot{background:var(--green);color:#fff;box-shadow:0 0 0 4px var(--green-l)}
+.prog-step.done .prog-dot{background:var(--green);color:#fff}
+.prog-step.done .prog-dot::after{content:'✓'}
+.prog-step.active .prog-dot .dot-num,.prog-step .prog-dot .dot-num{display:block}
+.prog-step.done .prog-dot .dot-num{display:none}
+.prog-label{font-size:10px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.prog-step.active .prog-label{color:var(--green)}
+.prog-step.done .prog-label{color:var(--green)}
+.prog-line{flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:18px;border-radius:2px;transition:.3s}
+.prog-line.done{background:var(--green)}
+
+/* ── FORM CARD ── */
+.auth-card{background:var(--white);border-radius:20px 20px 0 0;margin-top:-16px;padding:28px 22px 40px;flex:1;position:relative;z-index:2}
+
+/* ── STEP TITLE ── */
+.step-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--t1);margin-bottom:4px}
+.step-sub{font-size:13px;color:var(--t3);margin-bottom:22px}
+
+/* ── INPUT ── */
+.input-wrap{margin-bottom:14px}
+.input-wrap label{display:block;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.input-wrap input{width:100%;border:1.5px solid var(--border);border-radius:var(--r8);padding:12px 14px;font-family:'Mukta',sans-serif;font-size:15px;color:var(--t1);background:var(--white);transition:border-color .2s;outline:none}
+.input-wrap input:focus{border-color:var(--green)}
+.input-wrap input::placeholder{color:var(--t4)}
 .pw-wrap{position:relative}
-.pw-wrap input{width:100%;padding-right:44px;box-sizing:border-box}
-.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#888;padding:0;display:flex;align-items:center}
-.pw-toggle:hover{color:#333}
+.pw-wrap input{padding-right:46px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--t4);display:flex;align-items:center}
+.pw-toggle:hover{color:var(--green)}
+
+/* ── BUTTONS ── */
+.btn-primary{display:block;width:100%;background:var(--green);color:#fff;font-family:'Mukta',sans-serif;font-size:16px;font-weight:700;padding:13px;border-radius:var(--r8);border:none;cursor:pointer;transition:background .2s;margin-top:4px}
+.btn-primary:active{background:var(--green-d)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;gap:10px;margin:18px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{font-size:12px;color:var(--t4);font-weight:600}
+
+/* ── GOOGLE BTN ── */
+.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid var(--border);border-radius:var(--r8);padding:12px;font-family:'Mukta',sans-serif;font-size:14px;font-weight:700;color:var(--t1);background:#fff;cursor:pointer;transition:border-color .2s,background .2s}
+.google-btn:active{background:var(--bg);border-color:#aaa}
+.google-btn img{width:20px;height:20px;flex-shrink:0}
+
+/* ── OTP INPUTS ── */
+.otp-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.otp-box{width:44px;height:52px;border:1.5px solid var(--border);border-radius:var(--r8);text-align:center;font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:var(--t1);outline:none;transition:border-color .2s;background:var(--white)}
+.otp-box:focus{border-color:var(--green);background:var(--green-l)}
+
+/* ── TIMER ── */
+.otp-timer{text-align:center;font-size:12px;color:var(--t3);margin-bottom:16px}
+
+/* ── BACK BTN ── */
+.back-btn{display:flex;align-items:center;gap:4px;color:var(--green);font-size:13px;font-weight:700;margin-bottom:18px;padding:0;background:none;border:none;cursor:pointer}
+
+/* ── FOOTER LINKS ── */
+.auth-footer{text-align:center;font-size:13px;color:var(--t3);margin-top:20px}
+.auth-footer a{color:var(--green);font-weight:700}
+.terms{text-align:center;font-size:11px;color:var(--t4);margin-top:16px;line-height:1.6}
+.terms a{color:var(--green)}
+
+/* ── GOOGLE LOADER ── */
+.g-loader{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center}
+.g-loader-box{background:#fff;border-radius:14px;padding:32px;text-align:center;min-width:200px}
+.g-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+.g-loader-box p{font-size:13px;color:var(--t2);font-weight:600}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast-msg{background:#212121;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(min-width:481px){.auth-page{box-shadow:0 0 40px rgba(0,0,0,.15)}}
 </style>
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- HERO -->
+  <div class="auth-hero">
+    <div class="hero-circle1"></div>
+    <div class="hero-circle2"></div>
+    <div class="hero-inner">
+      <div class="hero-logo">india<span>Shop</span></div>
+      <div class="hero-title">Join Millions<br>of Shoppers! 🎉</div>
+      <div class="hero-sub">Get exclusive deals, fast delivery and the best prices — all in one app.</div>
+      <div class="hero-badges">
+        <span class="hero-badge">🆓 Zero Fees</span>
+        <span class="hero-badge">🎁 Welcome Offers</span>
+        <span class="hero-badge">🔒 100% Secure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="auth-card">
+
+    <!-- STEP PROGRESS -->
+    <div class="step-prog">
+      <div class="prog-step active" id="ps-1">
+        <div class="prog-dot"><span class="dot-num">1</span></div>
+        <div class="prog-label">Email</div>
+      </div>
+      <div class="prog-line" id="pl-1"></div>
+      <div class="prog-step" id="ps-2">
+        <div class="prog-dot"><span class="dot-num">2</span></div>
+        <div class="prog-label">Verify</div>
+      </div>
+      <div class="prog-line" id="pl-2"></div>
+      <div class="prog-step" id="ps-3">
+        <div class="prog-dot"><span class="dot-num">3</span></div>
+        <div class="prog-label">Details</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: EMAIL -->
+    <div id="step-email">
+      <div class="step-title">Create Account</div>
+      <div class="step-sub">Enter your email to get started</div>
+
+      <div class="input-wrap">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <button class="btn-primary" id="send-otp-btn" onclick="sendOTP()">Send OTP →</button>
+
+      <div class="divider"><span>or</span></div>
+
+      <button class="google-btn" onclick="window._googleSignup()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Sign up with Google
+      </button>
+
+      <div class="auth-footer">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+
+    <!-- STEP 2: OTP VERIFY -->
+    <div id="step-otp" style="display:none">
+      <button class="back-btn" onclick="goToStep('email')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back
+      </button>
+      <div class="step-title">Verify Email</div>
+      <div class="step-sub" id="otp-sub">OTP sent to your email</div>
+
+      <div class="otp-row" id="otp-row">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+        <input class="otp-box" type="text" maxlength="1" inputmode="numeric">
+      </div>
+
+      <div class="otp-timer" id="otp-timer-wrap">Resend in <span id="otp-timer">60s</span></div>
+      <button class="btn-primary" id="verify-btn" onclick="verifyOTP()">Verify OTP</button>
+    </div>
+
+    <!-- STEP 3: NAME & PASSWORD -->
+    <div id="step-details" style="display:none">
+      <div class="step-title">Almost Done! 🙌</div>
+      <div class="step-sub">Tell us a little about yourself</div>
+
+      <div class="input-wrap">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your full name" autocomplete="name">
+      </div>
+
+      <div class="input-wrap">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="Min. 6 characters" autocomplete="new-password">
+          <button type="button" class="pw-toggle" onclick="togglePw('password', this)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="create-btn" onclick="createAccount()">Create Account 🎉</button>
+    </div>
+
+    <p class="terms">By creating an account, you agree to our <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<!-- GOOGLE LOADER -->
+<div class="g-loader" id="google-loading">
+  <div class="g-loader-box">
+    <div class="g-spinner"></div>
+    <p>Signing in with Google…</p>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <script src="static/js/main.js"></script>
 <script>
   if (Auth.isLoggedIn()) window.location.href = 'index.html';
 
-  // OTP verified in step 2 — stored here for step 3 registration
   let _verifiedOTP = '';
 
+  // ── Step navigation + progress ────────────────────────────────────────────
   function goToStep(step) {
-    ['step-email','step-otp','step-details'].forEach(id => {
+    ['step-email', 'step-otp', 'step-details'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
 
-    const d1 = document.getElementById('dot-1');
-    const d2 = document.getElementById('dot-2');
-    const d3 = document.getElementById('dot-3');
-    const l1 = document.getElementById('line-1');
-    const l2 = document.getElementById('line-2');
-    [d1,d2,d3].forEach(d => { if(d) d.className='dot'; });
-    [l1,l2].forEach(l => { if(l) l.className='dot-line'; });
+    // Reset progress
+    [1, 2, 3].forEach(n => {
+      const ps = document.getElementById('ps-' + n);
+      if (ps) { ps.className = 'prog-step'; ps.querySelector('.dot-num').style.display = ''; }
+    });
+    [1, 2].forEach(n => {
+      const pl = document.getElementById('pl-' + n);
+      if (pl) pl.className = 'prog-line';
+    });
 
     if (step === 'email') {
       document.getElementById('step-email').style.display = '';
-      d1?.classList.add('active');
+      document.getElementById('ps-1').classList.add('active');
     } else if (step === 'otp') {
       document.getElementById('step-otp').style.display = '';
-      d1?.classList.add('done'); l1?.classList.add('done');
-      d2?.classList.add('active');
+      document.getElementById('ps-1').classList.add('done');
+      document.getElementById('pl-1').classList.add('done');
+      document.getElementById('ps-2').classList.add('active');
     } else if (step === 'details') {
       document.getElementById('step-details').style.display = '';
-      d1?.classList.add('done'); l1?.classList.add('done');
-      d2?.classList.add('done'); l2?.classList.add('done');
-      d3?.classList.add('active');
+      document.getElementById('ps-1').classList.add('done');
+      document.getElementById('pl-1').classList.add('done');
+      document.getElementById('ps-2').classList.add('done');
+      document.getElementById('pl-2').classList.add('done');
+      document.getElementById('ps-3').classList.add('active');
     }
   }
 
-  // Step 1: Send OTP
+  // ── OTP Input behaviour ───────────────────────────────────────────────────
+  function initOTPBoxes() {
+    const boxes = document.querySelectorAll('#otp-row .otp-box');
+    boxes.forEach((box, i) => {
+      box.value = '';
+      box.addEventListener('input', () => {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+      });
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+      });
+      box.addEventListener('paste', e => {
+        const p = e.clipboardData.getData('text').replace(/\D/g, '');
+        if (p.length === 6) {
+          [...boxes].forEach((b, j) => b.value = p[j] || '');
+          boxes[5].focus();
+          e.preventDefault();
+        }
+      });
+    });
+    boxes[0]?.focus();
+  }
+
+  function getOTP() {
+    return [...document.querySelectorAll('#otp-row .otp-box')].map(b => b.value).join('');
+  }
+
+  // ── Timer ─────────────────────────────────────────────────────────────────
+  let _timerInt;
+  function startTimer(secs) {
+    clearInterval(_timerInt);
+    let s = secs;
+    const wrap = document.getElementById('otp-timer-wrap');
+    if (wrap) wrap.innerHTML = `Resend in <span id="otp-timer">${s}s</span>`;
+    _timerInt = setInterval(() => {
+      s--;
+      const el = document.getElementById('otp-timer');
+      if (!el) { clearInterval(_timerInt); return; }
+      if (s <= 0) {
+        clearInterval(_timerInt);
+        el.parentElement.innerHTML = `<a href="#" onclick="resendOTP();return false" style="color:var(--green);font-weight:700;font-size:13px">Resend OTP</a>`;
+      } else {
+        el.textContent = s + 's';
+      }
+    }, 1000);
+  }
+
+  // ── Button loading ────────────────────────────────────────────────────────
+  function setLoading(btn, on) {
+    if (!btn) return;
+    btn.disabled = on;
+    if (on) { btn._orig = btn.textContent; btn.textContent = 'Please wait…'; }
+    else    { btn.textContent = btn._orig || btn.textContent; }
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────────────
+  function showToast(msg, dur = 2500) {
+    const wrap = document.getElementById('toast-wrap');
+    const t = document.createElement('div');
+    t.className = 'toast-msg';
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => t.remove(), dur);
+  }
+  if (typeof toast === 'undefined') window.toast = showToast;
+
+  // ── Step 1: Send OTP ──────────────────────────────────────────────────────
   async function sendOTP() {
     const email = document.getElementById('email').value.trim();
-    if (!email) return toast('Enter your email', 'error');
+    if (!email) return showToast('Please enter your email');
     const btn = document.getElementById('send-otp-btn');
-    btnLoading(btn, true);
+    setLoading(btn, true);
     try {
       await api('POST', '/auth/send-otp', { email, purpose: 'verify_email' });
-      document.getElementById('otp-sub').textContent = `Sent to ${email}`;
+      document.getElementById('otp-sub').textContent = `OTP sent to ${email}`;
       goToStep('otp');
-      initOTPInputs();
-      startOTPTimer(60);
-      toast('OTP sent!', 'success');
+      initOTPBoxes();
+      startTimer(60);
+      showToast('OTP sent! ✅');
     } catch (e) {
-      toast(e.message, 'error');
+      showToast(e.message || 'Something went wrong');
     } finally {
-      btnLoading(btn, false);
+      setLoading(btn, false);
     }
   }
 
-  // Step 2: Verify OTP — stores OTP for registration
+  // ── Step 2: Verify OTP ────────────────────────────────────────────────────
   async function verifyOTP() {
     const email = document.getElementById('email').value.trim();
-    const otp   = getOTPValue();
-    if (otp.length < 6) return toast('Enter 6-digit OTP', 'error');
+    const otp   = getOTP();
+    if (otp.length < 6) return showToast('Enter all 6 digits');
     const btn = document.getElementById('verify-btn');
-    btnLoading(btn, true);
+    setLoading(btn, true);
     try {
-      // Verify with backend — if success, save OTP for registration call
       await api('POST', '/auth/verify-otp', { email, otp, purpose: 'verify_email' });
       _verifiedOTP = otp;
       goToStep('details');
-      toast('Email verified!', 'success');
+      showToast('Email verified! ✅');
     } catch (e) {
-      toast(e.message, 'error');
+      showToast(e.message || 'Invalid OTP');
     } finally {
-      btnLoading(btn, false);
+      setLoading(btn, false);
     }
   }
 
-  // Step 3: Create Account — sends otp so backend marks is_verified=True
-  async function createAccount() {
-    const name = document.getElementById('name').value.trim();
-    const pwd  = document.getElementById('password').value;
-    if (!name)          return toast('Enter your full name', 'error');
-    if (pwd.length < 6) return toast('Password must be at least 6 characters', 'error');
-
-    const email = document.getElementById('email').value.trim();
-    const btn   = document.getElementById('create-btn');
-    btnLoading(btn, true);
-    try {
-      const data = await api('POST', '/auth/register', {
-        name,
-        email,
-        password:  pwd,
-        otp:       _verifiedOTP,   // ✅ KEY FIX: backend sets is_verified=True when otp is present
-      });
-      Auth.set(data.data.access_token, data.data.user);
-      toast('Account created! Welcome 🎉', 'success');
-      setTimeout(() => window.location.href = 'index.html', 800);
-    } catch (e) {
-      toast(e.message, 'error');
-    } finally {
-      btnLoading(btn, false);
-    }
-  }
-
+  // ── Resend OTP ────────────────────────────────────────────────────────────
   async function resendOTP() {
     const email = document.getElementById('email').value.trim();
     try {
       await api('POST', '/auth/send-otp', { email, purpose: 'verify_email' });
-      toast('OTP resent!', 'success');
-      const wrap = document.getElementById('otp-timer-wrap');
-      if (wrap) wrap.innerHTML = `Resend in <span id="otp-timer">60s</span>`;
-      startOTPTimer(60);
-    } catch (e) { toast(e.message, 'error'); }
+      showToast('OTP resent! ✅');
+      startTimer(60);
+    } catch (e) { showToast(e.message || 'Failed to resend'); }
+  }
+
+  // ── Step 3: Create Account ────────────────────────────────────────────────
+  async function createAccount() {
+    const name = document.getElementById('name').value.trim();
+    const pwd  = document.getElementById('password').value;
+    if (!name)          return showToast('Please enter your full name');
+    if (pwd.length < 6) return showToast('Password must be at least 6 characters');
+    const email = document.getElementById('email').value.trim();
+    const btn   = document.getElementById('create-btn');
+    setLoading(btn, true);
+    try {
+      const data = await api('POST', '/auth/register', {
+        name,
+        email,
+        password: pwd,
+        otp: _verifiedOTP,
+      });
+      Auth.set(data.data.access_token, data.data.user);
+      showToast('Account created! Welcome 🎉');
+      setTimeout(() => window.location.href = 'index.html', 800);
+    } catch (e) {
+      showToast(e.message || 'Registration failed');
+    } finally {
+      setLoading(btn, false);
+    }
   }
 
   function togglePw(id, btn) {
     const inp = document.getElementById(id);
     inp.type  = inp.type === 'password' ? 'text' : 'password';
-    btn.style.color = inp.type === 'text' ? 'var(--primary,#2874f0)' : '#888';
+    btn.style.color = inp.type === 'text' ? 'var(--green)' : 'var(--t4)';
   }
 
   document.getElementById('email')?.addEventListener('keydown', e => {
