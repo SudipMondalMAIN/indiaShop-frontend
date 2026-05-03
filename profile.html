@@ -1,99 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Edit Profile — indiaShop</title>
-<link rel="stylesheet" href="static/css/style.css">
-<link rel="stylesheet" href="static/css/nav.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+
 <style>
-.avatar-section { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: var(--radius); margin-bottom: 20px; }
-.profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.25); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; border: 3px solid rgba(255,255,255,0.5); }
-.avatar-name { color: #fff; font-size: 18px; font-weight: 700; }
-.avatar-email { color: rgba(255,255,255,0.8); font-size: 13px; }
-.form-section { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px; }
-.form-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text3); margin-bottom: 16px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+:root{
+  --green:#1ba345;--green-d:#147a34;--green-l:#e8f8ee;
+  --orange:#ff6600;--red:#e53935;
+  --bg:#f1f3f6;--white:#fff;--border:#e0e0e0;
+  --t1:#212121;--t2:#555;--t3:#878787;--t4:#aaa;
+  --r4:4px;--r8:8px;
+  --shadow:0 1px 4px rgba(0,0,0,.12);
+  --shadow-md:0 4px 16px rgba(0,0,0,.12)
+}
+html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;min-height:100vh;font-size:14px;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
+
+/* ── PAGE ── */
+.profile-page{min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--white)}
+
+/* ── HERO ── */
+.profile-hero{background:linear-gradient(140deg,#064e1f 0%,#1ba345 55%,#34d058 100%);padding:28px 24px 52px;position:relative;overflow:hidden;flex-shrink:0}
+.hero-circle1{position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero-circle2{position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero-inner{position:relative}
+.hero-top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.back-hero-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;transition:background .2s}
+.back-hero-btn:active{background:rgba(255,255,255,.3)}
+.hero-logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px}
+.hero-logo span{color:#ffeb3b}
+.hero-logo-wrap{flex:1}
+
+/* ── AVATAR ── */
+.avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.avatar-ring{
+  width:96px;height:96px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:3px solid rgba(255,255,255,.45);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;box-shadow:0 8px 24px rgba(0,0,0,.25);
+  cursor:pointer;overflow:hidden;
+  transition:border-color .2s
+}
+.avatar-ring:hover{border-color:rgba(255,255,255,.8)}
+.avatar-ring:hover .avatar-overlay{opacity:1}
+.avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:none}
+.avatar-letter{font-family:'Baloo 2',cursive;font-size:38px;font-weight:800;color:#fff;line-height:1;user-select:none}
+.avatar-overlay{
+  position:absolute;inset:0;border-radius:50%;
+  background:rgba(0,0,0,.45);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  opacity:0;transition:opacity .2s;pointer-events:none
+}
+.avatar-overlay svg{stroke:#fff;width:20px;height:20px}
+.avatar-overlay span{font-size:10px;font-weight:700;color:#fff;letter-spacing:.3px}
+.avatar-badge{position:absolute;bottom:2px;right:2px;width:26px;height:26px;background:var(--green-d);border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2}
+.avatar-badge svg{width:12px;height:12px;stroke:#fff}
+.avatar-name{font-family:'Baloo 2',cursive;font-size:20px;font-weight:800;color:#fff;line-height:1.2;text-align:center}
+.avatar-email{font-size:12px;color:rgba(255,255,255,.75);text-align:center}
+.avatar-change-hint{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;letter-spacing:.2px}
+
+/* ── IMAGE BOTTOM SHEET ── */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-backdrop.show{opacity:1;pointer-events:all}
+.img-sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:480px;
+  background:var(--white);border-radius:20px 20px 0 0;
+  z-index:999;padding:20px 22px 36px;
+  transition:transform .3s cubic-bezier(.32,1,.4,1)
+}
+.img-sheet.show{transform:translateX(-50%) translateY(0)}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 18px}
+.sheet-title{font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:var(--t1);margin-bottom:4px}
+.sheet-sub{font-size:12px;color:var(--t3);margin-bottom:20px}
+.sheet-options{display:flex;flex-direction:column;gap:10px}
+.sheet-opt{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:12px;
+  border:1.5px solid var(--border);
+  cursor:pointer;transition:border-color .2s,background .2s
+}
+.sheet-opt:active,.sheet-opt:hover{border-color:var(--green);background:var(--green-l)}
+.sheet-opt-icon{width:42px;height:42px;border-radius:10px;background:var(--green-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sheet-opt-icon svg{stroke:var(--green-d);width:20px;height:20px}
+.sheet-opt-info{flex:1}
+.sheet-opt-title{font-size:14px;font-weight:700;color:var(--t1)}
+.sheet-opt-sub{font-size:11px;color:var(--t3);margin-top:1px}
+.sheet-opt-remove .sheet-opt-icon{background:#fff0f0}
+.sheet-opt-remove .sheet-opt-icon svg{stroke:var(--red)}
+.sheet-opt-remove .sheet-opt-title{color:var(--red)}
+.sheet-opt-remove{border-color:#ffd0d0}
+.sheet-opt-remove:hover,.sheet-opt-remove:active{background:#fff0f0;border-color:var(--red)}
+
+/* ── UPLOAD PROGRESS ── */
+.upload-prog{display:none;margin-top:16px}
+.upload-bar-wrap{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.upload-bar{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .3s}
+.upload-label{font-size:11px;color:var(--t3);margin-top:5px;text-align:center}
+
+/* ── FORM CARD ── */
+.form-card{background:var(--white);border-radius:20px 20px 0 0;margin-top:-20px;padding:28px 22px 60px;flex:1;position:relative;z-index:2}
+
+/* ── SECTION HEADER ── */
+.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── INPUT ── */
+.input-group{margin-bottom:16px}
+.input-group label{display:block;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.input-group input{
+  width:100%;
+  border:1.5px solid var(--border);
+  border-radius:var(--r8);
+  padding:12px 14px;
+  font-family:'Mukta',sans-serif;
+  font-size:15px;
+  color:var(--t1);
+  background:var(--white);
+  transition:border-color .2s, box-shadow .2s;
+  outline:none
+}
+.input-group input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-l)}
+.input-group input::placeholder{color:var(--t4)}
+.input-group input:disabled{background:#f9f9f9;opacity:.65;cursor:not-allowed}
+.input-hint{font-size:11px;color:var(--t4);margin-top:5px;line-height:1.5}
+
+/* ── ICON INPUT ── */
+.icon-input-wrap{position:relative}
+.icon-input-wrap .inp-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t4);display:flex;align-items:center}
+.icon-input-wrap input{padding-left:40px}
+.icon-input-wrap input:focus ~ .inp-icon,
+.icon-input-wrap input:focus + .inp-icon{color:var(--green)}
+
+/* ── SAVE BUTTON ── */
+.btn-save{
+  display:block;width:100%;
+  background:var(--green);color:#fff;
+  font-family:'Mukta',sans-serif;font-size:16px;font-weight:700;
+  padding:13px;border-radius:var(--r8);
+  border:none;cursor:pointer;
+  transition:background .2s, transform .1s;
+  margin-top:6px;
+  box-shadow:0 4px 14px rgba(27,163,69,.35)
+}
+.btn-save:active{background:var(--green-d);transform:scale(0.985)}
+.btn-save:disabled{opacity:.6;cursor:not-allowed}
+
+/* ── INFO CHIP ── */
+.info-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--green-l);border:1px solid #c3eecf;
+  border-radius:var(--r8);padding:10px 12px;
+  margin-bottom:20px;font-size:12px;color:var(--green-d);font-weight:600
+}
+.info-chip svg{flex-shrink:0;stroke:var(--green-d)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
+.toast-msg{background:#212121;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(min-width:481px){.profile-page{box-shadow:0 0 40px rgba(0,0,0,.15)}}
 </style>
 </head>
 <body>
-<nav class="navbar"><div class="container"></div></nav>
-<div class="page-content">
-<div class="container" style="max-width:560px">
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-    <a href="account.html" style="color:var(--text3)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
-    <div class="fw-700 fs-18">Edit Profile</div>
-  </div>
+<div class="profile-page">
 
-  <div class="avatar-section" id="avatar-section">
-    <div class="profile-avatar" id="avatar-text">?</div>
-    <div class="avatar-name" id="avatar-name">Loading...</div>
-    <div class="avatar-email" id="avatar-email"></div>
-  </div>
+  <!-- HERO -->
+  <div class="profile-hero">
+    <div class="hero-circle1"></div>
+    <div class="hero-circle2"></div>
+    <div class="hero-inner">
 
-  <div class="form-section">
-    <div class="form-section-title">Personal Information</div>
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="input-wrap">
-        <label>Full Name</label>
-        <input type="text" id="name" placeholder="Your full name">
+      <div class="hero-top">
+        <a href="account.html" class="back-hero-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <div class="hero-logo-wrap">
+          <div class="hero-logo">india<span>Shop</span></div>
+        </div>
       </div>
-      <div class="input-wrap">
-        <label>Phone Number</label>
-        <input type="tel" id="phone" placeholder="10-digit number" maxlength="10">
+
+      <div class="avatar-wrap">
+        <div class="avatar-ring" id="avatar-ring" onclick="openImageSheet()">
+          <img id="avatar-img" class="avatar-img" alt="Profile photo">
+          <div class="avatar-letter" id="avatar-text">?</div>
+          <div class="avatar-overlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Change</span>
+          </div>
+          <div class="avatar-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+        </div>
+        <div class="avatar-name" id="avatar-name">Loading...</div>
+        <div class="avatar-email" id="avatar-email"></div>
+        <div class="avatar-change-hint">Tap photo to change</div>
       </div>
+
+      <!-- Hidden file inputs -->
+      <input type="file" id="file-gallery" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
+      <input type="file" id="file-camera" accept="image/*" capture="user" style="display:none" onchange="handleFileSelect(this)">
+
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="form-section-title">Email Address</div>
-    <div class="input-wrap">
+  <!-- FORM CARD -->
+  <div class="form-card">
+
+    <div class="section-label">Personal Information</div>
+
+    <div class="input-group">
+      <label>Full Name</label>
+      <div class="icon-input-wrap">
+        <input type="text" id="name" placeholder="Your full name" autocomplete="name">
+        <span class="inp-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Phone Number</label>
+      <div class="icon-input-wrap">
+        <input type="tel" id="phone" placeholder="10-digit number" maxlength="10" inputmode="numeric" autocomplete="tel">
+        <span class="inp-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 9.81a19.79 19.79 0 0 1-3.07-8.64A2 2 0 0 1 3 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15l.92 1.92z"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:22px">Email Address</div>
+
+    <div class="info-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Email cannot be changed after registration.
+    </div>
+
+    <div class="input-group">
       <label>Email</label>
-      <input type="email" id="email" placeholder="your@email.com" disabled style="opacity:0.6;cursor:not-allowed">
+      <div class="icon-input-wrap">
+        <input type="email" id="email" placeholder="your@email.com" disabled>
+        <span class="inp-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+      </div>
     </div>
-    <p style="font-size:12px;color:var(--text3);margin-top:8px">Email cannot be changed after registration.</p>
+
+    <button class="btn-save" id="save-btn" onclick="saveProfile()">Save Changes ✓</button>
+
   </div>
-
-  <button class="btn btn-primary btn-block btn-lg" id="save-btn" onclick="saveProfile()">Save Changes</button>
-
 </div>
+
+<!-- IMAGE BOTTOM SHEET -->
+<div class="sheet-backdrop" id="sheet-backdrop" onclick="closeImageSheet()"></div>
+<div class="img-sheet" id="img-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Profile Photo</div>
+  <div class="sheet-sub">Choose how you'd like to update your photo</div>
+  <div class="sheet-options">
+    <div class="sheet-opt" onclick="triggerGallery()">
+      <div class="sheet-opt-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="sheet-opt-info">
+        <div class="sheet-opt-title">Choose from Gallery</div>
+        <div class="sheet-opt-sub">Pick a photo from your device</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="sheet-opt" onclick="triggerCamera()">
+      <div class="sheet-opt-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+      <div class="sheet-opt-info">
+        <div class="sheet-opt-title">Take a Selfie</div>
+        <div class="sheet-opt-sub">Use your camera right now</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t4)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="sheet-opt sheet-opt-remove" id="remove-photo-opt" style="display:none" onclick="removePhoto()">
+      <div class="sheet-opt-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+      </div>
+      <div class="sheet-opt-info">
+        <div class="sheet-opt-title">Remove Photo</div>
+        <div class="sheet-opt-sub">Go back to initials avatar</div>
+      </div>
+    </div>
+  </div>
+  <div class="upload-prog" id="upload-prog">
+    <div class="upload-bar-wrap"><div class="upload-bar" id="upload-bar"></div></div>
+    <div class="upload-label" id="upload-label">Uploading…</div>
+  </div>
 </div>
-<nav class="bottom-nav"></nav>
+
+<div class="toast-wrap" id="toast-wrap"></div>
 
 <script src="static/js/main.js"></script>
 <script>
   if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-  buildNavbar('account');
+  if (typeof buildNavbar === 'function') buildNavbar('account');
 
-  const user = Auth.user();
+  let user = Auth.user();
+  let _pendingPhotoUrl = null; // Cloudinary URL after upload
+  let _photoRemoved   = false;
+
+  // ── Init ────────────────────────────────────────────────────────────────
   if (user) {
-    document.getElementById('avatar-text').textContent = user.name?.charAt(0)?.toUpperCase() || '?';
-    document.getElementById('avatar-name').textContent = user.name || '';
+    setAvatarDisplay(user.avatar_url || null, user.name || '');
+    document.getElementById('avatar-name').textContent  = user.name  || '';
     document.getElementById('avatar-email').textContent = user.email || '';
-    document.getElementById('name').value = user.name || '';
+    document.getElementById('name').value  = user.name  || '';
     document.getElementById('phone').value = user.phone || '';
     document.getElementById('email').value = user.email || '';
+    if (user.avatar_url) document.getElementById('remove-photo-opt').style.display = '';
   }
 
+  // ── Avatar display helper ────────────────────────────────────────────────
+  function setAvatarDisplay(url, name) {
+    const img    = document.getElementById('avatar-img');
+    const letter = document.getElementById('avatar-text');
+    if (url) {
+      img.src = url;
+      img.style.display = 'block';
+      letter.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      letter.style.display = 'block';
+      letter.textContent = name?.charAt(0)?.toUpperCase() || '?';
+    }
+  }
+
+  // Live name preview
   document.getElementById('name').addEventListener('input', () => {
     const n = document.getElementById('name').value.trim();
-    document.getElementById('avatar-text').textContent = n?.charAt(0)?.toUpperCase() || '?';
-    document.getElementById('avatar-name').textContent = n;
+    document.getElementById('avatar-name').textContent = n || 'Your Name';
+    if (!_pendingPhotoUrl && !user?.avatar_url) {
+      document.getElementById('avatar-text').textContent = n?.charAt(0)?.toUpperCase() || '?';
+    }
   });
 
-  async function saveProfile() {
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if (!name) return toast('Name is required', 'error');
-    if (phone && phone.length !== 10) return toast('Enter valid 10-digit phone', 'error');
-    const btn = document.getElementById('save-btn');
-    btnLoading(btn, true);
+  // ── Toast ────────────────────────────────────────────────────────────────
+  function showToast(msg, dur = 2500) {
+    const wrap = document.getElementById('toast-wrap');
+    const t = document.createElement('div');
+    t.className = 'toast-msg';
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => t.remove(), dur);
+  }
+  if (typeof toast === 'undefined') window.toast = showToast;
+
+  // ── Bottom Sheet ─────────────────────────────────────────────────────────
+  function openImageSheet() {
+    document.getElementById('sheet-backdrop').classList.add('show');
+    document.getElementById('img-sheet').classList.add('show');
+    document.getElementById('upload-prog').style.display = 'none';
+    // Show remove option if has photo
+    const hasPhoto = _pendingPhotoUrl || (user?.avatar_url && !_photoRemoved);
+    document.getElementById('remove-photo-opt').style.display = hasPhoto ? '' : 'none';
+  }
+  function closeImageSheet() {
+    document.getElementById('sheet-backdrop').classList.remove('show');
+    document.getElementById('img-sheet').classList.remove('show');
+  }
+
+  function triggerGallery() { document.getElementById('file-gallery').click(); }
+  function triggerCamera()  { document.getElementById('file-camera').click();  }
+
+  // ── File Selected ────────────────────────────────────────────────────────
+  function handleFileSelect(input) {
+    const file = input.files[0];
+    input.value = ''; // reset so same file can re-trigger
+    if (!file) return;
+
+    // Validate
+    if (!file.type.startsWith('image/')) return showToast('Please select an image file');
+    if (file.size > 5 * 1024 * 1024)     return showToast('Image must be under 5MB');
+
+    // Preview immediately
+    const reader = new FileReader();
+    reader.onload = e => {
+      setAvatarDisplay(e.target.result, user?.name || '');
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to Cloudinary
+    uploadToCloudinary(file);
+  }
+
+  // ── Cloudinary Upload ────────────────────────────────────────────────────
+  async function uploadToCloudinary(file) {
+    const prog      = document.getElementById('upload-prog');
+    const bar       = document.getElementById('upload-bar');
+    const label     = document.getElementById('upload-label');
+    prog.style.display = 'block';
+    bar.style.width    = '0%';
+    label.textContent  = 'Uploading…';
+
     try {
-      const data = await api('PUT', '/users/profile', { name, phone });
+      // Get Cloudinary signature from backend
+      const sigData = await api('GET', '/media/signature?folder=avatars');
+      const { signature, timestamp, api_key, cloud_name, upload_preset } = sigData.data;
+
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('timestamp', timestamp);
+      fd.append('api_key', api_key);
+      fd.append('signature', signature);
+      fd.append('folder', 'avatars');
+      if (upload_preset) fd.append('upload_preset', upload_preset);
+
+      // XHR for progress
+      await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`);
+        xhr.upload.onprogress = e => {
+          if (e.lengthComputable) {
+            const pct = Math.round(e.loaded / e.total * 90);
+            bar.style.width = pct + '%';
+            label.textContent = `Uploading… ${pct}%`;
+          }
+        };
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            const res = JSON.parse(xhr.responseText);
+            _pendingPhotoUrl = res.secure_url;
+            _photoRemoved    = false;
+            bar.style.width  = '100%';
+            label.textContent = 'Upload complete ✅';
+            document.getElementById('remove-photo-opt').style.display = '';
+            setTimeout(() => { prog.style.display = 'none'; closeImageSheet(); }, 800);
+            resolve();
+          } else {
+            reject(new Error('Upload failed'));
+          }
+        };
+        xhr.onerror = () => reject(new Error('Network error'));
+        xhr.send(fd);
+      });
+
+    } catch (e) {
+      prog.style.display = 'none';
+      showToast(e.message || 'Upload failed');
+      // Revert preview on failure
+      setAvatarDisplay(user?.avatar_url || null, user?.name || '');
+      _pendingPhotoUrl = null;
+    }
+  }
+
+  // ── Remove Photo ─────────────────────────────────────────────────────────
+  function removePhoto() {
+    _pendingPhotoUrl = null;
+    _photoRemoved    = true;
+    setAvatarDisplay(null, document.getElementById('name').value.trim() || user?.name || '');
+    closeImageSheet();
+    showToast('Photo removed');
+  }
+
+  // ── Save Button loading ───────────────────────────────────────────────────
+  function setLoading(btn, on) {
+    btn.disabled = on;
+    if (on) { btn._orig = btn.textContent; btn.textContent = 'Saving…'; }
+    else    { btn.textContent = btn._orig || 'Save Changes ✓'; }
+  }
+
+  // ── Save Profile ─────────────────────────────────────────────────────────
+  async function saveProfile() {
+    const name  = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if (!name)                        return showToast('Name is required');
+    if (phone && phone.length !== 10) return showToast('Enter valid 10-digit phone');
+
+    const btn = document.getElementById('save-btn');
+    setLoading(btn, true);
+
+    try {
+      const payload = { name, phone };
+      if (_pendingPhotoUrl)         payload.avatar_url = _pendingPhotoUrl;
+      else if (_photoRemoved)       payload.avatar_url = '';
+
+      await api('PUT', '/users/profile', payload);
+
       const updated = { ...user, name, phone };
+      if (_pendingPhotoUrl)   updated.avatar_url = _pendingPhotoUrl;
+      else if (_photoRemoved) updated.avatar_url = null;
+
       Auth.set(Auth.token(), updated);
-      toast('Profile updated!', 'success');
-    } catch(e) { toast(e.message, 'error'); }
-    finally { btnLoading(btn, false); }
+      user = updated;
+      _pendingPhotoUrl = null;
+      _photoRemoved    = false;
+
+      showToast('Profile updated! ✅');
+    } catch(e) {
+      showToast(e.message || 'Something went wrong');
+    } finally {
+      setLoading(btn, false);
+    }
   }
 </script>
 </body>
