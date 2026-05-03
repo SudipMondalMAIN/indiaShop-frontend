@@ -23,10 +23,8 @@ html,body{font-family:'Mukta',sans-serif;background:var(--bg);color:var(--t1);-w
 a{text-decoration:none;color:inherit}
 button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
 
-/* ── PAGE ── */
 .profile-page{min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--white)}
 
-/* ── HERO ── */
 .profile-hero{background:linear-gradient(140deg,#064e1f 0%,#1ba345 55%,#34d058 100%);padding:28px 24px 52px;position:relative;overflow:hidden;flex-shrink:0}
 .hero-circle1{position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
 .hero-circle2{position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
@@ -38,7 +36,6 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 .hero-logo span{color:#ffeb3b}
 .hero-logo-wrap{flex:1}
 
-/* ── AVATAR ── */
 .avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
 .avatar-ring{
   width:96px;height:96px;border-radius:50%;
@@ -67,7 +64,6 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 .avatar-email{font-size:12px;color:rgba(255,255,255,.75);text-align:center}
 .avatar-change-hint{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;letter-spacing:.2px}
 
-/* ── IMAGE BOTTOM SHEET ── */
 .sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;opacity:0;pointer-events:none;transition:opacity .25s}
 .sheet-backdrop.show{opacity:1;pointer-events:all}
 .img-sheet{
@@ -100,61 +96,42 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 .sheet-opt-remove{border-color:#ffd0d0}
 .sheet-opt-remove:hover,.sheet-opt-remove:active{background:#fff0f0;border-color:var(--red)}
 
-/* ── UPLOAD PROGRESS ── */
 .upload-prog{display:none;margin-top:16px}
 .upload-bar-wrap{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
 .upload-bar{height:100%;width:0%;background:var(--green);border-radius:99px;transition:width .3s}
 .upload-label{font-size:11px;color:var(--t3);margin-top:5px;text-align:center}
 
-/* ── FORM CARD ── */
 .form-card{background:var(--white);border-radius:20px 20px 0 0;margin-top:-20px;padding:28px 22px 60px;flex:1;position:relative;z-index:2}
 
-/* ── SECTION HEADER ── */
 .section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ── INPUT ── */
 .input-group{margin-bottom:16px}
 .input-group label{display:block;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
 .input-group input{
-  width:100%;
-  border:1.5px solid var(--border);
-  border-radius:var(--r8);
-  padding:12px 14px;
-  font-family:'Mukta',sans-serif;
-  font-size:15px;
-  color:var(--t1);
-  background:var(--white);
-  transition:border-color .2s, box-shadow .2s;
-  outline:none
+  width:100%;border:1.5px solid var(--border);border-radius:var(--r8);
+  padding:12px 14px;font-family:'Mukta',sans-serif;font-size:15px;
+  color:var(--t1);background:var(--white);
+  transition:border-color .2s,box-shadow .2s;outline:none
 }
 .input-group input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-l)}
 .input-group input::placeholder{color:var(--t4)}
 .input-group input:disabled{background:#f9f9f9;opacity:.65;cursor:not-allowed}
-.input-hint{font-size:11px;color:var(--t4);margin-top:5px;line-height:1.5}
 
-/* ── ICON INPUT ── */
 .icon-input-wrap{position:relative}
 .icon-input-wrap .inp-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t4);display:flex;align-items:center}
 .icon-input-wrap input{padding-left:40px}
-.icon-input-wrap input:focus ~ .inp-icon,
-.icon-input-wrap input:focus + .inp-icon{color:var(--green)}
 
-/* ── SAVE BUTTON ── */
 .btn-save{
-  display:block;width:100%;
-  background:var(--green);color:#fff;
+  display:block;width:100%;background:var(--green);color:#fff;
   font-family:'Mukta',sans-serif;font-size:16px;font-weight:700;
-  padding:13px;border-radius:var(--r8);
-  border:none;cursor:pointer;
-  transition:background .2s, transform .1s;
-  margin-top:6px;
+  padding:13px;border-radius:var(--r8);border:none;cursor:pointer;
+  transition:background .2s,transform .1s;margin-top:6px;
   box-shadow:0 4px 14px rgba(27,163,69,.35)
 }
 .btn-save:active{background:var(--green-d);transform:scale(0.985)}
 .btn-save:disabled{opacity:.6;cursor:not-allowed}
 
-/* ── INFO CHIP ── */
 .info-chip{
   display:flex;align-items:center;gap:8px;
   background:var(--green-l);border:1px solid #c3eecf;
@@ -163,7 +140,6 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 }
 .info-chip svg{flex-shrink:0;stroke:var(--green-d)}
 
-/* ── TOAST ── */
 .toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
 .toast-msg{background:#212121;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeUp .25s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -207,7 +183,6 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
         <div class="avatar-change-hint">Tap photo to change</div>
       </div>
 
-      <!-- Hidden file inputs -->
       <input type="file" id="file-gallery" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
       <input type="file" id="file-camera" accept="image/*" capture="user" style="display:none" onchange="handleFileSelect(this)">
 
@@ -309,22 +284,10 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 <script src="static/js/main.js"></script>
 <script>
   if (!Auth.isLoggedIn()) window.location.href = 'login.html';
-  if (typeof buildNavbar === 'function') buildNavbar('account');
 
   let user = Auth.user();
-  let _pendingPhotoUrl = null; // Cloudinary URL after upload
+  let _pendingPhotoUrl = null;
   let _photoRemoved   = false;
-
-  // ── Init ────────────────────────────────────────────────────────────────
-  if (user) {
-    setAvatarDisplay(user.avatar_url || null, user.name || '');
-    document.getElementById('avatar-name').textContent  = user.name  || '';
-    document.getElementById('avatar-email').textContent = user.email || '';
-    document.getElementById('name').value  = user.name  || '';
-    document.getElementById('phone').value = user.phone || '';
-    document.getElementById('email').value = user.email || '';
-    if (user.avatar_url) document.getElementById('remove-photo-opt').style.display = '';
-  }
 
   // ── Avatar display helper ────────────────────────────────────────────────
   function setAvatarDisplay(url, name) {
@@ -340,6 +303,32 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
       letter.textContent = name?.charAt(0)?.toUpperCase() || '?';
     }
   }
+
+  // ── Init: localStorage থেকে আগে দেখাও, তারপর API থেকে fresh data নাও ──
+  if (user) {
+    setAvatarDisplay(user.avatar_url || null, user.name || '');
+    document.getElementById('avatar-name').textContent  = user.name  || '';
+    document.getElementById('avatar-email').textContent = user.email || '';
+    document.getElementById('name').value  = user.name  || '';
+    document.getElementById('phone').value = user.phone || '';
+    document.getElementById('email').value = user.email || '';
+    if (user.avatar_url) document.getElementById('remove-photo-opt').style.display = '';
+  }
+
+  // API থেকে latest user data fetch করো
+  api('GET', '/users/profile').then(res => {
+    if (!res?.data) return;
+    const u = res.data;
+    user = u;
+    Auth.set(Auth.token(), u); // localStorage update করো
+    setAvatarDisplay(u.avatar_url || null, u.name || '');
+    document.getElementById('avatar-name').textContent  = u.name  || '';
+    document.getElementById('avatar-email').textContent = u.email || '';
+    document.getElementById('name').value  = u.name  || '';
+    document.getElementById('phone').value = u.phone || '';
+    document.getElementById('email').value = u.email || '';
+    if (u.avatar_url) document.getElementById('remove-photo-opt').style.display = '';
+  }).catch(() => {});
 
   // Live name preview
   document.getElementById('name').addEventListener('input', () => {
@@ -366,7 +355,6 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     document.getElementById('sheet-backdrop').classList.add('show');
     document.getElementById('img-sheet').classList.add('show');
     document.getElementById('upload-prog').style.display = 'none';
-    // Show remove option if has photo
     const hasPhoto = _pendingPhotoUrl || (user?.avatar_url && !_photoRemoved);
     document.getElementById('remove-photo-opt').style.display = hasPhoto ? '' : 'none';
   }
@@ -381,21 +369,16 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
   // ── File Selected ────────────────────────────────────────────────────────
   function handleFileSelect(input) {
     const file = input.files[0];
-    input.value = ''; // reset so same file can re-trigger
+    input.value = '';
     if (!file) return;
-
-    // Validate
     if (!file.type.startsWith('image/')) return showToast('Please select an image file');
     if (file.size > 5 * 1024 * 1024)     return showToast('Image must be under 5MB');
 
     // Preview immediately
     const reader = new FileReader();
-    reader.onload = e => {
-      setAvatarDisplay(e.target.result, user?.name || '');
-    };
+    reader.onload = e => setAvatarDisplay(e.target.result, user?.name || '');
     reader.readAsDataURL(file);
 
-    // Upload to Cloudinary
     uploadToCloudinary(file);
   }
 
@@ -426,17 +409,24 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
         };
 
         xhr.onload = () => {
-          const res = JSON.parse(xhr.responseText);
-          if (xhr.status === 200 && res.success) {
-            _pendingPhotoUrl = res.data.avatar_url;
-            _photoRemoved    = false;
-            bar.style.width  = '100%';
-            label.textContent = 'Upload complete ✅';
-            document.getElementById('remove-photo-opt').style.display = '';
-            setTimeout(() => { prog.style.display = 'none'; closeImageSheet(); }, 700);
-            resolve();
-          } else {
-            reject(new Error(res.message || 'Upload failed'));
+          try {
+            const res = JSON.parse(xhr.responseText);
+            if (xhr.status === 200 && res.success) {
+              _pendingPhotoUrl  = res.data.avatar_url;
+              _photoRemoved     = false;
+              // localStorage-এ avatar_url update করো
+              user.avatar_url   = res.data.avatar_url;
+              Auth.set(Auth.token(), user);
+              bar.style.width   = '100%';
+              label.textContent = 'Upload complete ✅';
+              document.getElementById('remove-photo-opt').style.display = '';
+              setTimeout(() => { prog.style.display = 'none'; closeImageSheet(); }, 700);
+              resolve();
+            } else {
+              reject(new Error(res.message || 'Upload failed'));
+            }
+          } catch(e) {
+            reject(new Error('Server error'));
           }
         };
         xhr.onerror = () => reject(new Error('Network error'));
@@ -456,11 +446,11 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     closeImageSheet();
     try {
       await api('DELETE', '/users/avatar');
-      _pendingPhotoUrl    = null;
-      _photoRemoved       = true;
-      user.avatar_url     = null;
+      _pendingPhotoUrl      = null;
+      _photoRemoved         = true;
+      user.avatar_url       = null;
       user.avatar_public_id = null;
-      Auth.set(Auth.token(), user);
+      Auth.set(Auth.token(), user); // localStorage update করো
       setAvatarDisplay(null, document.getElementById('name').value.trim() || user?.name || '');
       showToast('Photo removed');
     } catch(e) {
@@ -475,7 +465,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     else    { btn.textContent = btn._orig || 'Save Changes ✓'; }
   }
 
-  // ── Save Profile (only name + phone, avatar already saved on upload) ──────
+  // ── Save Profile ──────────────────────────────────────────────────────────
   async function saveProfile() {
     const name  = document.getElementById('name').value.trim();
     const phone = document.getElementById('phone').value.trim();
@@ -486,7 +476,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     setLoading(btn, true);
 
     try {
-      await api('PUT', '/users/profile', { name, phone });
+      const res = await api('PUT', '/users/profile', { name, phone });
       const updated = { ...user, name, phone };
       Auth.set(Auth.token(), updated);
       user = updated;
