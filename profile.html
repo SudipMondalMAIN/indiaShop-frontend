@@ -399,51 +399,44 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     uploadToCloudinary(file);
   }
 
-  // ── Cloudinary Upload ────────────────────────────────────────────────────
+  // ── Upload to Backend → Cloudinary ──────────────────────────────────────
   async function uploadToCloudinary(file) {
-    const prog      = document.getElementById('upload-prog');
-    const bar       = document.getElementById('upload-bar');
-    const label     = document.getElementById('upload-label');
+    const prog  = document.getElementById('upload-prog');
+    const bar   = document.getElementById('upload-bar');
+    const label = document.getElementById('upload-label');
     prog.style.display = 'block';
     bar.style.width    = '0%';
     label.textContent  = 'Uploading…';
 
     try {
-      // Get Cloudinary signature from backend
-      const sigData = await api('GET', '/media/signature?folder=avatars');
-      const { signature, timestamp, api_key, cloud_name, upload_preset } = sigData.data;
-
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('timestamp', timestamp);
-      fd.append('api_key', api_key);
-      fd.append('signature', signature);
-      fd.append('folder', 'avatars');
-      if (upload_preset) fd.append('upload_preset', upload_preset);
-
-      // XHR for progress
       await new Promise((resolve, reject) => {
+        const fd  = new FormData();
+        fd.append('image', file);
+
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`);
+        xhr.open('POST', (window.API_BASE || '') + '/api/users/avatar');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + Auth.token());
+
         xhr.upload.onprogress = e => {
           if (e.lengthComputable) {
             const pct = Math.round(e.loaded / e.total * 90);
-            bar.style.width = pct + '%';
+            bar.style.width   = pct + '%';
             label.textContent = `Uploading… ${pct}%`;
           }
         };
+
         xhr.onload = () => {
-          if (xhr.status === 200) {
-            const res = JSON.parse(xhr.responseText);
-            _pendingPhotoUrl = res.secure_url;
+          const res = JSON.parse(xhr.responseText);
+          if (xhr.status === 200 && res.success) {
+            _pendingPhotoUrl = res.data.avatar_url;
             _photoRemoved    = false;
             bar.style.width  = '100%';
             label.textContent = 'Upload complete ✅';
             document.getElementById('remove-photo-opt').style.display = '';
-            setTimeout(() => { prog.style.display = 'none'; closeImageSheet(); }, 800);
+            setTimeout(() => { prog.style.display = 'none'; closeImageSheet(); }, 700);
             resolve();
           } else {
-            reject(new Error('Upload failed'));
+            reject(new Error(res.message || 'Upload failed'));
           }
         };
         xhr.onerror = () => reject(new Error('Network error'));
@@ -453,19 +446,26 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     } catch (e) {
       prog.style.display = 'none';
       showToast(e.message || 'Upload failed');
-      // Revert preview on failure
       setAvatarDisplay(user?.avatar_url || null, user?.name || '');
       _pendingPhotoUrl = null;
     }
   }
 
   // ── Remove Photo ─────────────────────────────────────────────────────────
-  function removePhoto() {
-    _pendingPhotoUrl = null;
-    _photoRemoved    = true;
-    setAvatarDisplay(null, document.getElementById('name').value.trim() || user?.name || '');
+  async function removePhoto() {
     closeImageSheet();
-    showToast('Photo removed');
+    try {
+      await api('DELETE', '/users/avatar');
+      _pendingPhotoUrl    = null;
+      _photoRemoved       = true;
+      user.avatar_url     = null;
+      user.avatar_public_id = null;
+      Auth.set(Auth.token(), user);
+      setAvatarDisplay(null, document.getElementById('name').value.trim() || user?.name || '');
+      showToast('Photo removed');
+    } catch(e) {
+      showToast(e.message || 'Failed to remove photo');
+    }
   }
 
   // ── Save Button loading ───────────────────────────────────────────────────
@@ -475,7 +475,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     else    { btn.textContent = btn._orig || 'Save Changes ✓'; }
   }
 
-  // ── Save Profile ─────────────────────────────────────────────────────────
+  // ── Save Profile (only name + phone, avatar already saved on upload) ──────
   async function saveProfile() {
     const name  = document.getElementById('name').value.trim();
     const phone = document.getElementById('phone').value.trim();
@@ -486,21 +486,10 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
     setLoading(btn, true);
 
     try {
-      const payload = { name, phone };
-      if (_pendingPhotoUrl)         payload.avatar_url = _pendingPhotoUrl;
-      else if (_photoRemoved)       payload.avatar_url = '';
-
-      await api('PUT', '/users/profile', payload);
-
+      await api('PUT', '/users/profile', { name, phone });
       const updated = { ...user, name, phone };
-      if (_pendingPhotoUrl)   updated.avatar_url = _pendingPhotoUrl;
-      else if (_photoRemoved) updated.avatar_url = null;
-
       Auth.set(Auth.token(), updated);
       user = updated;
-      _pendingPhotoUrl = null;
-      _photoRemoved    = false;
-
       showToast('Profile updated! ✅');
     } catch(e) {
       showToast(e.message || 'Something went wrong');
