@@ -143,6 +143,34 @@ img{display:block;max-width:100%;object-fit:cover}
 .cart-fab-badge{background:#ff3d00;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid var(--green)}
 .toast-wrap{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ADDRESS BOTTOM SHEET ──────────────────────────────────────────────── */
+.addr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s}
+.addr-overlay.open{opacity:1;pointer-events:all}
+.addr-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:480px;background:#fff;border-radius:16px 16px 0 0;z-index:501;transition:transform .3s cubic-bezier(.32,1,.45,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+.addr-sheet.open{transform:translateX(-50%) translateY(0)}
+.addr-sheet-handle{width:40px;height:4px;border-radius:99px;background:var(--border);margin:12px auto 0}
+.addr-sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.addr-sheet-title{font-size:15px;font-weight:700;color:var(--t1)}
+.addr-sheet-close{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--t2);cursor:pointer}
+.addr-list{max-height:55vh;overflow-y:auto;padding:0 16px 4px}
+.addr-card{border:1.5px solid var(--border2);border-radius:var(--r8);padding:12px 40px 12px 14px;margin-bottom:10px;cursor:pointer;position:relative;transition:.15s}
+.addr-card:active{transform:scale(.98)}
+.addr-card.selected{border-color:var(--green);background:var(--green-l)}
+.addr-card-top{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.addr-card-name{font-size:13px;font-weight:700;color:var(--t1)}
+.addr-default-tag{font-size:9px;font-weight:700;background:var(--green);color:#fff;padding:1px 6px;border-radius:99px}
+.addr-card-line{font-size:12px;color:var(--t2);line-height:1.5}
+.addr-card-phone{font-size:11px;color:var(--t3);margin-top:2px}
+.addr-card-check{position:absolute;top:50%;right:14px;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:#fff;transition:.15s;flex-shrink:0}
+.addr-card.selected .addr-card-check{background:var(--green);border-color:var(--green)}
+.addr-sheet-footer{border-top:1px solid var(--border2);padding:10px 16px 12px;display:flex;gap:10px}
+.addr-add-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:1.5px dashed var(--green);border-radius:var(--r8);color:var(--green);font-size:13px;font-weight:700;cursor:pointer;background:none}
+.addr-empty{text-align:center;padding:30px 20px;color:var(--t3)}
+.addr-empty .ae-ico{font-size:40px;margin-bottom:8px}
+.addr-empty .ae-t{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:4px}
+.addr-empty .ae-s{font-size:12px}
+
 @media(min-width:481px){.page{box-shadow:0 0 40px rgba(0,0,0,.15);border-left:1px solid var(--border);border-right:1px solid var(--border)}}
 </style>
 </head>
@@ -176,8 +204,7 @@ img{display:block;max-width:100%;object-fit:cover}
       </a>
     </div>
   </div>
-  <!-- Location bar — address loaded dynamically from API -->
-  <div class="loc-bar" onclick="window.location='account.html#addresses'">
+  <div class="loc-bar" onclick="openAddrSheet()">
     <span>📍</span>
     <span class="loc-text" id="loc-text">Select delivery address</span>
     <span class="loc-change" id="loc-change">Add ▾</span>
@@ -246,7 +273,6 @@ img{display:block;max-width:100%;object-fit:cover}
     </div>
   </div>
 
-  <!-- trust row — real content -->
   <div class="trust-row">
     <div class="trust-item">
       <div class="trust-ico">🚚</div>
@@ -284,6 +310,23 @@ img{display:block;max-width:100%;object-fit:cover}
       <div class="sb-s">Reach lakhs of customers. Zero listing fee!</div>
     </div>
     <a class="sb-btn" href="seller-register.html">Become a Seller →</a>
+  </div>
+</div>
+
+<!-- ── ADDRESS BOTTOM SHEET ─────────────────────────────────────────────────── -->
+<div class="addr-overlay" id="addr-overlay" onclick="closeAddrSheet()"></div>
+<div class="addr-sheet" id="addr-sheet">
+  <div class="addr-sheet-handle"></div>
+  <div class="addr-sheet-head">
+    <span class="addr-sheet-title">📍 Select Delivery Address</span>
+    <button class="addr-sheet-close" onclick="closeAddrSheet()">✕</button>
+  </div>
+  <div class="addr-list" id="addr-list"></div>
+  <div class="addr-sheet-footer">
+    <button class="addr-add-btn" onclick="window.location='account.html#addresses'">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add New Address
+    </button>
   </div>
 </div>
 
@@ -341,11 +384,8 @@ function _getCart() {
     return raw;
   } catch { return {}; }
 }
-
 function _saveCart(c) {
-  const arr = Object.entries(c).map(([id, v]) => ({
-    id, price: v.price, qty: v.qty, name: v.name, img: v.img || ''
-  }));
+  const arr = Object.entries(c).map(([id, v]) => ({ id, price: v.price, qty: v.qty, name: v.name, img: v.img || '' }));
   localStorage.setItem('is_cart', JSON.stringify(arr));
 }
 let _cart = _getCart();
@@ -374,55 +414,113 @@ function _checkUser() {
   }
 }
 
-// ─── LOAD ADDRESS FROM API ────────────────────────────────────────────────────
+// ─── ADDRESS STATE ────────────────────────────────────────────────────────────
+let _allAddrs   = [];   // API থেকে সব address
+let _activeAddr = null; // এই session-এ selected address
+
+function _setLocBar(addr) {
+  const locText   = document.getElementById('loc-text');
+  const locChange = document.getElementById('loc-change');
+  if (!addr) {
+    if (locText)   locText.textContent = 'Select delivery address';
+    if (locChange) locChange.textContent = 'Add ▾';
+    return;
+  }
+  if (locText) {
+    locText.innerHTML = `Delivering to <b>${escapeHtml(addr.city || '')}, ${escapeHtml(addr.pincode || '')}</b> — ${escapeHtml(addr.line1 || '')}`;
+  }
+  if (locChange) locChange.textContent = 'Change ▾';
+}
+
 async function loadUserAddress() {
   const locText   = document.getElementById('loc-text');
   const locChange = document.getElementById('loc-change');
 
   if (!Auth.isLoggedIn()) {
-    // Not logged in — prompt to login
-    if (locText)   locText.textContent = 'Login to see delivery address';
+    if (locText)   locText.textContent = 'Login to set delivery address';
     if (locChange) locChange.textContent = 'Login ▾';
     return;
   }
 
   try {
     const data  = await api('GET', '/users/addresses');
-    const addrs = data?.data || [];
+    _allAddrs   = data?.data || [];
 
-    if (!addrs.length) {
+    if (!_allAddrs.length) {
       if (locText)   locText.textContent = 'No address saved yet';
       if (locChange) locChange.textContent = 'Add ▾';
       return;
     }
 
-    // prefer default address, else first one
-    const addr = addrs.find(a => a.is_default) || addrs[0];
+    // default address বা প্রথমটা show করো
+    _activeAddr = _allAddrs.find(a => a.is_default) || _allAddrs[0];
+    _setLocBar(_activeAddr);
 
-    // Build display string: "line1, city, state pincode"
-    const parts = [];
-    if (addr.line1)   parts.push(addr.line1);
-    if (addr.city)    parts.push(addr.city);
-    if (addr.state)   parts.push(addr.state);
-    if (addr.pincode) parts.push(addr.pincode);
-
-    const displayAddr = parts.join(', ');
-
-    if (locText) {
-      locText.innerHTML = `Delivering to <b>${escapeHtml(addr.city || addr.line1)}, ${escapeHtml(addr.pincode || '')}</b> — ${escapeHtml(addr.line1 || '')}`;
-    }
-    if (locChange) locChange.textContent = 'Change ▾';
-
-  } catch (e) {
-    // API error — silent fail, keep default text
+  } catch {
     if (locText)   locText.textContent = 'Select delivery address';
     if (locChange) locChange.textContent = 'Add ▾';
   }
 }
 
+// ─── ADDRESS BOTTOM SHEET ─────────────────────────────────────────────────────
+function openAddrSheet() {
+  if (!Auth.isLoggedIn()) {
+    window.location = 'login.html';
+    return;
+  }
+  _renderAddrList();
+  document.getElementById('addr-overlay').classList.add('open');
+  document.getElementById('addr-sheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAddrSheet() {
+  document.getElementById('addr-overlay').classList.remove('open');
+  document.getElementById('addr-sheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function _renderAddrList() {
+  const list = document.getElementById('addr-list');
+  if (!list) return;
+
+  if (!_allAddrs.length) {
+    list.innerHTML = `
+      <div class="addr-empty">
+        <div class="ae-ico">📭</div>
+        <div class="ae-t">No saved addresses</div>
+        <div class="ae-s">Add an address to continue</div>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = _allAddrs.map(addr => {
+    const isSelected = _activeAddr && addr.id === _activeAddr.id;
+    const line2part  = addr.line2 ? addr.line2 + ', ' : '';
+    const addrLine   = `${addr.line1 || ''}, ${line2part}${addr.city || ''}, ${addr.state || ''} — ${addr.pincode || ''}`;
+
+    return `<div class="addr-card ${isSelected ? 'selected' : ''}" onclick="selectAddr('${addr.id}')">
+      <div class="addr-card-top">
+        <div class="addr-card-name">${escapeHtml(addr.full_name || '')}</div>
+        ${addr.is_default ? '<span class="addr-default-tag">Default</span>' : ''}
+      </div>
+      <div class="addr-card-line">${escapeHtml(addrLine)}</div>
+      ${addr.phone ? `<div class="addr-card-phone">📞 ${escapeHtml(addr.phone)}</div>` : ''}
+      <div class="addr-card-check">${isSelected ? '✓' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectAddr(id) {
+  _activeAddr = _allAddrs.find(a => a.id === id);
+  if (!_activeAddr) return;
+  _setLocBar(_activeAddr);
+  _renderAddrList(); // selected highlight update
+  setTimeout(closeAddrSheet, 300);
+}
+
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
 let _allCats = [];
-
 async function loadCategories() {
   try {
     const data = await api('GET', '/categories');
@@ -484,13 +582,11 @@ async function filterCat(el, slug) {
   document.querySelectorAll('.cat-chip').forEach(x => x.classList.remove('active'));
   const chip = el || document.getElementById('chip-'+slug) || document.getElementById('chip-all');
   if (chip) chip.classList.add('active');
-
   const cat   = _allCats.find(c => c.slug === slug);
   const name  = slug === 'all' ? 'All' : (cat?.name || slug);
   const emoji = slug === 'all' ? '🛍️' : (cat?.emoji || '📦');
   const ttl   = document.getElementById('sec-title');
   if (ttl) ttl.innerHTML = `${emoji} <span>${escapeHtml(name)}</span> Products`;
-
   await loadProducts(slug);
   document.getElementById('prod-grid')?.scrollIntoView({ behavior:'smooth', block:'start' });
 }
@@ -516,7 +612,6 @@ function _makeCard(p, wl) {
   const sid     = String(p.id);
   const sname   = String(p.name||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;');
   const simg    = String(img).replace(/'/g,"&#39;");
-
   const addHTML = q > 0
     ? `<div class="qty-ctrl">
          <button class="qty-btn" onclick="event.stopPropagation();_chgQty('${sid}',-1,${price},'${sname}','${simg}')">−</button>
@@ -524,11 +619,9 @@ function _makeCard(p, wl) {
          <button class="qty-btn" onclick="event.stopPropagation();_chgQty('${sid}',1,${price},'${sname}','${simg}')">+</button>
        </div>`
     : `<button class="pc-add" onclick="event.stopPropagation();_addCart('${sid}',${price},'${sname}','${simg}')">+ Add</button>`;
-
   return `<div class="pc" data-pid="${sid}" data-price="${price}" data-name="${sname}" data-img="${simg}" onclick="location='product-detail.html?slug=${p.slug}'">
     <div class="pc-img-wrap">
-      <img src="${escapeHtml(img)}" alt="${escapeHtml(p.name||'')}" loading="lazy"
-           onerror="this.src='https://placehold.co/300x300/f9f9f9/878787?text=?'">
+      <img src="${escapeHtml(img)}" alt="${escapeHtml(p.name||'')}" loading="lazy" onerror="this.src='https://placehold.co/300x300/f9f9f9/878787?text=?'">
       ${hasDisc ? `<span class="pc-badge sale">${p.discount_pct}% OFF</span>` : ''}
       ${p.is_featured ? `<span class="pc-badge hot" style="left:auto;right:36px">⭐ Top</span>` : ''}
       <button class="pc-wish" onclick="event.stopPropagation();_wishToggle(this,'${sid}')">${wished?'❤️':'🤍'}</button>
@@ -565,11 +658,7 @@ async function _chgQty(id, d, price, name, img) {
   _refreshRow(id, price, name, img);
   updateCartFab();
   if (Auth.isLoggedIn()) {
-    try {
-      if (_cart[id]) {
-        await api('POST', '/cart', { product_id: id, quantity: _cart[id].qty });
-      }
-    } catch(e) {}
+    try { if (_cart[id]) await api('POST', '/cart', { product_id: id, quantity: _cart[id].qty }); } catch(e) {}
   }
 }
 
@@ -625,16 +714,11 @@ function hideSR() { const r=document.getElementById('search-results'); if(r) r.s
 // ─── PAGE VISIBILITY SYNC ─────────────────────────────────────────────────────
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
-    const newCart = _getCart();
-    _cart = newCart;
+    _cart = _getCart();
     updateCartFab();
     document.querySelectorAll('.pc[data-pid]').forEach(card => {
-      const id    = card.dataset.pid;
-      const price = parseFloat(card.dataset.price);
-      const name  = card.dataset.name;
-      const img   = card.dataset.img;
-      const row   = document.getElementById('ar-' + id);
-      if (row) _refreshRow(id, price, name, img);
+      const row = document.getElementById('ar-' + card.dataset.pid);
+      if (row) _refreshRow(card.dataset.pid, parseFloat(card.dataset.price), card.dataset.name, card.dataset.img);
     });
   }
 });
@@ -643,7 +727,7 @@ document.addEventListener('visibilitychange', () => {
 _cart = _getCart();
 _checkUser();
 updateCartFab();
-loadUserAddress();   // ← API থেকে real address load
+loadUserAddress();
 loadCategories();
 loadProducts('all');
 </script>
