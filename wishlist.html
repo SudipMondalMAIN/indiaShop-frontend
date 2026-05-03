@@ -27,7 +27,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
 img{display:block;max-width:100%;object-fit:cover}
 .page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative}
 
-/* ── HEADER ── */
+/* HEADER */
 .header{position:sticky;top:0;z-index:100;background:var(--header);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .header-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
 .logo{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;flex-shrink:0}
@@ -38,10 +38,10 @@ img{display:block;max-width:100%;object-fit:cover}
 .hbtn svg{width:22px;height:22px}
 .hbadge{position:absolute;top:-3px;right:0;min-width:16px;height:16px;border-radius:99px;background:#ff3d00;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--header);padding:0 3px}
 
-/* ── SCROLL BODY ── */
+/* SCROLL */
 .scroll-body{overflow-y:auto;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
 
-/* ── PAGE TITLE BAR ── */
+/* TITLE BAR */
 .page-title-bar{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;background:var(--white);margin-bottom:8px;border-bottom:1px solid var(--border2)}
 .back-btn{width:34px;height:34px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--t2);flex-shrink:0;transition:.15s}
 .back-btn:active{background:var(--border)}
@@ -51,17 +51,17 @@ img{display:block;max-width:100%;object-fit:cover}
 .clear-all-btn{font-size:12px;font-weight:700;color:var(--red);padding:6px 10px;border-radius:var(--r4);background:transparent;transition:.15s}
 .clear-all-btn:active{background:#fce4e4}
 
-/* ── SORT / FILTER BAR ── */
+/* SORT BAR */
 .sort-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--white);margin-bottom:8px;border-bottom:1px solid var(--border2)}
 .sort-bar-label{font-size:12px;color:var(--t3);font-weight:600;margin-right:2px}
 .sort-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);color:var(--t2);background:var(--white);transition:.15s;cursor:pointer}
 .sort-chip.active{border-color:var(--green);color:var(--green);background:var(--green-l)}
 .sort-chip:active{background:var(--bg)}
 
-/* ── WISH GRID ── */
+/* GRID */
 .wish-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 10px 10px}
 
-/* ── WISH CARD ── */
+/* CARD */
 .wish-card{background:var(--white);border-radius:var(--r8);box-shadow:var(--shadow);overflow:hidden;position:relative;display:flex;flex-direction:column;transition:.15s}
 .wish-card:active{transform:scale(.98)}
 
@@ -87,12 +87,12 @@ img{display:block;max-width:100%;object-fit:cover}
 .wish-price-row{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
 .wish-price{font-size:15px;font-weight:800;color:var(--t1)}
 .wish-original{font-size:11px;color:var(--t4);text-decoration:line-through}
-.wish-atc{width:100%;margin-top:4px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:8px 0;border-radius:var(--r4);text-align:center;transition:.15s;letter-spacing:.2px}
+.wish-atc{width:100%;margin-top:4px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:8px 0;border-radius:var(--r4);text-align:center;transition:.15s;letter-spacing:.2px;cursor:pointer;border:none;font-family:'Mukta',sans-serif}
 .wish-atc:active{background:var(--green-d)}
 .wish-atc.oos{background:var(--t4);cursor:not-allowed}
 .wish-atc.added{background:var(--blue)}
 
-/* ── SKELETON ── */
+/* SKELETON */
 .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .skel-card{background:var(--white);border-radius:var(--r8);overflow:hidden;box-shadow:var(--shadow)}
@@ -103,7 +103,7 @@ img{display:block;max-width:100%;object-fit:cover}
 .skel-line.w50{width:50%}
 .skel-btn{height:30px;margin:4px 10px 10px;border-radius:var(--r4)}
 
-/* ── EMPTY STATE ── */
+/* EMPTY */
 .empty-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;gap:0}
 .empty-icon{width:90px;height:90px;background:var(--green-l);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
 .empty-icon svg{color:var(--green)}
@@ -112,24 +112,19 @@ img{display:block;max-width:100%;object-fit:cover}
 .empty-cta{background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--r8);display:inline-block;transition:.15s}
 .empty-cta:active{background:var(--green-d)}
 
-/* ── ERROR STATE ── */
-.error-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 30px;text-align:center;gap:12px}
-.error-wrap p{font-size:13px;color:var(--t3)}
-.retry-btn{background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:9px 22px;border-radius:var(--r4)}
-
-/* ── SUMMARY BAR ── */
+/* SUMMARY BAR */
 .summary-bar{background:var(--white);border-top:1px solid var(--border2);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:0}
 .summary-bar-info{font-size:12px;color:var(--t3)}
 .summary-bar-info strong{color:var(--t1);font-weight:700}
-.add-all-btn{background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:9px 16px;border-radius:var(--r4);white-space:nowrap;transition:.15s}
+.add-all-btn{background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:9px 16px;border-radius:var(--r4);white-space:nowrap;transition:.15s;cursor:pointer;border:none;font-family:'Mukta',sans-serif}
 .add-all-btn:active{background:var(--green-d)}
 
-/* ── TOAST ── */
+/* TOAST */
 .toast-wrap{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;display:flex;flex-direction:column;gap:6px;align-items:center}
 .toast{background:rgba(33,33,33,.92);color:#fff;font-size:13px;font-weight:600;padding:9px 18px;border-radius:99px;white-space:nowrap;backdrop-filter:blur(8px);animation:toastIn .25s ease both}
 @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── BOTTOM NAV ── */
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center}
 .bottom-nav-inner{width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -2px 8px rgba(0,0,0,.08)}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 4px;cursor:pointer;text-decoration:none;color:var(--t3);font-size:10px;font-weight:600;border:none;background:none;font-family:'Mukta',sans-serif}
@@ -182,26 +177,21 @@ img{display:block;max-width:100%;object-fit:cover}
 
   <!-- MAIN CONTENT -->
   <div id="main-content">
-    <!-- Skeleton loader -->
     <div class="wish-grid" id="skeleton-grid">
-      ${[1,2,3,4].map(()=>`
-      <div class="skel-card">
-        <div class="skel-img skeleton"></div>
-        <div class="skel-line w80 skeleton"></div>
-        <div class="skel-line w60 skeleton"></div>
-        <div class="skel-line w50 skeleton"></div>
-        <div class="skel-btn skeleton"></div>
-      </div>`).join('')}
+      <div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line w80 skeleton"></div><div class="skel-line w60 skeleton"></div><div class="skel-line w50 skeleton"></div><div class="skel-btn skeleton"></div></div>
+      <div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line w80 skeleton"></div><div class="skel-line w60 skeleton"></div><div class="skel-line w50 skeleton"></div><div class="skel-btn skeleton"></div></div>
+      <div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line w80 skeleton"></div><div class="skel-line w60 skeleton"></div><div class="skel-line w50 skeleton"></div><div class="skel-btn skeleton"></div></div>
+      <div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line w80 skeleton"></div><div class="skel-line w60 skeleton"></div><div class="skel-line w50 skeleton"></div><div class="skel-btn skeleton"></div></div>
     </div>
   </div>
 
-  <!-- SUMMARY BAR (shown when items exist) -->
+  <!-- SUMMARY BAR -->
   <div class="summary-bar" id="summary-bar" style="display:none">
     <div class="summary-bar-info" id="summary-text"></div>
-    <button class="add-all-btn" id="add-all-btn" onclick="addAllToCart()">Add All to Cart</button>
+    <button class="add-all-btn" onclick="addAllToCart()">Add All to Cart</button>
   </div>
 
-</div><!-- /scroll-body -->
+</div>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
@@ -231,37 +221,70 @@ img{display:block;max-width:100%;object-fit:cover}
 
 <div class="toast-wrap" id="toast-wrap"></div>
 
-</div><!-- /page -->
+</div>
 
+<script src="static/js/main.js"></script>
 <script>
-// ── Auth guard ──────────────────────────────────────────────────────────────
-const token = localStorage.getItem('is_token');
-if (!token) window.location.href = 'login.html';
-
-// ── Wishlist key (same as account.html: is_wishlist) ──────────────────────
-const WISH_KEY = 'is_wishlist';
-const CART_KEY = 'is_cart';
-
-// ── State ──────────────────────────────────────────────────────────────────
-let wishItems  = [];
-let sortMode   = 'added';
-let cartCounts = {};
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
-function fmt(price) {
-  return '₹' + Number(price).toLocaleString('en-IN', {maximumFractionDigits:0});
+/* ── Auth guard ── */
+if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+  window.location.href = 'login.html?next=wishlist.html';
 }
-function discPct(p) {
-  const op = p.original_price || p.mrp || 0;
-  const sp = p.price || p.sale_price || 0;
+
+const WISH_KEY = 'is_wishlist';
+
+/* ── State ── */
+let wishItems = [];
+let sortMode  = 'added';
+
+/* ── Helpers ── */
+function fmt(price) {
+  return '₹' + Number(price || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+}
+
+/*
+ * Backend থেকে product আসে এই fields এ:
+ *   discounted_price  — actual selling price
+ *   price             — original / MRP
+ *   primary_image     — main image URL
+ *   avg_rating        — average rating
+ *   review_count      — total reviews
+ *   stock             — stock quantity
+ *   slug, name, brand — same
+ *
+ * products.html / product-detail.html থেকে wishlist এ save করার সময়
+ * এই সব fields সহ পুরো product object save করা হয়।
+ * নিচের helpers দুটো সব possible field name handle করে।
+ */
+
+function getSalePrice(p) {
+  /* discounted_price > price > sale_price — এই order এ check */
+  return Number(p.discounted_price ?? p.price ?? p.sale_price ?? 0);
+}
+
+function getOriginalPrice(p) {
+  /* original_price / mrp / price — MRP হিসেবে */
+  return Number(p.original_price ?? p.mrp ?? p.price ?? 0);
+}
+
+function getImage(p) {
+  /* primary_image > images array > image > placeholder */
+  if (p.primary_image) return p.primary_image;
+  if (p.images && p.images.length) {
+    const img = p.images[0];
+    return typeof img === 'string' ? img : (img?.url || '');
+  }
+  return p.image || 'https://placehold.co/200x200/f1f3f6/aaa?text=No+Image';
+}
+
+function getDiscount(p) {
+  const sp = getSalePrice(p);
+  const op = getOriginalPrice(p);
+  if (p.discount_pct) return Number(p.discount_pct);
   if (!op || op <= sp) return 0;
   return Math.round((1 - sp / op) * 100);
 }
-function salePrice(p) {
-  return p.price || p.sale_price || 0;
-}
 
-// ── Wishlist localStorage helpers ──────────────────────────────────────────
+/* ── Wishlist localStorage helpers ── */
 function getWishlist() {
   try { return JSON.parse(localStorage.getItem(WISH_KEY) || '[]'); } catch { return []; }
 }
@@ -270,56 +293,53 @@ function saveWishlist(items) {
   wishItems = items;
 }
 function removeFromWishlist(id) {
-  saveWishlist(getWishlist().filter(i => (i.id || i._id) != id));
+  saveWishlist(getWishlist().filter(i => String(i.id || i._id) !== String(id)));
 }
-function clearWishlist() {
-  saveWishlist([]);
-}
+function clearWishlist() { saveWishlist([]); }
 
-// ── Cart localStorage helpers ──────────────────────────────────────────────
-function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY) || '{}'); } catch { return {}; }
-}
-function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  cartCounts = cart;
-}
-function addToCartLocal(product) {
-  const cart  = getCart();
-  const id    = String(product.id || product._id);
-  const price = salePrice(product);
-  if (cart[id]) {
-    cart[id].qty = (cart[id].qty || 1) + 1;
-  } else {
-    cart[id] = {
-      id, qty: 1, price,
-      name:  product.name,
-      image: product.image || (product.images && product.images[0]?.url) || '',
-    };
+/* ── Cart via API ── */
+async function addItemToCart(product) {
+  const pid = String(product.id || product._id || '');
+  if (!pid) { toast('Invalid product'); return false; }
+
+  if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+    window.location.href = 'login.html?next=wishlist.html';
+    return false;
   }
-  saveCart(cart);
-  updateCartBadge();
-}
-function updateCartBadge() {
-  const cart  = getCart();
-  const count = Object.values(cart).reduce((a, b) => a + (b.qty || 0), 0);
-  const el    = document.getElementById('cart-hbadge');
-  if (!el) return;
-  if (count > 0) { el.textContent = count; el.style.display = 'flex'; }
-  else           { el.style.display = 'none'; }
+
+  try {
+    await api('POST', '/cart', { product_id: pid, quantity: 1 });
+    if (typeof Cart !== 'undefined' && Cart.refresh) Cart.refresh();
+    updateCartBadge();
+    return true;
+  } catch (e) {
+    console.error('Cart error:', e);
+    return false;
+  }
 }
 
-// ── Toast ──────────────────────────────────────────────────────────────────
+function updateCartBadge() {
+  /* main.js Cart এ badge update থাকলে সেটা use করো */
+  if (typeof Cart !== 'undefined' && Cart.getCount) {
+    const count = Cart.getCount();
+    const el = document.getElementById('cart-hbadge');
+    if (!el) return;
+    if (count > 0) { el.textContent = count; el.style.display = 'flex'; }
+    else el.style.display = 'none';
+  }
+}
+
+/* ── Toast ── */
 function toast(msg) {
   const wrap = document.getElementById('toast-wrap');
   const el   = document.createElement('div');
-  el.className = 'toast';
+  el.className   = 'toast';
   el.textContent = msg;
   wrap.appendChild(el);
   setTimeout(() => el.remove(), 2800);
 }
 
-// ── Sort ───────────────────────────────────────────────────────────────────
+/* ── Sort ── */
 function setSort(mode) {
   sortMode = mode;
   document.querySelectorAll('.sort-chip').forEach(c => {
@@ -327,27 +347,28 @@ function setSort(mode) {
   });
   render();
 }
+
 function sorted(items) {
   const arr = [...items];
-  if (sortMode === 'price_asc')  return arr.sort((a,b) => salePrice(a) - salePrice(b));
-  if (sortMode === 'price_desc') return arr.sort((a,b) => salePrice(b) - salePrice(a));
-  return arr; // 'added' = original order
+  if (sortMode === 'price_asc')  return arr.sort((a, b) => getSalePrice(a) - getSalePrice(b));
+  if (sortMode === 'price_desc') return arr.sort((a, b) => getSalePrice(b) - getSalePrice(a));
+  return arr;
 }
 
-// ── Render ──────────────────────────────────────────────────────────────────
+/* ── Render ── */
 function render() {
-  const items = sorted(getWishlist());
-  const grid  = document.getElementById('main-content');
+  const items    = sorted(getWishlist());
+  const grid     = document.getElementById('main-content');
   const sortBar  = document.getElementById('sort-bar');
   const clearBtn = document.getElementById('clear-all-btn');
   const summaryBar = document.getElementById('summary-bar');
   const subtitle   = document.getElementById('wish-subtitle');
 
   if (!items.length) {
-    sortBar.style.display  = 'none';
-    clearBtn.style.display = 'none';
+    sortBar.style.display    = 'none';
+    clearBtn.style.display   = 'none';
     summaryBar.style.display = 'none';
-    subtitle.textContent = '0 items';
+    subtitle.textContent     = '0 items';
     grid.innerHTML = `
       <div class="empty-wrap">
         <div class="empty-icon">
@@ -356,95 +377,98 @@ function render() {
           </svg>
         </div>
         <div class="empty-title">Your wishlist is empty</div>
-        <div class="empty-sub">Save items you love and come back to them anytime. Start exploring!</div>
+        <div class="empty-sub">Save items you love and come back to them anytime.</div>
         <a href="products.html" class="empty-cta">Discover Products →</a>
       </div>`;
     return;
   }
 
-  subtitle.textContent = `${items.length} item${items.length !== 1 ? 's' : ''} saved`;
-  sortBar.style.display  = 'flex';
-  clearBtn.style.display = 'block';
+  subtitle.textContent     = `${items.length} item${items.length !== 1 ? 's' : ''} saved`;
+  sortBar.style.display    = 'flex';
+  clearBtn.style.display   = 'block';
   summaryBar.style.display = 'flex';
 
-  // Summary bar
   const available = items.filter(p => (p.stock ?? 1) > 0);
-  const totalVal  = available.reduce((a,p) => a + salePrice(p), 0);
+  const totalVal  = available.reduce((a, p) => a + getSalePrice(p), 0);
   document.getElementById('summary-text').innerHTML =
     `<strong>${available.length}</strong> in-stock · Total <strong>${fmt(totalVal)}</strong>`;
 
   grid.innerHTML = `<div class="wish-grid">${items.map(p => cardHTML(p)).join('')}</div>`;
 }
 
-function cardHTML(p) {
-  const id       = p.id || p._id;
-  const name     = p.name || 'Product';
-  const brand    = p.brand || '';
-  const price    = salePrice(p);
-  const op       = p.original_price || p.mrp || 0;
-  const disc     = discPct(p);
-  const rating   = p.avg_rating || p.rating || 0;
-  const rCount   = p.review_count || p.rating_count || 0;
-  const stock    = p.stock ?? 1;
-  const inStock  = stock > 0;
-  const imgSrc   = p.image || (p.images && (p.images[0]?.url || p.images[0])) || 'https://placehold.co/200x200/f1f3f6/aaa?text=No+Image';
-  const slug     = p.slug || id;
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-  const cart    = getCart();
-  const inCart  = !!cart[String(id)];
+function cardHTML(p) {
+  const id      = p.id || p._id || '';
+  const name    = p.name || 'Product';
+  const brand   = p.brand || '';
+  const price   = getSalePrice(p);
+  const op      = getOriginalPrice(p);
+  const disc    = getDiscount(p);
+  const rating  = Number(p.avg_rating || p.rating || 0);
+  const rCount  = p.review_count || p.rating_count || 0;
+  const stock   = p.stock ?? 1;
+  const inStock = stock > 0;
+  const imgSrc  = getImage(p);
+  const slug    = p.slug || id;
+  const showDisc = disc > 0 && op > price + 0.5;
 
   return `
-  <div class="wish-card" id="card-${id}">
-    <button class="wish-remove" onclick="removeItem('${id}')" title="Remove">
+  <div class="wish-card" id="card-${esc(id)}">
+    <button class="wish-remove" onclick="removeItem('${esc(id)}')" title="Remove">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
 
-    <div class="wish-img-wrap" onclick="window.location='product-detail.html?id=${slug}'">
-      <img src="${imgSrc}" alt="${name}" onerror="this.src='https://placehold.co/200x200/f1f3f6/aaa?text=No+Image'">
-      ${disc ? `<div class="disc-badge">${disc}% off</div>` : ''}
+    <div class="wish-img-wrap" onclick="window.location='product-detail.html?slug=${esc(slug)}'">
+      <img src="${esc(imgSrc)}" alt="${esc(name)}"
+           onerror="this.src='https://placehold.co/200x200/f1f3f6/aaa?text=No+Image'">
+      ${showDisc ? `<div class="disc-badge">${disc}% off</div>` : ''}
       ${!inStock ? `<div class="out-of-stock-overlay"><span class="out-badge">Out of Stock</span></div>` : ''}
     </div>
 
     <div class="wish-info">
-      ${brand ? `<div class="wish-brand">${brand}</div>` : ''}
-      <div class="wish-name" onclick="window.location='product-detail.html?id=${slug}'">${name}</div>
+      ${brand ? `<div class="wish-brand">${esc(brand)}</div>` : ''}
+      <div class="wish-name" onclick="window.location='product-detail.html?slug=${esc(slug)}'">${esc(name)}</div>
 
-      ${rating ? `
+      ${rating > 0 ? `
       <div class="wish-rating">
-        <div class="wish-rating-pill">
-          ★ ${rating.toFixed(1)}
-        </div>
+        <div class="wish-rating-pill">★ ${rating.toFixed(1)}</div>
         ${rCount ? `<span class="wish-rating-count">(${rCount})</span>` : ''}
       </div>` : ''}
 
       <div class="wish-price-row">
         <div class="wish-price">${fmt(price)}</div>
-        ${op && disc ? `<div class="wish-original">${fmt(op)}</div>` : ''}
+        ${showDisc ? `<div class="wish-original">${fmt(op)}</div>` : ''}
       </div>
 
       <button
-        class="wish-atc ${!inStock ? 'oos' : inCart ? 'added' : ''}"
-        id="atc-${id}"
-        onclick="${inStock ? `addToCart('${id}')` : ''}"
+        class="wish-atc${!inStock ? ' oos' : ''}"
+        id="atc-${esc(id)}"
+        onclick="${inStock ? `addToCart('${esc(id)}')` : ''}"
         ${!inStock ? 'disabled' : ''}
       >
-        ${!inStock ? 'Out of Stock' : inCart ? '✓ Added to Cart' : 'Add to Cart'}
+        ${!inStock ? 'Out of Stock' : 'Add to Cart'}
       </button>
     </div>
   </div>`;
 }
 
-// ── Actions ────────────────────────────────────────────────────────────────
+/* ── Actions ── */
 function removeItem(id) {
   const card = document.getElementById(`card-${id}`);
-  if (card) { card.style.opacity='0'; card.style.transform='scale(.9)'; card.style.transition='.2s'; }
+  if (card) {
+    card.style.opacity    = '0';
+    card.style.transform  = 'scale(.9)';
+    card.style.transition = '.2s';
+  }
   setTimeout(() => {
     removeFromWishlist(id);
     render();
     toast('Removed from wishlist');
-    updateAccountStats();
   }, 180);
 }
 
@@ -453,89 +477,97 @@ function clearAll() {
   clearWishlist();
   render();
   toast('Wishlist cleared');
-  updateAccountStats();
 }
 
-function addToCart(id) {
+async function addToCart(id) {
   const items = getWishlist();
   const prod  = items.find(p => String(p.id || p._id) === String(id));
   if (!prod) return;
 
-  addToCartLocal(prod);
-
   const btn = document.getElementById(`atc-${id}`);
+  if (btn) { btn.textContent = '⏳ Adding…'; btn.disabled = true; }
+
+  const ok = await addItemToCart(prod);
+
   if (btn) {
-    btn.textContent = '✓ Added to Cart';
-    btn.classList.add('added');
-    btn.classList.remove('oos');
+    if (ok) {
+      btn.textContent = '✓ Added to Cart';
+      btn.classList.add('added');
+      toast('Added to cart! 🛒');
+    } else {
+      btn.textContent = 'Add to Cart';
+      btn.disabled    = false;
+      toast('Could not add to cart');
+    }
   }
-  toast('Added to cart!');
 }
 
-function addAllToCart() {
+async function addAllToCart() {
   const items = getWishlist().filter(p => (p.stock ?? 1) > 0);
   if (!items.length) { toast('No in-stock items to add'); return; }
-  items.forEach(p => addToCartLocal(p));
+
+  const btn = document.querySelector('.add-all-btn');
+  if (btn) { btn.textContent = '⏳ Adding…'; btn.disabled = true; }
+
+  let added = 0;
+  for (const p of items) {
+    const ok = await addItemToCart(p);
+    if (ok) added++;
+  }
+
+  if (btn) { btn.textContent = 'Add All to Cart'; btn.disabled = false; }
+
   render();
-  toast(`${items.length} item${items.length > 1 ? 's' : ''} added to cart!`);
+  toast(added > 0 ? `${added} item${added > 1 ? 's' : ''} added to cart!` : 'Could not add items');
 }
 
-// ── Update account stats ───────────────────────────────────────────────────
-function updateAccountStats() {
-  // sync stat-wishlist element if on same session
-  try {
-    const el = document.getElementById && window.parent?.document?.getElementById('stat-wishlist');
-    if (el) el.textContent = getWishlist().length;
-  } catch {}
-}
-
-// ── Try fetching product details from API to enrich stored wishlist ────────
+/* ── Enrich wishlist from API ──
+ * Wishlist এ পুরোনো data (শুধু slug/id) থাকলে API থেকে fresh data টেনে update করে
+ */
 async function enrichFromAPI() {
   const items = getWishlist();
   if (!items.length) { render(); return; }
 
-  // Check if items already have full details (price set)
-  const needsEnrich = items.some(p => !p.price && !p.sale_price);
+  /* সব item এ price আছে কিনা check করো */
+  const needsEnrich = items.some(p => !getSalePrice(p) || !getImage(p));
   if (!needsEnrich) { render(); return; }
 
   try {
-    const res = await fetch('/api/products?limit=100', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const token = localStorage.getItem('is_token') || (typeof Auth !== 'undefined' ? Auth.getToken?.() : '');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+    const res  = await fetch('/api/products?limit=200', { headers });
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
-    const apiProds = (data?.data?.products || []);
+
+    const apiProds = data?.data?.products || data?.products || [];
+    if (!apiProds.length) throw new Error('No products returned');
+
     const enriched = items.map(p => {
-      const id = String(p.id || p._id);
-      const found = apiProds.find(ap => String(ap.id || ap._id) === id);
-      return found ? { ...p, ...found } : p;
+      const localId = String(p.id || p._id || p.slug || '');
+      const found   = apiProds.find(ap =>
+        String(ap.id || ap._id) === localId ||
+        String(ap.slug)         === localId ||
+        String(ap.slug)         === String(p.slug)
+      );
+      return found ? { ...p, ...found, id: found.id || found._id || p.id } : p;
     });
+
     saveWishlist(enriched);
   } catch (e) {
-    // silently fail — use stored data
+    console.warn('Wishlist enrich failed (using stored data):', e);
   }
+
   render();
 }
 
-// ── Init ───────────────────────────────────────────────────────────────────
+/* ── Init ── */
 wishItems = getWishlist();
-updateCartBadge();
 
-// Hide skeleton quickly and start
 setTimeout(() => {
   const sk = document.getElementById('skeleton-grid');
   if (sk) sk.remove();
   enrichFromAPI();
-}, 300);
-
-// Also just render immediately with stored data then enrich
-setTimeout(() => {
-  const sk = document.getElementById('skeleton-grid');
-  if (sk) {
-    sk.remove();
-    render();
-    enrichFromAPI();
-  }
 }, 0);
 </script>
 
