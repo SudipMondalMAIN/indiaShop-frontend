@@ -414,7 +414,7 @@ button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;ba
         fd.append('image', file);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', (window.API_BASE || '') + '/api/users/avatar');
+        xhr.open('POST', BASE_URL + '/users/avatar');
         xhr.setRequestHeader('Authorization', 'Bearer ' + Auth.token());
 
         xhr.upload.onprogress = e => {
