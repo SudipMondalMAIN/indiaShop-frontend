@@ -122,6 +122,27 @@ img{display:block;max-width:100%}
 .toast-msg{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
 .toast-msg.show{opacity:1}
 
+@media (min-width: 992px){
+
+  .page{
+    width:100%;
+    max-width:none;
+    margin:0;
+    box-shadow:none;
+    border:none;
+  }
+
+  .bottom-nav-inner{
+    width:100%;
+    max-width:none;
+  }
+
+  .prod-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+}
+
 @media(min-width:481px){.page,.filter-drawer{box-shadow:0 0 40px rgba(0,0,0,.1)}}
 </style>
 </head>
