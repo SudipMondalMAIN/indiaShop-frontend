@@ -160,6 +160,27 @@ img{display:block;max-width:100%}
 .toast-msg{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:99px;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
 .toast-msg.show{opacity:1}
 
+ @media (min-width: 992px){
+
+  .page{
+    width:100%;
+    max-width:none;
+    margin:0;
+    box-shadow:none;
+    border:none;
+  }
+
+  .bottom-nav-inner{
+    width:100%;
+    max-width:none;
+  }
+
+  .prod-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+} 
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .anim{animation:fadeUp .22s ease both}
 
