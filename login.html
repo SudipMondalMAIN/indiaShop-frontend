@@ -53,7 +53,21 @@ a{text-decoration:none;color:inherit}
 button{font-family:'Mukta',sans-serif;cursor:pointer;border:none;outline:none;background:none}
 
 /* ── PAGE LAYOUT ── */
-.auth-page{min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--white)}
+.auth-page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:480px;
+    margin:0 auto;
+    background:var(--white);
+}
+
+@media (min-width: 992px){
+    .auth-page{
+        max-width:1200px;
+    }
+}
 
 /* ── TOP HERO BANNER ── */
 .auth-hero{background:linear-gradient(140deg,#064e1f 0%,#1ba345 55%,#34d058 100%);padding:36px 24px 44px;position:relative;overflow:hidden;flex-shrink:0}
