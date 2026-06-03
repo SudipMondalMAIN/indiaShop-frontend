@@ -140,6 +140,27 @@ img{display:block;max-width:100%}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .cart-item{animation:fadeIn .2s ease both}
 
+ @media (min-width: 992px){
+
+  .page{
+    width:100%;
+    max-width:none;
+    margin:0;
+    box-shadow:none;
+    border:none;
+  }
+
+  .bottom-nav-inner{
+    width:100%;
+    max-width:none;
+  }
+
+  .prod-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+} 
+
 @media(min-width:481px){.page,.bottom-bar{box-shadow:0 0 40px rgba(0,0,0,.1)}}
 </style>
 </head>
